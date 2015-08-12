@@ -1,0 +1,247 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="../xml/paretospec.xslt"?>
+<pareto_specification xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="uri:pareto" xsi:schemaLocation="uri:pareto http://www.es.ele.tue.nl/~mgeilen/paretoalgebra/xml/paretospec.xsd ">
+  <name>Case-Study, An Algebra of Pareto Points, Fundamenta Informaticae</name>
+  <description>
+    Model of a video stream delivered from a server via a wireless connection to a
+    hand-held device. The case-study is described in the paper "An Algebra of Pareto Points", to appear in Fundamenta Informaticae
+  </description>
+  <quantity_definitions>
+    <quantity_definition name="MPEGQuality" type="real"></quantity_definition>
+    <quantity_definition name="MPEGBitRate"  type="real"></quantity_definition>
+    <quantity_definition name="MPEGParams" type="unordered">
+      <values>
+        <value>mp_s1</value>
+        <value>mp_s2</value>
+        <value>mp_s3</value>
+        <value>mp_s4</value>
+        <value>mp_s5</value>
+        <value>mp_s6</value>
+        <value>mp_s7</value>
+        <value>mp_s8</value>
+      </values>
+    </quantity_definition>
+    <quantity_definition name="TransmBitRate_Inv"  type="real"></quantity_definition>
+    <quantity_definition name="TransmLatency" type="real"></quantity_definition>
+    <quantity_definition name="TransmBufferCapacity" type="real"></quantity_definition>
+    <quantity_definition name="TransmPower" type="real"></quantity_definition>
+    <quantity_definition name="DecoderCompEffort" type="real"></quantity_definition>
+    <quantity_definition name="DecoderLatency" type="real"></quantity_definition>
+    <quantity_definition name="ProcessorCompEffort_Inv" type="real"></quantity_definition>
+    <quantity_definition name="ProcessorMode" type="unordered">
+      <values>
+        <value>pr_M1</value>
+        <value>pr_M2</value>
+        <value>pr_M3</value>
+      </values>
+    </quantity_definition>
+    <quantity_definition name="ProcessorPower"  type="real"></quantity_definition>
+  </quantity_definitions>
+  <configuration_spaces>
+    <space name="Encoder">
+        <quantity name="MPEGParams" referBy="MPEGParams_Encoder"></quantity>
+        <quantity name="MPEGQuality"></quantity>
+        <quantity name="MPEGBitRate"></quantity>
+    </space>
+    <space name="Transmission">
+        <quantity name="TransmBitRate_Inv"></quantity>
+        <quantity name="TransmLatency"></quantity>
+        <quantity name="TransmBufferCapacity"></quantity>
+        <quantity name="TransmPower"></quantity>
+    </space>
+    <space name="Decoder">
+        <quantity name="MPEGParams" referBy="MPEGParams_Decoder"></quantity>
+        <quantity name="DecoderCompEffort"></quantity>
+    </space>
+    <space name="Processor">
+        <quantity name="ProcessorCompEffort_Inv"></quantity>
+        <quantity name="ProcessorMode"></quantity>
+        <quantity name="ProcessorPower"></quantity>
+    </space>
+  </configuration_spaces>
+  <configuration_sets>
+    <configuration_set name="EncoderProfile" space_id="Encoder">
+      <configurations>
+        <configuration>
+          <value>mp_s1</value>
+          <value>-38</value>
+          <value>64</value>
+        </configuration>
+        <configuration>
+          <value>mp_s2</value>
+          <value>-45</value>
+          <value>384</value>
+        </configuration>
+        <configuration>
+          <value>mp_s3</value>
+          <value>-41</value>
+          <value>64</value>
+        </configuration>
+        <configuration>
+          <value>mp_s4</value>
+          <value>-48</value>
+          <value>384</value>
+        </configuration>
+        <configuration>
+          <value>mp_s5</value>
+          <value>-46.5</value>
+          <value>64</value>
+        </configuration>
+        <configuration>
+          <value>mp_s6</value>
+          <value>-52.5</value>
+          <value>384</value>
+        </configuration>
+        <configuration>
+          <value>mp_s7</value>
+          <value>-48.5</value>
+          <value>64</value>
+        </configuration>
+        <configuration>
+          <value>mp_s8</value>
+          <value>-56</value>
+          <value>384</value>
+        </configuration>
+      </configurations>
+    </configuration_set>
+    <configuration_set name="TransmissionProfile" space_id="Transmission">
+      <configurations>
+        <configuration>
+          <value>0.01</value>
+          <value>0.125</value>
+          <value>12500</value>
+          <value>0.07</value>
+        </configuration>
+        <configuration>
+          <value>0.002</value>
+          <value>0.025</value>
+          <value>12500</value>
+          <value>0.33</value>
+        </configuration>
+        <configuration>
+          <value>0.002</value>
+          <value>0.07</value>
+          <value>35000</value>
+          <value>0.22</value>
+        </configuration>
+        <configuration>
+          <value>0.002</value>
+          <value>0.16</value>
+          <value>80000</value>
+          <value>0.16</value>
+        </configuration>
+      </configurations>
+    </configuration_set>
+    <configuration_set name="DecoderProfile" space_id="Decoder">
+      <configurations>
+        <configuration>
+          <value>mp_s1</value>
+          <value>97</value>
+        </configuration>
+        <configuration>
+          <value>mp_s2</value>
+          <value>156</value>
+        </configuration>
+        <configuration>
+          <value>mp_s3</value>
+          <value>192</value>
+        </configuration>
+        <configuration>
+          <value>mp_s4</value>
+          <value>303</value>
+        </configuration>
+        <configuration>
+          <value>mp_s5</value>
+          <value>378</value>
+        </configuration>
+        <configuration>
+          <value>mp_s6</value>
+          <value>545</value>
+        </configuration>
+        <configuration>
+          <value>mp_s7</value>
+          <value>749</value>
+        </configuration>
+        <configuration>
+          <value>mp_s8</value>
+          <value>1100</value>
+        </configuration>
+      </configurations>
+    </configuration_set>
+    <configuration_set name="ProcessorProfile" space_id="Processor">
+      <configurations>
+        <configuration>
+          <value>0.0025</value>
+          <value>pr_M1</value>
+          <value>2.8</value>
+        </configuration>
+        <configuration>
+          <value>0.0050</value>
+          <value>pr_M2</value>
+          <value>1.6</value>
+        </configuration>
+        <configuration>
+          <value>0.0100</value>
+          <value>pr_M3</value>
+          <value>0.9</value>
+        </configuration>
+      </configurations>
+    </configuration_set>
+  </configuration_sets>
+  <calculation>
+    <push name="ProcessorProfile"/>
+    <push name="DecoderProfile"/>
+    <product/>
+    <prodcons>
+      <producer_quant>ProcessorCompEffort_Inv</producer_quant>
+      <consumer_quant>DecoderCompEffort</consumer_quant>
+    </prodcons>
+    <abstract>
+      <quant>ProcessorCompEffort_Inv</quant>
+      <quant>DecoderCompEffort</quant>
+    </abstract>
+    <hide>
+      <quant>ProcessorMode</quant>
+    </hide>
+    <minimize/>
+    <store name="Decoder-Processor-Profile"/>
+    <push name="TransmissionProfile"/>
+    <push name="EncoderProfile"/>
+    <product/>
+    <prodcons>
+      <producer_quant>TransmBitRate_Inv</producer_quant>
+      <consumer_quant>MPEGBitRate</consumer_quant>
+    </prodcons>
+    <abstract>
+      <quant>TransmBitRate_Inv</quant>
+      <quant>MPEGBitRate</quant>
+    </abstract>
+    <minimize/>
+    <store name="Encoder-Transmission-Profile"/>
+    <push name="Decoder-Processor-Profile"/>
+    <push name="Encoder-Transmission-Profile"/>
+    <join>
+      <between quanta="MPEGParams_Encoder" quantb="MPEGParams_Decoder"/>
+    </join>
+    <hide>
+      <quant>MPEGParams_Encoder</quant>
+    </hide>
+    <abstract>
+      <quant>MPEGParams_Decoder</quant>
+    </abstract>
+    <minimize/>
+    <aggregate>
+      <quant>TransmPower</quant>
+      <quant>ProcessorPower</quant>
+      <name>TotalPower</name>
+    </aggregate>
+    <abstract>
+      <quant>TransmPower</quant>
+      <quant>ProcessorPower</quant>
+    </abstract>
+    <duplicate/>
+    <store name="Final Profile"/>
+    <duplicate/>
+    <print/>
+  </calculation>
+</pareto_specification>

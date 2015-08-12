@@ -1,0 +1,55 @@
+﻿<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="../xml/paretospec.xslt"?>
+<pareto_specification xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="uri:pareto" xsi:schemaLocation="uri:pareto http://www.es.ele.tue.nl/~mgeilen/paretoalgebra/xml/paretospec.xsd ">
+  <name>SimpleCullTest</name>
+  <description>
+    A Test for the simple cull implementation
+  </description>
+  <quantity_definitions>
+    <quantity_definition name="Q" type="real"/>
+  </quantity_definitions>
+  <configuration_spaces>
+    <space name="3D">
+      <quantity name="Q" referBy="Value1"></quantity>
+      <quantity name="Q" referBy="Value2"></quantity>
+      <quantity name="Q" referBy="Value3"></quantity>
+    </space>
+  </configuration_spaces>
+  <configuration_sets>
+    <configuration_set name="TestSet" space_id="3D">
+      <configurations>
+        <configuration>
+          <value>1</value>
+          <value>10</value>
+          <value>2</value>
+        </configuration>
+        <configuration>
+          <value>2</value>
+          <value>9</value>
+          <value>3</value>
+        </configuration>
+        <configuration>
+          <value>3</value>
+          <value>8</value>
+          <value>4</value>
+        </configuration>
+        <configuration>
+          <value>4</value>
+          <value>1</value>
+          <value>1</value>
+        </configuration>
+      </configurations>
+    </configuration_set>
+  </configuration_sets>
+  <calculation>
+    <push name="TestSet"/>
+    <hide>
+      <quant>Value1</quant>
+    </hide>
+    <minimize/>
+    <store name="Result"/>
+    <push name="Result"/>
+    <print/>
+  </calculation>
+</pareto_specification>
+
