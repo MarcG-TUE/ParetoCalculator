@@ -34,8 +34,8 @@ namespace Pareto {
 				//
 				this->Text = windowTitle;
 
-				vector<QuantityType*> qtl = cs->confspace->quantities;
-				vector<QuantityType*>::iterator i;
+                std::vector<QuantityType*> qtl = cs->confspace->quantities;
+                std::vector<QuantityType*>::iterator i;
 				for(i = qtl.begin(); i!=qtl.end(); i++){
 					quantABox->Items->Add(gcnew System::String((*i)->name.c_str()));
 					quantBBox->Items->Add(gcnew System::String((*i)->name.c_str()));

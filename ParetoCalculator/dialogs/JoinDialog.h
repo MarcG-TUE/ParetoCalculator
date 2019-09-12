@@ -33,8 +33,8 @@ namespace Pareto {
 				//
 				//TODO: Add the constructor code here
 				//
-				vector<QuantityType*> qtl = cs->confspace->quantities;
-				vector<QuantityType*>::iterator i;
+                std::vector<QuantityType*> qtl = cs->confspace->quantities;
+                std::vector<QuantityType*>::iterator i;
 				for(i = qtl.begin(); i!=qtl.end(); i++){
 					quantitiesList->Items->Add(gcnew System::String((*i)->name.c_str()));
 				}

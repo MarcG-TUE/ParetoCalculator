@@ -65,7 +65,7 @@ ParetoParser::ParetoParser(Pareto::ParetoCalculator *forPC){
 }
 
 
-void ParetoParser::LoadFile(wstring f){
+void ParetoParser::LoadFile(std::wstring f){
 //	original, non validating version:
 //	pXMLDoc = gcnew System::Xml::XmlDocument();
 //	XmlTextReader^ myXmlTextReader = gcnew XmlTextReader(gcnew System::String(f.c_str()));
@@ -104,7 +104,7 @@ void ValidationEventHandler::eventHandler (Object^ /*sender*/, Schema::Validatio
 
 
 
-void ParetoParser::SaveAll(wstring f){
+void ParetoParser::SaveAll(std::wstring f){
 	this->Save_PrepareXMLDoc();
 	this->SaveQuantityTypes();
 	this->SaveConfigurationSpaces();
@@ -112,7 +112,7 @@ void ParetoParser::SaveAll(wstring f){
 	this->Save_OutputFile(f);
 }
 
-void ParetoParser::Save(string itemToSave, wstring f){
+void ParetoParser::Save(std::string itemToSave, std::wstring f){
 	StorableObject* o = pc->retrieve(itemToSave);
 	ConfigurationSpace* csp;
 
@@ -165,7 +165,7 @@ void ParetoParser::Save_PrepareXMLDoc(){
 	pXMLDoc->AppendChild(pXMLRootElem);
 }
 
-void ParetoParser::Save_OutputFile(wstring f){
+void ParetoParser::Save_OutputFile(std::wstring f){
 //	Save the XML document to file
 	System::Xml::XmlTextWriter^ writer = gcnew XmlTextWriter( gcnew System::String(f.c_str()), nullptr );
 	writer->Formatting = Formatting::Indented;
@@ -227,7 +227,7 @@ void ParetoParser::LoadQuantityTypes(){
 			qn = qne; // temp qne is to avoid type casting
 		}
 		if(!typeDetermined){
-			throw *new EParetoCalculatorError(string("Quantity of unknown type "+system_to_std_string(pTypeStr)));
+			throw *new EParetoCalculatorError(std::string("Quantity of unknown type "+system_to_std_string(pTypeStr)));
 		}
 		pc->store(*qn);
 	}
@@ -340,7 +340,7 @@ void ParetoParser::LoadConfigurationSets(){
 		
 		ConfigurationSpace* sp = dynamic_cast<ConfigurationSpace*>(pc->retrieve(system_to_std_string(pConfSetNode->Attributes->GetNamedItem("space_id")->InnerXml)));
 		ConfigurationSet* cs = new ConfigurationSet(sp, system_to_std_string(pConfSetNode->Attributes->GetNamedItem("name")->InnerXml));
-		vector<QuantityType*> *qts = &sp->quantities;
+        std::vector<QuantityType*> *qts = &sp->quantities;
 
 		// get all the configurations and add them to the set
 		XmlNodeList^ pXMLDomConfsList = pConfSetNode->SelectNodes("pa:configurations/pa:configuration", nsmgr);
@@ -389,7 +389,7 @@ XmlElement^ ParetoParser::Save_XMLBuildConfigurationSetNode(ConfigurationSet* cs
 		for(l=conf.quantities.begin(); l!=conf.quantities.end(); l++){
 			XmlElement^ valueNode = pXMLDoc->CreateElement("value");
 			QuantityValue* v = *l;
-			string& vs = v->asString();
+            std::string& vs = v->asString();
 			valueNode->AppendChild(pXMLDoc->CreateTextNode(gcnew System::String(vs.c_str())));
 			confNode->AppendChild(valueNode);
 		}
@@ -620,7 +620,7 @@ void ParetoParser::LoadOperations() throw(...){
 
 
 
-vector<QuantityType*>& ParetoParser::getQuantityTypes(){
-        vector<QuantityType*>* v = new(vector<QuantityType*>);
+std::vector<QuantityType*>& ParetoParser::getQuantityTypes(){
+    std::vector<QuantityType*>* v = new(std::vector<QuantityType*>);
         return *v;
 }

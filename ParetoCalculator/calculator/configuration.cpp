@@ -40,7 +40,7 @@
 
 namespace Pareto {
 
-ConfigurationSpace::ConfigurationSpace(string n): StorableObject(n){
+ConfigurationSpace::ConfigurationSpace(std::string n): StorableObject(n){
 }
 
 void ConfigurationSpace::addQuantity(QuantityType& q){
@@ -97,7 +97,7 @@ const QuantityName* ConfigurationSpace::getUnorderedQuantity(){
 	for(k=0, i = this->quantityNames.begin(); i!=this->quantityNames.end(); i++, k++){
 		QuantityType* t = this->quantities[(*i).second];
 		if((this->quantityVisibility[k]) && (t->isUnordered())){
-			string *qn = new string;
+            std::string *qn = new std::string;
 			*qn = (*i).first;
 			return qn;
 		}
@@ -111,7 +111,7 @@ const QuantityName* ConfigurationSpace::getTotallyOrderedQuantity(){
 	for(k=0, i = this->quantityNames.begin(); i!=this->quantityNames.end(); i++, k++){
 		QuantityType* t = this->quantities[(*i).second];
 		if((this->quantityVisibility[k]) && (t->isTotallyOrdered())){
-			string *qn = new string;
+            std::string *qn = new std::string;
 			*qn = (*i).first;
 			return qn;
 		}
@@ -169,7 +169,7 @@ bool ConfigurationSpace::LexicographicCompare(const Configuration& c1, const Con
 
 
 
-void const ConfigurationSpace::streamOn(ostream& os){
+void const ConfigurationSpace::streamOn(std::ostream& os){
 	os << name << " = ";
 	unsigned int n;
 	for (n = 0; n < this->quantities.size(); n++){
@@ -182,15 +182,15 @@ void const ConfigurationSpace::streamOn(ostream& os){
 	}
 }
 
-string& Configuration::asString(void) {
-	ostringstream myString;
+std::string& Configuration::asString(void) {
+    std::ostringstream myString;
 	this->streamOn(myString);
-	return *new string(myString.str());
+	return *new std::string(myString.str());
 }
 
 
 ConfigurationSpace* ConfigurationSpace::hide(ListOfQuantityNames *lqn){
-	string n = "Hide of " + this->name;
+    std::string n = "Hide of " + this->name;
 	ConfigurationSpace* cs = new ConfigurationSpace(n);
 	for(unsigned int i=0; i<this->quantities.size(); i++){
 		bool v = this->quantityVisibility[i];
@@ -209,7 +209,7 @@ ConfigurationSpace* ConfigurationSpace::hide(const QuantityName& qn){
 
 
 ConfigurationSpace* ConfigurationSpace::unhide(ListOfQuantityNames *lqn){
-	string n = "Unhide of " + this->name;
+    std::string n = "Unhide of " + this->name;
 	ConfigurationSpace* cs = new ConfigurationSpace(n);
 	for(unsigned int i=0; i<this->quantities.size(); i++){
 		bool v = this->quantityVisibility[i];
@@ -273,7 +273,7 @@ void Configuration::addQuantitiesOf(const Configuration& c){
 }
 
 
-void Configuration::streamOn(ostream& os) const {
+void Configuration::streamOn(std::ostream& os) const {
 	os << "(";
 	ListOfQuantityValues::const_iterator i;
 	unsigned int n=0;
@@ -335,7 +335,7 @@ bool operator<(const Configuration& c1, const Configuration& c2){ return (c1<=c2
 
 ///////////////// ConfigurationSet ///////////
 
-ConfigurationSet::ConfigurationSet(ConfigurationSpace* cs, string n): StorableObject(n), confspace(cs) {
+ConfigurationSet::ConfigurationSet(ConfigurationSpace* cs, std::string n): StorableObject(n), confspace(cs) {
 }
 
 
@@ -393,14 +393,14 @@ bool ConfigurationSet::containsConfiguration(Configuration& c){
 	return confs.find(c)!=confs.end();
 }
 
-void const ConfigurationSet::streamOn(ostream& os){
+void const ConfigurationSet::streamOn(std::ostream& os){
 	os << "{";
 	SetOfConfigurations::iterator i;
 	unsigned int n=0;
 	for(i=confs.begin(); i!=confs.end(); i++, n++){
 		const Configuration* c = &(*i);
         os << c;
-        if(n<confs.size()-1) os << ", " << endl;
+        if(n<confs.size()-1) os << ", " << std::endl;
         }
 	os << "}";
 }
@@ -545,7 +545,7 @@ IndexOnUnorderedConfigurationSet::IndexOnUnorderedConfigurationSet(const Quantit
 
 
 
-ostream& operator<<(ostream& os, const Configuration* c){
+std::ostream& operator<<(std::ostream& os, const Configuration* c){
 	c->streamOn(os);
 	return os;
 }

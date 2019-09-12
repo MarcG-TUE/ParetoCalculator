@@ -51,15 +51,13 @@
 #include "storage.h"
 
 
-using namespace std;
-
 namespace Pareto {
 
 	class Configuration;
 
 	// An STL vector of pointers to quantity types
 	// 
-	class ListOfQuantityTypes : public vector<QuantityType*> {};
+	class ListOfQuantityTypes : public std::vector<QuantityType*> {};
 
 	/// An STL vector of quantity names
 	/// 
@@ -75,11 +73,11 @@ namespace Pareto {
 
 	// An STL map from QuantityNames to integers
 	// 
-	class QuantityIntMap: public map<QuantityName, unsigned int> {};
+	class QuantityIntMap: public std::map<QuantityName, unsigned int> {};
 
 	// An STL vector of bools
 	// 
-	class BoolVector: public vector<bool> {};
+	class BoolVector: public std::vector<bool> {};
 
 
 	///
@@ -98,7 +96,7 @@ namespace Pareto {
 		BoolVector quantityVisibility;
 
 		/// Constructor of configuration space with name 'n'
-		ConfigurationSpace(string n);
+		ConfigurationSpace(std::string n);
 
 		/// compare tests the dominance relation between configurations
 		bool compare(const Configuration& c1, const Configuration& c2);
@@ -167,7 +165,7 @@ namespace Pareto {
 		ConfigurationSpace* unhide(ListOfQuantityNames *lqn);
 
 		/// stream a string representation of the configuration space to 'os'
-		const void streamOn(ostream& os);
+		const void streamOn(std::ostream& os);
 
 
 		// Run-time type checking.
@@ -181,7 +179,7 @@ namespace Pareto {
 	bool operator!=(ConfigurationSpace& cs1, ConfigurationSpace& cs2);
 
 	// An STL vector of QuantityValues
-	class ListOfQuantityValues : public vector<QuantityValue*> {
+	class ListOfQuantityValues : public std::vector<QuantityValue*> {
 	};
 
 	/// A configuration of Pareto Algebra.
@@ -216,13 +214,13 @@ namespace Pareto {
 		virtual void setQuantity(int n, QuantityValue* v);
 
 		/// stream a string representation of the configuration to 'os'
-		virtual void streamOn(ostream& os) const;
+		virtual void streamOn(std::ostream& os) const;
 
 		/// returns a string representation of the configuration
-		string& asString();
+        std::string& asString();
 	};
 
-	ostream& operator<<(ostream& os, const Configuration* c);
+    std::ostream& operator<<(std::ostream& os, const Configuration* c);
 
 	bool operator<=(const Configuration& c1, const Configuration& c2);
 	bool operator==(const Configuration& c1, const Configuration& c2);
@@ -278,7 +276,7 @@ namespace Pareto {
 
 	// implements an index on the configurations of a configurationset
 	// used for sorting the configurations w.r.t. different quantities.
-	class IndexOnTotalOrderConfigurationSet: public vector<ConfigurationIndexOnTotalOrderReference>, public IndexOnConfigurationSet {
+	class IndexOnTotalOrderConfigurationSet: public std::vector<ConfigurationIndexOnTotalOrderReference>, public IndexOnConfigurationSet {
 	public:
 		IndexOnTotalOrderConfigurationSet(const QuantityName& qn, ConfigurationSet* cs);
 		virtual ConfigurationIndexReference* get(int n) {return &(this->at(n));}
@@ -287,7 +285,7 @@ namespace Pareto {
 
 	// Make an index on an unordered quantity, based on a total order derived from the string
 	// representation of the quantity values
-	class IndexOnUnorderedConfigurationSet: public vector<ConfigurationIndexOnUnorderedReference>, public IndexOnConfigurationSet {
+	class IndexOnUnorderedConfigurationSet: public std::vector<ConfigurationIndexOnUnorderedReference>, public IndexOnConfigurationSet {
 	public:
 		IndexOnUnorderedConfigurationSet(const QuantityName& qn, ConfigurationSet* cs);
 		virtual ConfigurationIndexReference* get(int n) {return &(this->at(n));}
@@ -307,14 +305,14 @@ namespace Pareto {
 	};
 
 
-	class SetOfConfigurations: public set<Configuration, CompareConfiguration> {};
+	class SetOfConfigurations: public std::set<Configuration, CompareConfiguration> {};
 
 
 	/// Represents a set of configurations
 	class ConfigurationSet: public StorableObject{
 	public:
 		/// constructor of a set of configurations on configuration space 'cs' and with name 'n'
-		ConfigurationSet(ConfigurationSpace* cs, string n);
+		ConfigurationSet(ConfigurationSpace* cs, std::string n);
 
 		/// add a configuration to the set
 		void addConfiguration(const Configuration& c);
@@ -336,7 +334,7 @@ namespace Pareto {
 		bool containsConfiguration(Configuration& c);
 
 		/// stream a string representation of the configuration set to 'os'
-		virtual const void streamOn(ostream& os);
+		virtual const void streamOn(std::ostream& os);
 
 		// Run-time type checking.
 		virtual bool isConfigurationSet(void) { return true;}

@@ -40,18 +40,16 @@
 
 #pragma once
 
-using namespace std;
-
 namespace Pareto {
 
 	/// Exception object for exceptions in the calculator
 	class EParetoCalculatorError {
 	public:
 		// Constructor
-		EParetoCalculatorError(const string s);
+		EParetoCalculatorError(const std::string s);
 
 		/// the error message of the exception
-		string errorMsg;
+        std::string errorMsg;
 	};
 
 

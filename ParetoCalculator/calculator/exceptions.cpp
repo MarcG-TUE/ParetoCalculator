@@ -36,11 +36,10 @@
 
 #include "exceptions.h"
 
-using namespace std;
 
 namespace Pareto {
 
-EParetoCalculatorError::EParetoCalculatorError(const string s){
+EParetoCalculatorError::EParetoCalculatorError(const std::string s){
 	errorMsg = s;
 }
 

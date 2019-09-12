@@ -13,7 +13,7 @@ using namespace Pareto;
 // try to solve later...
 static ParetoCalculator *paretocalculator;
 
-static void MarshalString ( String ^ s, wstring& os ) {
+static void MarshalString ( String ^ s, std::wstring& os ) {
    using namespace Runtime::InteropServices;
    const wchar_t* chars = 
       (const wchar_t*)(Marshal::StringToHGlobalUni(s)).ToPointer();

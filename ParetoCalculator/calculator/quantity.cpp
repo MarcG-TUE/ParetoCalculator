@@ -36,11 +36,10 @@
 #include "quantity.h"
 #include "calculator.h"
 
-using namespace std;
 
 namespace Pareto {
 
-QuantityType::QuantityType(string n): StorableObject(n){
+QuantityType::QuantityType(std::string n): StorableObject(n){
 }
 
 bool QuantityType::compare(const QuantityValue& q1, const QuantityValue& q2) const {
@@ -58,7 +57,7 @@ bool QuantityType::totalOrderSmaller(const QuantityValue& v1, const QuantityValu
 	return 0;
 }
 
-void QuantityType::streamOn(ostream& os) const {
+void QuantityType::streamOn(std::ostream& os) const {
 os << name;
 }
 
@@ -68,7 +67,7 @@ QuantityValue& QuantityType::defaultValue(void){
 	return v;
 }
 
-QuantityValue& QuantityType::valueFromString(const string s){
+QuantityValue& QuantityType::valueFromString(const std::string s){
 	throw *new EParetoCalculatorError("valueFromString in abstract class QuantityType should not be called");
 	return this->defaultValue();
 }
@@ -87,16 +86,16 @@ bool operator!=(QuantityType& t1, QuantityType& t2){
 
 /////////////// QuantityType_Enum ///////////////////
 
-QuantityType_Enum::QuantityType_Enum(string n): QuantityType(n) {
+QuantityType_Enum::QuantityType_Enum(std::string n): QuantityType(n) {
 }
 
-void QuantityType_Enum::addQuantity(string s){
+void QuantityType_Enum::addQuantity(std::string s){
 names.push_back(s);
 quantities.push_back(new QuantityValue_Enum(*this, s));
 };
 
 
-void QuantityType_Enum::streamOn(ostream& os) const {
+void QuantityType_Enum::streamOn(std::ostream& os) const {
 QuantityType::streamOn(os);
 os << "{";
 for(unsigned int i=0; i<quantities.size(); i++){
@@ -111,9 +110,9 @@ QuantityValue& QuantityType_Enum::defaultValue(void){
 return **quantities.begin();
 }
 
-QuantityValue& QuantityType_Enum::valueFromString(const string qn){
-vector<string>::iterator n_iter;
-vector<QuantityValue_Enum*>::iterator q_iter;
+QuantityValue& QuantityType_Enum::valueFromString(const std::string qn){
+std::vector<std::string>::iterator n_iter;
+std::vector<QuantityValue_Enum*>::iterator q_iter;
 
 for (n_iter=names.begin(), q_iter=quantities.begin(); n_iter != names.end(); n_iter++, q_iter++)
   {
@@ -165,7 +164,7 @@ bool QuantityType_Enum::totalOrderSmaller(const QuantityValue& v1, const Quantit
 
 ////////////////// QuantityType_Enum_Unordered //////////////////
 
-QuantityType_Enum_Unordered::QuantityType_Enum_Unordered(string n): QuantityType_Enum(n) {
+QuantityType_Enum_Unordered::QuantityType_Enum_Unordered(std::string n): QuantityType_Enum(n) {
 }
 
 bool QuantityType_Enum_Unordered::compare(const QuantityValue& q1, const QuantityValue& q2) const {
@@ -179,14 +178,14 @@ else return false;
 QuantityValue::QuantityValue(QuantityType& t): qtype(t){
 }
 
-void QuantityValue::streamOn(ostream& os) const {
+void QuantityValue::streamOn(std::ostream& os) const {
 os << "a value of " << qtype;
 }
 
-string& QuantityValue::asString(void) const {
-	ostringstream myString;
+std::string& QuantityValue::asString(void) const {
+    std::ostringstream myString;
 	this->streamOn(myString);
-	return *new string(myString.str());
+	return *new std::string(myString.str());
 }
 
 bool operator<=(const QuantityValue& q1, const QuantityValue& q2){
@@ -212,23 +211,23 @@ bool operator<(const QuantityValue& q1, const QuantityValue& q2) {
 
 ///////////////// QuantityValue_Enum //////////////////
 
-QuantityValue_Enum::QuantityValue_Enum(QuantityType& t, string v): QuantityValue(t){
+QuantityValue_Enum::QuantityValue_Enum(QuantityType& t, std::string v): QuantityValue(t){
 value = v;
 }
 
-void QuantityValue_Enum::streamOn(ostream& os) const {
+void QuantityValue_Enum::streamOn(std::ostream& os) const {
 os << value;
 }
 
 
 ///////////////// QuantityType_Integer ///////////////////
 
-QuantityType_Integer::QuantityType_Integer(string n)
+QuantityType_Integer::QuantityType_Integer(std::string n)
 :QuantityType(n)
 {
 }
 
-void QuantityType_Integer::streamOn(ostream& os) const {
+void QuantityType_Integer::streamOn(std::ostream& os) const {
 os << name ;
 }
 
@@ -237,7 +236,7 @@ QuantityValue* v = new QuantityValue_Integer(*this, 0);
 return *v;
 }
 
-QuantityValue& QuantityType_Integer::valueFromString(const string s){
+QuantityValue& QuantityType_Integer::valueFromString(const std::string s){
 	int number = std::strtol(s.c_str(), 0, 10);
 	return * new QuantityValue_Integer(*this, number); 
 }
@@ -277,7 +276,7 @@ QuantityValue_Integer::QuantityValue_Integer(QuantityType& t, int n)
 {
 }
 
-void QuantityValue_Integer::streamOn(ostream& os) const {
+void QuantityValue_Integer::streamOn(std::ostream& os) const {
 os << value;
 }
 
@@ -287,12 +286,12 @@ os << value;
 
 ///////////////// QuantityType_Real ///////////////////
 
-QuantityType_Real::QuantityType_Real(string n)
+QuantityType_Real::QuantityType_Real(std::string n)
 :QuantityType(n)
 {
 }
 
-void QuantityType_Real::streamOn(ostream& os) const {
+void QuantityType_Real::streamOn(std::ostream& os) const {
 os << name ;
 }
 
@@ -301,7 +300,7 @@ QuantityValue* v = new QuantityValue_Real(*this, 0.0);
 return *v;
 }
 
-QuantityValue& QuantityType_Real::valueFromString(const string s){
+QuantityValue& QuantityType_Real::valueFromString(const std::string s){
 	return * new QuantityValue_Real(*this, strtod(s.c_str(),NULL));
 }
 
@@ -340,7 +339,7 @@ QuantityValue_Real::QuantityValue_Real(QuantityType& t, double n)
 {
 }
 
-void QuantityValue_Real::streamOn(ostream& os) const {
+void QuantityValue_Real::streamOn(std::ostream& os) const {
 os << value;
 }
 
@@ -356,7 +355,7 @@ os << value;
 // return os;
 //}
 
-ostream& operator<<(ostream& os, QuantityValue& v){
+std::ostream& operator<<(std::ostream& os, QuantityValue& v){
  v.streamOn(os);
  return os;
 }

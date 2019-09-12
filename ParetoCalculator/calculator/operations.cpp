@@ -36,15 +36,15 @@
 #include "calculator.h"
 #include <string>
 #include <sstream>
-using namespace std;
+
 using namespace Pareto;
 
 
 // Some C++ thing, making me initialise the static members in POperation_ProdCons here...
-string* POperation_ProdCons::p_test = NULL;
-string* POperation_ProdCons::c_test = NULL;
-vector<int> POperation_Join::qan;
-vector<int> POperation_Join::qbn;
+std::string* POperation_ProdCons::p_test = NULL;
+std::string* POperation_ProdCons::c_test = NULL;
+std::vector<int> POperation_Join::qan;
+std::vector<int> POperation_Join::qbn;
 
 
 
@@ -77,7 +77,7 @@ void POperation_Product::executeOn(ParetoCalculator& c){
 c.product();
 };
 
-POperation_Push::POperation_Push(const string& oname): ParetoCalculatorOperation() {
+POperation_Push::POperation_Push(const std::string& oname): ParetoCalculatorOperation() {
 o = oname;
 }
 
@@ -85,7 +85,7 @@ void POperation_Push::executeOn(ParetoCalculator& c){
 c.push(o);
 }
 
-POperation_Store::POperation_Store(const string& oname): ParetoCalculatorOperation() {
+POperation_Store::POperation_Store(const std::string& oname): ParetoCalculatorOperation() {
 o = oname;
 }
 
@@ -116,7 +116,7 @@ void POperation_Print::executeOn(ParetoCalculator& c){
         c.print();
 }
 
-POperation_ProdCons::POperation_ProdCons(const string& pqname, const string& cqname): ParetoCalculatorOperation(){
+POperation_ProdCons::POperation_ProdCons(const std::string& pqname, const std::string& cqname): ParetoCalculatorOperation(){
 p_quant = pqname;
 c_quant = cqname;
 }
@@ -141,7 +141,7 @@ bool POperation_ProdCons::testConstraint(const Pareto::Configuration& c){
 return cq->value <= (1.0 / pq->value);
 }
 
-POperation_Derived::POperation_Derived(const string& aqname, const string& bqname): ParetoCalculatorOperation(){
+POperation_Derived::POperation_Derived(const std::string& aqname, const std::string& bqname): ParetoCalculatorOperation(){
 a_quant = aqname;
 b_quant = bqname;
 }
@@ -151,19 +151,19 @@ void POperation_Derived::executeOn(ParetoCalculator& c){
 ConfigurationSet* cs = (c.popConfigurationSet());
 
 // define new sum quantity type
-ostringstream sqn; 
+std::ostringstream sqn; 
 sqn << this->description() << " of " << a_quant << " and " << b_quant;
 QuantityType_Real* sqt = new QuantityType_Real(sqn.str());
 
 // build new configuration space
-ostringstream sqsn; 
+std::ostringstream sqsn; 
 sqsn << this->description() << " (" << cs->confspace->name << ")";
 ConfigurationSpace* scs = new ConfigurationSpace(sqsn.str());
 scs->addQuantitiesOf(*cs->confspace);
 scs->addQuantity(*sqt);
 
 // build new set of configurations
-ostringstream sconfsn; 
+std::ostringstream sconfsn; 
 sconfsn << this->description() << " (" << cs->name << ", " << a_quant << ", " << b_quant << ")";
 
 ConfigurationSet* sconfs = new ConfigurationSet(scs, sconfsn.str());
@@ -188,7 +188,7 @@ for(i=cs->confs.begin(); i!=cs->confs.end(); i++){
 c.push(*sconfs);
 }
 
-POperation_Aggregate::POperation_Aggregate(ListOfQuantityNames* ag_quants, string& agname)
+POperation_Aggregate::POperation_Aggregate(ListOfQuantityNames* ag_quants, std::string& agname)
 {
 	this->aggregate_quants = ag_quants;
 	this->newName = agname;
@@ -203,21 +203,21 @@ void POperation_Aggregate::executeOn(ParetoCalculator& c)
 	QuantityType_Real* sqt = new QuantityType_Real(this->newName);
 
 	// build new configuration space
-	ostringstream sqsn; 
+	std::ostringstream sqsn; 
 	sqsn << "Aggregation" << " (" << cs->confspace->name << ")";
 	ConfigurationSpace* scs = new ConfigurationSpace(sqsn.str());
 	scs->addQuantitiesOf(*cs->confspace);
 	scs->addQuantity(*sqt);
 
 	// build new set of configurations
-	ostringstream sconfsn; 
+	std::ostringstream sconfsn; 
 	sconfsn << "Aggregation" << " (" << this->newName << ")";
 	ConfigurationSet* sconfs = new ConfigurationSet(scs, sconfsn.str());
 
 	// find positions of quantities to aggregate
-	vector<unsigned int> idx;
+	std::vector<unsigned int> idx;
 	for(ListOfQuantityNames::iterator i=this->aggregate_quants->begin(); i!=this->aggregate_quants->end(); i++){
-		string& qn = *i;
+		std::string& qn = *i;
 		idx.push_back(cs->confspace->indexOfQuantity(qn));
 	}
 
@@ -229,7 +229,7 @@ void POperation_Aggregate::executeOn(ParetoCalculator& c)
 
 		double sum = 0.0;
 
-		vector<unsigned int>::iterator j;
+		std::vector<unsigned int>::iterator j;
 		for(j=idx.begin(); j!=idx.end(); j++){
 			unsigned int k = *j;
 #ifdef _DEBUG
@@ -250,47 +250,47 @@ void POperation_Aggregate::executeOn(ParetoCalculator& c)
 
 
 
-POperation_Sum::POperation_Sum(const string& aqname, const string& bqname): POperation_Derived(aqname, bqname){
+POperation_Sum::POperation_Sum(const std::string& aqname, const std::string& bqname): POperation_Derived(aqname, bqname){
 }
 
 double POperation_Sum::derive(double a, double b){
 	return a+b;
 }
 
-string POperation_Sum::description(){
+std::string POperation_Sum::description(){
 	return "Sum";
 }
 
-POperation_Max::POperation_Max(const string& aqname, const string& bqname): POperation_Derived(aqname, bqname){
+POperation_Max::POperation_Max(const std::string& aqname, const std::string& bqname): POperation_Derived(aqname, bqname){
 }
 
 double POperation_Max::derive(double a, double b){
 	if(a>b){return a;} else {return b;}
 }
 
-string POperation_Max::description(){
+std::string POperation_Max::description(){
 	return "Max";
 }
 
-POperation_Min::POperation_Min(const string& aqname, const string& bqname): POperation_Derived(aqname, bqname){
+POperation_Min::POperation_Min(const std::string& aqname, const std::string& bqname): POperation_Derived(aqname, bqname){
 }
 
 double POperation_Min::derive(double a, double b){
 	if(a>b){return b;} else {return a;}
 }
 
-string POperation_Min::description(){
+std::string POperation_Min::description(){
 	return "Min";
 }
 
-POperation_Multiply::POperation_Multiply(const string& aqname, const string& bqname): POperation_Derived(aqname, bqname){
+POperation_Multiply::POperation_Multiply(const std::string& aqname, const std::string& bqname): POperation_Derived(aqname, bqname){
 }
 
 double POperation_Multiply::derive(double a, double b){
 	return a*b;
 }
 
-string POperation_Multiply::description(){
+std::string POperation_Multiply::description(){
 	return "Multiply";
 }
 
@@ -330,8 +330,8 @@ POperation_Join::POperation_Join(JoinMap* jqnamemap){
 
 bool POperation_Join::testConstraint(const Pareto::Configuration& c){
 	bool diff = false;
-	vector<int>::iterator i=qan.begin();
-	vector<int>::iterator j=qbn.begin();
+	std::vector<int>::iterator i=qan.begin();
+	std::vector<int>::iterator j=qbn.begin();
 	for(; !diff && i!=qan.end(); i++, j++){
 		unsigned int k = *i;
 		unsigned int m = *j;
@@ -447,7 +447,7 @@ void POperation_EfficientJoin::executeOn(ParetoCalculator& c){
 
 
 
-POperation_EfficientProdCons::POperation_EfficientProdCons(const string& pqname, const string& cqname): p_quant(pqname), c_quant(cqname){
+POperation_EfficientProdCons::POperation_EfficientProdCons(const std::string& pqname, const std::string& cqname): p_quant(pqname), c_quant(cqname){
 }
 
 bool POperation_EfficientProdCons::default_match(const QuantityValue& vp, const QuantityValue& vc) const {
@@ -473,7 +473,7 @@ void POperation_EfficientProdCons::executeOn(ParetoCalculator& c){
 	ConfigurationSpace* nspace = new ConfigurationSpace("Product("+csp->confspace->name+";"+csc->confspace->name+")");
 	nspace->addQuantitiesOf(*csc->confspace);
 	nspace->addQuantitiesOf(*csp->confspace);
-	string name = "Producer-Consumer ( " + csp->name + ", " + csc->name + ", " + p_quant + ", "+ c_quant + ")";
+	std::string name = "Producer-Consumer ( " + csp->name + ", " + csc->name + ", " + p_quant + ", "+ c_quant + ")";
 	ConfigurationSet* ns = new ConfigurationSet(nspace, name);
 
 	IndexOnTotalOrderConfigurationSet ip(p_quant, csp);

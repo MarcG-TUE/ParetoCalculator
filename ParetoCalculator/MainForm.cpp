@@ -75,8 +75,8 @@ namespace Pareto {
 
 		void MainForm::updateStack() {
 			this->stackListBox->Items->Clear();
-			vector<StorableObject*> stack = paretocalculator->stack;
-			vector<StorableObject*>::iterator i;
+            std::vector<StorableObject*> stack = paretocalculator->stack;
+            std::vector<StorableObject*>::iterator i;
 			for(i=stack.begin(); i!=stack.end(); i++){
 				this->stackListBox->Items->Add(gcnew System::String((*i)->asString().c_str()));
 			}
@@ -91,7 +91,7 @@ namespace Pareto {
 			try{
 				// print selected item from stack
 				unsigned int n = this->stackListBox->SelectedIndex;
-				vector<StorableObject*> stack = paretocalculator->stack;
+                std::vector<StorableObject*> stack = paretocalculator->stack;
 				if((n>=0)&&(n<stack.size())){
 					StorableObject* o = stack[n];
 					this->verbose(o->asString().c_str());
@@ -491,7 +491,7 @@ namespace Pareto {
 
 			std:: stringstream str;
 			str<<elapsed_time;
-			string buffer(str.str());
+            std::string buffer(str.str());
 			paretocalculator->verbose(buffer);
 		}
 

@@ -40,7 +40,7 @@ namespace Pareto {
 				QuantityIntMap qm = cs->confspace->quantityNames;
 				QuantityIntMap::iterator i;
 				for(i = qm.begin(); i!=qm.end(); i++){
-					const string s = (*i).first;
+					const std::string s = (*i).first;
 					this->xAxisBox->Items->Add(gcnew System::String(s.c_str()));
 					this->yAxisBox->Items->Add(gcnew System::String(s.c_str()));
 					this->colorBox->Items->Add(gcnew System::String(s.c_str()));

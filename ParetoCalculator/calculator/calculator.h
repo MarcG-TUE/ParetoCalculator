@@ -51,7 +51,7 @@ namespace Pareto {
 		virtual void verbose(const std::string& s) = 0;
 	};
 
-	typedef list<ConfigurationSet*> ListOfConfSet;
+	typedef std::list<ConfigurationSet*> ListOfConfSet;
 
 	/// The Pareto Calculator object
 	///
@@ -77,16 +77,16 @@ namespace Pareto {
 		void store(void);
 
 		/// retrieve an object from the memory 
-		StorableObject* retrieve(const string& oname) throw (EParetoCalculatorError);
+		StorableObject* retrieve(const std::string& oname) throw (EParetoCalculatorError);
 
 		/// retrieve a quantity type from the memory 
-		QuantityType* retrieveQuantityType(const string& oname) throw (EParetoCalculatorError);
+		QuantityType* retrieveQuantityType(const std::string& oname) throw (EParetoCalculatorError);
 
 		/// push an object 'o' onto the calculator stack
 		void push(StorableObject& o);
 
 		/// retreive the object name 'oname' from memory and push it on the stack
-		void push(const string& oname) throw(EParetoCalculatorError);
+		void push(const std::string& oname) throw(EParetoCalculatorError);
 
 		/// return an object popped from the stack
 		StorableObject* pop()  throw(EParetoCalculatorError);
@@ -102,10 +102,10 @@ namespace Pareto {
 		void duplicate();
 
 		/// Put the names of the object in memory on the stream 'os'
-		void listStorage(ostream& os);
+		void listStorage(std::ostream& os);
 
 		/// pop an object from the stack and show it on the stream 'os'
-		void printOn(ostream& os);
+		void printOn(std::ostream& os);
 
 		/// pop an object from the stack and show it on the StatusCallBack-verbose
 		void print();

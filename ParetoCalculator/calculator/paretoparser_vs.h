@@ -63,9 +63,9 @@ class ParetoParser {
 public:
 		ParetoParser(ParetoCalculator* forPC);
 
-        void LoadFile(wstring f);
-        void SaveAll(wstring f);
-        void Save(string itemToSave, wstring f);
+        void LoadFile(std::wstring f);
+        void SaveAll(std::wstring f);
+        void Save(std::string itemToSave, std::wstring f);
         void LoadQuantityTypes();
         void SaveQuantityTypes();
         void LoadConfigurationSpaces();
@@ -73,9 +73,9 @@ public:
         void LoadConfigurationSets();
         void SaveConfigurationSets();
         void LoadOperations() throw(...);
-        vector<QuantityType*>& getQuantityTypes();
-        vector<QuantityType*>& getConfigurationSpaces();
-        vector<QuantityType*>& getConfigurationSets();
+        std::vector<QuantityType*>& getQuantityTypes();
+        std::vector<QuantityType*>& getConfigurationSpaces();
+        std::vector<QuantityType*>& getConfigurationSets();
         ParetoCalculatorOperation& getNextOperation();
 
 private:
@@ -84,7 +84,7 @@ private:
 
 	// Save/Load support
 	void Save_PrepareXMLDoc(void);
-	void Save_OutputFile(wstring f);
+	void Save_OutputFile(std::wstring f);
 	XmlElement^ Save_XMLBuildConfigurationSetNode(ConfigurationSet* cs);
 	XmlElement^ Save_XMLBuildConfigurationSpaceNode(ConfigurationSpace* cs);
 	XmlElement^ ParetoParser::Save_XMLBuildQuantityTypeNode(QuantityType* qt);

@@ -39,7 +39,6 @@
 #include <vector>
 #include <map>
 
-using namespace std;
 
 namespace Pareto {
 
@@ -48,14 +47,14 @@ namespace Pareto {
 	///
 	class StorableObject {
 	public:
-		StorableObject(string n);
+		StorableObject(std::string n);
 		virtual ~StorableObject(){};
 		
 		/// name of the object
-		string name;
+        std::string name;
 
-		virtual const void streamOn(ostream& os);
-		string& asString(void);
+		virtual const void streamOn(std::ostream& os);
+        std::string& asString(void);
 
 		// Run-time type checking. The price we pay...
 		
@@ -72,14 +71,14 @@ namespace Pareto {
 		virtual bool isString(void) = 0;
 	};
 
-	class StorageMap : public map<string,StorableObject*>{};
+	class StorageMap : public std::map<std::string,StorableObject*>{};
 
 	/// A string that can be stored in calculator storage
 	class StorableString : public StorableObject {
 	public:
-		StorableString(string n): StorableObject(n){};
-		virtual const void streamOn(ostream& os){ os << name ;}
-		string& asString(void){return name;}
+		StorableString(std::string n): StorableObject(n){};
+		virtual const void streamOn(std::ostream& os){ os << name ;}
+        std::string& asString(void){return name;}
 		virtual bool isConfigurationSet(void) {return false;}
 		virtual bool isConfigurationSpace(void) {return false;}
 		virtual bool isQuantityType(void) {return false;}
@@ -87,10 +86,10 @@ namespace Pareto {
 	};
 
 
-	ostream& operator<<(ostream& os, StorableObject& o);
+    std::ostream& operator<<(std::ostream& os, StorableObject& o);
 
 	/// A stack of StorableObjects
-	class StackOfStorageObjects: public vector<StorableObject*>{
+	class StackOfStorageObjects: public std::vector<StorableObject*>{
 	public:
 		StorableObject* pop(void);
 		void push(StorableObject* o);

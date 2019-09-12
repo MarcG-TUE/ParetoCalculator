@@ -37,14 +37,13 @@
 #include <string>
 #include <map>
 
-using namespace std;
 
 namespace Pareto {
 
 	//
 	// A StringMap is just an STL map from strings to strings
 	//
-	class StringMap: public std::map<string,string>{};
+	class StringMap: public std::map<std::string, std::string>{};
 
 }
 

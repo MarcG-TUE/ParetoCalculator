@@ -35,7 +35,7 @@ namespace Pareto {
 				QuantityIntMap& qm = cs->confspace->quantityNames;
 				QuantityIntMap::iterator i;
 				for(i = qm.begin(); i!=qm.end(); i++){
-					const string ns = (i->first);
+					const std::string ns = (i->first);
 					quantitiesBox->Items->Add(gcnew System::String(ns.c_str()));
 				}
 			}

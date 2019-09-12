@@ -38,23 +38,23 @@
 
 namespace Pareto {
 
-	StorableObject::StorableObject(string n){
+	StorableObject::StorableObject(std::string n){
 		name=n;
 	}
 
 
-	const void StorableObject::streamOn(ostream& os){
+	const void StorableObject::streamOn(std::ostream& os){
 		os << "a storable object";
 	}
 
-	string& StorableObject::asString(void) {
-		ostringstream myString;
+    std::string& StorableObject::asString(void) {
+        std::ostringstream myString;
 		this->streamOn(myString);
-		return *new string(myString.str());
+		return *new std::string(myString.str());
 	}
 
 
-	ostream& operator<<(ostream& os, StorableObject& o){
+    std::ostream& operator<<(std::ostream& os, StorableObject& o){
 		o.streamOn(os);
 		return os;
 	}

@@ -224,7 +224,7 @@ void ParetoCalculator::hide(ListOfQuantityNames *lqn){
 
 ConfigurationSet& ParetoCalculator::hiding(ConfigurationSet& cs, ListOfQuantityNames *lqn){
 	ConfigurationSpace *csp = cs.confspace->hide(lqn);
-	string nm = "Hide of " + cs.name;
+    std::string nm = "Hide of " + cs.name;
 	ConfigurationSet *ncs = new ConfigurationSet(csp, nm);
 	SetOfConfigurations::iterator i;
 	for(i=cs.confs.begin(); i!=cs.confs.end(); i++){
@@ -629,7 +629,7 @@ ConfigurationSet& ParetoCalculator::efficient_minimize(ConfigurationSet& cs){
 
 void ParetoCalculator::store(StorableObject& o){
 	// put the object in memory
-	memory.insert(pair<const string, StorableObject*>(o.name,&o));
+	memory.insert(std::pair<const std::string, StorableObject*>(o.name,&o));
 }
 
 void ParetoCalculator::store(void){
@@ -637,7 +637,7 @@ void ParetoCalculator::store(void){
 	this->store(*this->pop());
 }
 
-StorableObject* ParetoCalculator::retrieve(const string& oname) throw(EParetoCalculatorError){
+StorableObject* ParetoCalculator::retrieve(const std::string& oname) throw(EParetoCalculatorError){
 	// find object in memory
 	StorageMap::iterator p=memory.find(oname);
 	if(p==memory.end()){
@@ -648,7 +648,7 @@ StorableObject* ParetoCalculator::retrieve(const string& oname) throw(EParetoCal
 	}
 }
 
-QuantityType* ParetoCalculator::retrieveQuantityType(const string& oname) throw (EParetoCalculatorError){
+QuantityType* ParetoCalculator::retrieveQuantityType(const std::string& oname) throw (EParetoCalculatorError){
 	return dynamic_cast<QuantityType*>(this->retrieve(oname));
 }
 
@@ -657,7 +657,7 @@ void ParetoCalculator::push(StorableObject& o){
 	stack.push(&o);
 }
 
-void ParetoCalculator::push(const string& oname) throw(EParetoCalculatorError){
+void ParetoCalculator::push(const std::string& oname) throw(EParetoCalculatorError){
 StorableObject* o=this->retrieve(oname);
 if(o){
         this->push(*o);
@@ -741,19 +741,19 @@ void ParetoCalculator::product(void){
 }
 
 
-void ParetoCalculator::listStorage(ostream& os){
+void ParetoCalculator::listStorage(std::ostream& os){
 	StorageMap::iterator i;
 	for(i=memory.begin(); i!=memory.end(); i++){
-		os << (*i).first << endl;
+		os << (*i).first << std::endl;
 	}
 }
 
-void ParetoCalculator::printOn(ostream& os){
-os << *this->pop() << endl;
+void ParetoCalculator::printOn(std::ostream& os){
+os << *this->pop() << std::endl;
 }
 
 void ParetoCalculator::print(){
-	ostringstream myString;
+    std::ostringstream myString;
 	this->pop()->streamOn(myString);
 	this->verbose(myString.str());
 }

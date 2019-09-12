@@ -40,12 +40,11 @@
 
 #include "storage.h"
 
-using namespace std;
 
 namespace Pareto {
 
 	/// name of a quantity type
-	typedef string QuantityName ;
+	typedef std::string QuantityName ;
 
 	class QuantityValue;
 
@@ -53,7 +52,7 @@ namespace Pareto {
 	class QuantityType: public StorableObject {
 	public:
 		/// Constructor of a quantity type with name 'n'
-		QuantityType(string n);
+		QuantityType(std::string n);
 
 		/// compare (<=) two quantity values of this quantity type.
 		virtual bool compare(const QuantityValue& q1, const QuantityValue& q2) const;
@@ -65,16 +64,16 @@ namespace Pareto {
 		virtual bool totalOrderSmaller(const QuantityValue& v1, const QuantityValue& v2);
 
 		/// Stream a string representation of this quantity type to the stream 'os'
-		virtual void streamOn(ostream& os) const;
+		virtual void streamOn(std::ostream& os) const;
 
 		/// returns a default value for this quantity type
 		virtual QuantityValue& defaultValue(void);
 
 		/// converts a string into a value of this quantity type.
-		virtual QuantityValue& valueFromString(const string s);
+		virtual QuantityValue& valueFromString(const std::string s);
 
 		/// returns a string representation of this quantity type.
-		virtual string& asString(){return this->name;}
+		virtual std::string& asString(){return this->name;}
 
 		// Run-time type checking
 		virtual bool isConfigurationSet(void) { return false;}
@@ -90,7 +89,7 @@ namespace Pareto {
 		virtual bool isUnordered(void) = 0;
 
 		// XML support
-		virtual string* xmlTypeString(void) = 0;
+		virtual std::string* xmlTypeString(void) = 0;
 	};
 
 
@@ -107,10 +106,10 @@ namespace Pareto {
 		virtual ~QuantityValue(){};
 
 		/// Stream a string representation of the quantiy value on 'os'
-		virtual void streamOn(ostream& os) const;
+		virtual void streamOn(std::ostream& os) const;
 
 		/// return a string representation of the quantity value
-		string& asString(void) const;
+		std::string& asString(void) const;
 
 		/// The quantity type of this quantity value
 		QuantityType& qtype;
@@ -123,30 +122,30 @@ namespace Pareto {
 
 	class QuantityValue_Enum;
 
-	class ListOfQuantityValueEnum : public vector<QuantityValue_Enum*> {};
+	class ListOfQuantityValueEnum : public std::vector<QuantityValue_Enum*> {};
 
 	/// Enumerated quantity type. The values in this type are assumed to be totally ordered.
 	class QuantityType_Enum: public QuantityType {
 	public:
 		/// an STL vector of names of the values
-		vector<string> names;
+		std::vector<std::string> names;
 		///instances of each of the values of this type
 		ListOfQuantityValueEnum quantities;
 
 		/// Constructor 
-		QuantityType_Enum(string n);
+		QuantityType_Enum(std::string n);
 
 		/// add a value to the type, with name 's'
-		virtual void addQuantity(string s);
+		virtual void addQuantity(std::string s);
 
 		/// stream a string representation of the quantity type to 'os'
-		virtual void streamOn(ostream& os) const;
+		virtual void streamOn(std::ostream& os) const;
 
 		/// return a default value for this type
 		virtual QuantityValue& defaultValue(void);
 
 		/// create a value object from a string representation
-		virtual QuantityValue& valueFromString(const string s);
+		virtual QuantityValue& valueFromString(const std::string s);
 
 		/// compare two values of this type (<=)
 		virtual bool compare(const QuantityValue& q1, const QuantityValue& q2) const;
@@ -163,7 +162,7 @@ namespace Pareto {
 		virtual bool isUnordered(void) {return false;}
 
 		// XML support
-		virtual string* xmlTypeString(void) {return new string("enum");}
+		virtual std::string* xmlTypeString(void) {return new std::string("enum");}
 	};
 
 
@@ -171,16 +170,16 @@ namespace Pareto {
 	class QuantityValue_Enum: public QuantityValue{
 	public:
 		/// Constructor, provide enumerated type and string representation of the desired value
-		QuantityValue_Enum(QuantityType& t, string v);
+		QuantityValue_Enum(QuantityType& t, std::string v);
 
 		/// stream a string representation of the value to 'os'
-		virtual void streamOn(ostream& os) const;
+		virtual void streamOn(std::ostream& os) const;
 
 		/// obtain an index of this values within the list of values of its type
 		virtual unsigned int index(void) const;
 
 		/// a string representing the enumerated value
-		string value;
+		std::string value;
 	};
 
 
@@ -188,13 +187,13 @@ namespace Pareto {
 	class QuantityType_Enum_Unordered: public QuantityType_Enum {
 	public:
 		/// Constructor 
-		QuantityType_Enum_Unordered(string n);
+		QuantityType_Enum_Unordered(std::string n);
 		virtual bool compare(const QuantityValue& q1, const QuantityValue& q2) const;
 		virtual bool isTotallyOrdered(void) {return false;}
 		virtual bool isUnordered(void) {return true;}
 
 		// XML support
-		virtual string* xmlTypeString(void) {return new string("unordered");}
+		virtual std::string* xmlTypeString(void) {return new std::string("unordered");}
 	};
 
 
@@ -202,16 +201,16 @@ namespace Pareto {
 	class QuantityType_Integer: public QuantityType {
 	public:
 		/// Constructor. name 'n'
-		QuantityType_Integer(string n);
+		QuantityType_Integer(std::string n);
 
 		/// stream a string representation of the type to 'os'
-		virtual void streamOn(ostream& os) const;
+		virtual void streamOn(std::ostream& os) const;
 
 		/// return some default value of this type
 		virtual QuantityValue& defaultValue(void);
 
 		/// create a value of this type from a string
-		virtual QuantityValue& valueFromString(const string s);
+		virtual QuantityValue& valueFromString(const std::string s);
 
 		virtual bool compare(const QuantityValue& q1, const QuantityValue& q2) const;
 		virtual bool equal(const QuantityValue& q1, const QuantityValue& q2) const;
@@ -223,7 +222,7 @@ namespace Pareto {
 		virtual bool isUnordered(void) {return false;}
 
 		// XML support
-		virtual string* xmlTypeString(void) {return new string("integer");}
+		virtual std::string* xmlTypeString(void) {return new std::string("integer");}
 	};
 
 
@@ -234,7 +233,7 @@ namespace Pareto {
 		QuantityValue_Integer(QuantityType& t, int n);
 
 		/// stream a string representation of the value to 'os'
-		virtual void streamOn(ostream& os) const;
+		virtual void streamOn(std::ostream& os) const;
 
 		/// the integer value
 		int value;
@@ -245,16 +244,16 @@ namespace Pareto {
 	public:
 
 		/// Constructor. name 'n'
-		QuantityType_Real(string n);
+		QuantityType_Real(std::string n);
 
 		/// stream a string representation of the type to 'os'
-		virtual void streamOn(ostream& os) const;
+		virtual void streamOn(std::ostream& os) const;
 
 		/// return some default value of this type
 		virtual QuantityValue& defaultValue(void);
 
 		/// create a value of this type from a string
-		virtual QuantityValue& valueFromString(const string s);
+		virtual QuantityValue& valueFromString(const std::string s);
 
 		virtual bool compare(const QuantityValue& q1, const QuantityValue& q2) const;
 		virtual bool equal(const QuantityValue& q1, const QuantityValue& q2) const;
@@ -266,7 +265,7 @@ namespace Pareto {
 		virtual bool isUnordered(void) {return false;}
 
 		// XML support
-		virtual string* xmlTypeString(void) {return new string("real");}
+		virtual std::string* xmlTypeString(void) {return new std::string("real");}
 	};
 
 
@@ -278,7 +277,7 @@ namespace Pareto {
 		QuantityValue_Real(QuantityType& t, double r);
 
 		/// stream a string representation of the value to 'os'
-		virtual void streamOn(ostream& os) const;
+		virtual void streamOn(std::ostream& os) const;
 
 		/// the real value
 		double value;
@@ -286,7 +285,7 @@ namespace Pareto {
 
 
 
-	ostream& operator<<(ostream& os, QuantityValue& v);
+    std::ostream& operator<<(std::ostream& os, QuantityValue& v);
 
 	bool operator<=(const QuantityValue& q1, const QuantityValue& q2);
 	bool operator==(const QuantityValue& q1, const QuantityValue& q2);

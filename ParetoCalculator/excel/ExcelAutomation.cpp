@@ -58,14 +58,14 @@ void ExcelAutomation::createTable(ConfigurationSet* cs, std::string& qx, std::st
 		const QuantityValue& vx = c.getQuantity(qix);
 		const QuantityValue& vy = c.getQuantity(qiy);
 
-		ostrstream vxString;
+        std::ostrstream vxString;
 		vx.streamOn(vxString);
-		vxString << ends;
+		vxString << std::ends;
 		this->putNumberInSheet(i+1,1,std::string(vxString.str()));
 
-		ostrstream vyString;
+        std::ostrstream vyString;
 		vy.streamOn(vyString);
-		vyString << ends;
+		vyString << std::ends;
 		this->putNumberInSheet(i+1,2,std::string(vyString.str()));
 	}
 }
@@ -90,8 +90,8 @@ void ExcelAutomation::plotGraph(){
 	Excel::Chart^ ac = this->excelWorkbook->ActiveChart;
 
 	ac->ChartType=Excel::XlChartType::xlXYScatter;
-	ostrstream rnString;
-	rnString << "A" << 1 << ":B" << confset->confs.size() << ends;
+    std::ostrstream rnString;
+	rnString << "A" << 1 << ":B" << confset->confs.size() << std::ends;
 
 	Excel::Range^ rn  = this->excelWorksheet->Range::get( gcnew System::String(rnString.str()), System::Type::Missing);
 	ac->SetSourceData(rn,Excel::XlRowCol::xlColumns);

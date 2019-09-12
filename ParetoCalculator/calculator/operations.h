@@ -81,8 +81,8 @@ namespace Pareto {
 	/// A push operation to push a named element from the memory onto the stack
 	class POperation_Push: public ParetoCalculatorOperation {
 	public:
-		string o;
-		POperation_Push(const string& oname);
+		std::string o;
+		POperation_Push(const std::string& oname);
 		virtual void executeOn(ParetoCalculator& c);
 	};
 
@@ -106,8 +106,8 @@ namespace Pareto {
 	/// memory of the calculator.
 	class POperation_Store: public ParetoCalculatorOperation {
 	public:
-		string o;
-		POperation_Store(const string& oname);
+		std::string o;
+		POperation_Store(const std::string& oname);
 		virtual void executeOn(ParetoCalculator& c);
 	};
 
@@ -136,10 +136,10 @@ namespace Pareto {
 	/// The (naive implementation of) producer-consumer constraint operation between two quantities.
 	class POperation_ProdCons: public ParetoCalculatorOperation {
 	public:
-		static string* p_test;
-		static string* c_test;
-		string p_quant, c_quant;
-		POperation_ProdCons(const string& pqname, const string& cqname);
+		static std::string* p_test;
+		static std::string* c_test;
+		std::string p_quant, c_quant;
+		POperation_ProdCons(const std::string& pqname, const std::string& cqname);
 		static bool testConstraint(const Configuration& c);
 		virtual void executeOn(ParetoCalculator& c);
 	};
@@ -148,8 +148,8 @@ namespace Pareto {
 	/// user as producer or consumer must be totally ordered.
 	class POperation_EfficientProdCons: public ParetoCalculatorOperation {
 	public:
-		string p_quant, c_quant;
-		POperation_EfficientProdCons(const string& pqname, const string& cqname);
+		std::string p_quant, c_quant;
+		POperation_EfficientProdCons(const std::string& pqname, const std::string& cqname);
 		virtual void executeOn(ParetoCalculator& c);
 		bool default_match(const QuantityValue& va, const QuantityValue& vb) const;
 	};
@@ -157,59 +157,59 @@ namespace Pareto {
 	/// Superclass for operations for computing various derived quantities
 	class POperation_Derived: public ParetoCalculatorOperation {
 	public:
-		POperation_Derived(const string& aqname, const string& bqname);
+		POperation_Derived(const std::string& aqname, const std::string& bqname);
 		virtual void executeOn(ParetoCalculator& c);
 	private:
-		string a_quant, b_quant;
+		std::string a_quant, b_quant;
 		virtual double derive(double a, double b) = 0;
-		virtual string description() = 0;
+		virtual std::string description() = 0;
 	};
 
 	/// Operation for computing derived quantity: sum of two quantities
 	class POperation_Sum: public  POperation_Derived {
 	public:
-		POperation_Sum(const string& aqname, const string& bqname);
+		POperation_Sum(const std::string& aqname, const std::string& bqname);
 	private:
 		virtual double derive(double a, double b);
-		virtual string description();
+		virtual std::string description();
 	};
 
 	/// Operation for computing derived quantity: max of two quantities
 	class POperation_Max: public POperation_Derived {
 	public:
-		POperation_Max(const string& aqname, const string& bqname);
+		POperation_Max(const std::string& aqname, const std::string& bqname);
 	private:
 		virtual double derive(double a, double b);
-		virtual string description();
+		virtual std::string description();
 	};
 
 	/// Operation for computing derived quantity: min of two quantities
 	class POperation_Min: public POperation_Derived {
 	public:
-		POperation_Min(const string& aqname, const string& bqname);
+		POperation_Min(const std::string& aqname, const std::string& bqname);
 	private:
 		virtual double derive(double a, double b);
-		virtual string description();
+		virtual std::string description();
 	};
 
 	/// Operation for computing derived quantity: product of two quantities
 	class POperation_Multiply: public POperation_Derived {
 	public:
-		POperation_Multiply(const string& aqname, const string& bqname);
+		POperation_Multiply(const std::string& aqname, const std::string& bqname);
 	private:
 		virtual double derive(double a, double b);
-		virtual string description();
+		virtual std::string description();
 	};
 
 	/// Operation for computing the aggregation (sum) of all quantities given in
 	/// a list of quantity names
 	class POperation_Aggregate: public ParetoCalculatorOperation {
 	public:
-		POperation_Aggregate(ListOfQuantityNames *ag_quants, string& agname);
+		POperation_Aggregate(ListOfQuantityNames *ag_quants, std::string& agname);
 		virtual void executeOn(ParetoCalculator& c);
 	private:
 		ListOfQuantityNames *aggregate_quants;
-		string newName;
+		std::string newName;
 	};
 
 	/// An STL map from strings to string expressing how two configuration
@@ -221,8 +221,8 @@ namespace Pareto {
 	class POperation_Join: public ParetoCalculatorOperation {
 	public:
 		JoinMap* j_quants;
-		static vector<int> qan;
-		static vector<int> qbn;
+		static std::vector<int> qan;
+		static std::vector<int> qbn;
 		POperation_Join(JoinMap* jqnamemap);
 		static bool testConstraint(const Configuration& c);
 		virtual void executeOn(ParetoCalculator& c);
