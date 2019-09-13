@@ -98,7 +98,15 @@
     <Import Project="ExternalLibraries.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)\lib\</OutDir>
+    <TargetName>$(ProjectName)d</TargetName>
+    <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)\lib\</OutDir>
+    <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -115,6 +123,13 @@
       <AdditionalDependencies>libxml2d.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(LibxmlDir)\lib</AdditionalLibraryDirectories>
     </Lib>
+    <CustomBuildStep>
+      <Command>powershell.exe -File $(ProjectDir)bin/copy_include_files.ps1</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Copying Incude Files</Message>
+      <Outputs>$(SolutionDir)inc</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -147,6 +162,11 @@
       <AdditionalDependencies>libxml2.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(LibxmlDir)\lib</AdditionalLibraryDirectories>
     </Lib>
+    <CustomBuildStep>
+      <Command>powershell.exe -File $(ProjectDir)bin/copy_include_files.ps1</Command>
+      <Message>Copying Incude Files</Message>
+      <Outputs>$(SolutionDir)inc</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
