@@ -58,7 +58,7 @@ ParetoParser::ParetoParser(Pareto::ParetoCalculator *forPC){
 }
 
 
-void ParetoParser::LoadFile(wstring f){
+void ParetoParser::LoadFile(std::wstring f){
 	pXMLDoc = xmlParseFile(wstring_to_string(f).c_str());
     if (pXMLDoc == NULL ) {
         pc->verbose("Document not parsed successfully. \n");
@@ -141,7 +141,7 @@ void ParetoParser::LoadQuantityTypes(){
             }
         
             if(!typeDetermined){
-                throw *new EParetoCalculatorError(string("Quantity of unknown type "+pTypeStr));
+                throw *new EParetoCalculatorError(std::string("Quantity of unknown type "+pTypeStr));
             }
             pc->store(*qn);
 
@@ -213,7 +213,7 @@ void ParetoParser::LoadConfigurationSets(){
             ConfigurationSpace* sp = dynamic_cast<ConfigurationSpace*>(pc->retrieve(getNodeAttribute(pConfSetNode, (xmlChar*)"space_id")));
 			
 			ConfigurationSet* cs = new ConfigurationSet(sp, getNodeAttribute(pConfSetNode, (xmlChar*)"name"));
-            vector<QuantityType*> *qts = &sp->quantities;
+			std::vector<QuantityType*> *qts = &sp->quantities;
 
             // get all the configurations and add them to the set
             xmlChar *xpath_confs = (xmlChar*) "pa:configurations/pa:configuration";
@@ -253,7 +253,8 @@ void ParetoParser::LoadConfigurationSets(){
 
 
 
-void ParetoParser::LoadOperations() throw(EParetoCalculatorError){
+void ParetoParser::LoadOperations() // throw(EParetoCalculatorError)
+{
     // Load the operations from XML document
 	// To be ported later if necessary...
 }
@@ -261,7 +262,7 @@ void ParetoParser::LoadOperations() throw(EParetoCalculatorError){
 
 
 
-vector<QuantityType*>& ParetoParser::getQuantityTypes(){
-        vector<QuantityType*>* v = new(vector<QuantityType*>);
+std::vector<QuantityType*>& ParetoParser::getQuantityTypes(){
+	std::vector<QuantityType*>* v = new(std::vector<QuantityType*>);
         return *v;
 }

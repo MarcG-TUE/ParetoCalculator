@@ -1,22 +1,39 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParetoCalculator", "ParetoCalculator\ParetoCalculator.vcxproj", "{3A095A64-61AA-4E40-947A-68442FF6CC96}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParetoCalculatorLibrary", "ParetoCalculatorLibrary\ParetoCalculatorLibrary.vcxproj", "{769B27CD-8B54-4D2A-A1BB-8C07EB07C653}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
 		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3A095A64-61AA-4E40-947A-68442FF6CC96}.Debug|Win32.ActiveCfg = Debug|Win32
 		{3A095A64-61AA-4E40-947A-68442FF6CC96}.Debug|Win32.Build.0 = Debug|Win32
+		{3A095A64-61AA-4E40-947A-68442FF6CC96}.Debug|x64.ActiveCfg = Debug|Win32
 		{3A095A64-61AA-4E40-947A-68442FF6CC96}.Release|Win32.ActiveCfg = Release|Win32
 		{3A095A64-61AA-4E40-947A-68442FF6CC96}.Release|Win32.Build.0 = Release|Win32
+		{3A095A64-61AA-4E40-947A-68442FF6CC96}.Release|x64.ActiveCfg = Release|Win32
+		{769B27CD-8B54-4D2A-A1BB-8C07EB07C653}.Debug|Win32.ActiveCfg = Debug|Win32
+		{769B27CD-8B54-4D2A-A1BB-8C07EB07C653}.Debug|Win32.Build.0 = Debug|Win32
+		{769B27CD-8B54-4D2A-A1BB-8C07EB07C653}.Debug|x64.ActiveCfg = Debug|x64
+		{769B27CD-8B54-4D2A-A1BB-8C07EB07C653}.Debug|x64.Build.0 = Debug|x64
+		{769B27CD-8B54-4D2A-A1BB-8C07EB07C653}.Release|Win32.ActiveCfg = Release|Win32
+		{769B27CD-8B54-4D2A-A1BB-8C07EB07C653}.Release|Win32.Build.0 = Release|Win32
+		{769B27CD-8B54-4D2A-A1BB-8C07EB07C653}.Release|x64.ActiveCfg = Release|x64
+		{769B27CD-8B54-4D2A-A1BB-8C07EB07C653}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9975FB43-9DA7-4A30-94C1-151576821020}
 	EndGlobalSection
 EndGlobal

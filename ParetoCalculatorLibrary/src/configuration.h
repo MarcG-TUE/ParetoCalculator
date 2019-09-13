@@ -124,7 +124,7 @@ namespace Pareto {
 		bool includesQuantityNamed(const QuantityName& qn);
 
 		/// retrieve a quantity of the configuration space by its name
-		QuantityType& getQuantity(const QuantityName& qn) throw(EParetoCalculatorError);
+		QuantityType& getQuantity(const QuantityName& qn); // throw(EParetoCalculatorError);
 
 		/// create a new configuration in this configuration space
 		Configuration* newConfiguration(void);
@@ -133,7 +133,7 @@ namespace Pareto {
 		unsigned int nrOfVisibleQuantities(void);
 
 		/// returns the index of quantity with name 'qn' in the list of quantities
-		unsigned int indexOfQuantity(const QuantityName& qn) throw(EParetoCalculatorError);
+		unsigned int indexOfQuantity(const QuantityName& qn); // throw(EParetoCalculatorError);
 
 		/// returns an arbitrary unordered quantity from the configuration space if one exists.
 		///

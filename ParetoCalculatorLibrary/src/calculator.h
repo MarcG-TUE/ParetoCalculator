@@ -77,26 +77,26 @@ namespace Pareto {
 		void store(void);
 
 		/// retrieve an object from the memory 
-		StorableObject* retrieve(const std::string& oname) throw (EParetoCalculatorError);
+		StorableObject* retrieve(const std::string& oname); // throw (EParetoCalculatorError);
 
 		/// retrieve a quantity type from the memory 
-		QuantityType* retrieveQuantityType(const std::string& oname) throw (EParetoCalculatorError);
+		QuantityType* retrieveQuantityType(const std::string& oname); // throw (EParetoCalculatorError);
 
 		/// push an object 'o' onto the calculator stack
 		void push(StorableObject& o);
 
 		/// retreive the object name 'oname' from memory and push it on the stack
-		void push(const std::string& oname) throw(EParetoCalculatorError);
+		void push(const std::string& oname); // throw(EParetoCalculatorError);
 
 		/// return an object popped from the stack
-		StorableObject* pop()  throw(EParetoCalculatorError);
+		StorableObject* pop(); // throw(EParetoCalculatorError);
 
 		/// pop a configuration set from the set.
 		/// Throws an exception if the object is not a configuration set
-		ConfigurationSet* popConfigurationSet() throw(EParetoCalculatorError);
+		ConfigurationSet* popConfigurationSet(); // throw(EParetoCalculatorError);
 
 		/// return a pointer to the object on top of the stack without removing it.
-		StorableObject* peek() throw(EParetoCalculatorError);
+		StorableObject* peek(); // throw(EParetoCalculatorError);
 
 		/// duplicate the object on top of the stack
 		void duplicate();

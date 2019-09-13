@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <LibxmlDir>C:\Users\mgeil\Documents\Software\libraries\libxml2-2.9.8\</LibxmlDir>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="LibxmlDir">
+      <Value>$(LibxmlDir)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

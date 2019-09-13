@@ -35,12 +35,12 @@
 #include <sstream>
 #include <math.h>
 
-#ifdef _MSC_VER
-#pragma warning( disable : 4290 ) // to ignore the exception specification warnings in Visual Studio
-#include "paretoparser_vs.h"
-#else
+//#ifdef _MSC_VER
+//#pragma warning( disable : 4290 ) // to ignore the exception specification warnings in Visual Studio
+//#include "paretoparser_vs.h"
+//#else
 #include "paretoparser_libxml.h"
-#endif
+//#endif
 
 
 using namespace Pareto;
@@ -637,7 +637,8 @@ void ParetoCalculator::store(void){
 	this->store(*this->pop());
 }
 
-StorableObject* ParetoCalculator::retrieve(const std::string& oname) throw(EParetoCalculatorError){
+StorableObject* ParetoCalculator::retrieve(const std::string& oname) // throw(EParetoCalculatorError)
+{
 	// find object in memory
 	StorageMap::iterator p=memory.find(oname);
 	if(p==memory.end()){
@@ -648,7 +649,8 @@ StorableObject* ParetoCalculator::retrieve(const std::string& oname) throw(EPare
 	}
 }
 
-QuantityType* ParetoCalculator::retrieveQuantityType(const std::string& oname) throw (EParetoCalculatorError){
+QuantityType* ParetoCalculator::retrieveQuantityType(const std::string& oname) //throw (EParetoCalculatorError)
+{
 	return dynamic_cast<QuantityType*>(this->retrieve(oname));
 }
 
@@ -657,7 +659,8 @@ void ParetoCalculator::push(StorableObject& o){
 	stack.push(&o);
 }
 
-void ParetoCalculator::push(const std::string& oname) throw(EParetoCalculatorError){
+void ParetoCalculator::push(const std::string& oname) //throw(EParetoCalculatorError)
+{
 StorableObject* o=this->retrieve(oname);
 if(o){
         this->push(*o);
@@ -667,7 +670,8 @@ else {
         }
 }
 
-StorableObject* ParetoCalculator::pop() throw(EParetoCalculatorError){
+StorableObject* ParetoCalculator::pop() //throw(EParetoCalculatorError)
+{
 	if(stack.size()>0){
 		return stack.pop();
 	} else {
@@ -676,7 +680,8 @@ StorableObject* ParetoCalculator::pop() throw(EParetoCalculatorError){
 	}
 }
 
-ConfigurationSet* ParetoCalculator::popConfigurationSet() throw(EParetoCalculatorError){
+ConfigurationSet* ParetoCalculator::popConfigurationSet() //throw(EParetoCalculatorError)
+{
 	StorableObject* so = this->pop();
 	if(!so->isConfigurationSet()){
 		throw *new EParetoCalculatorError("Configuration set expected in ParetoCalculator::popConfigurationSet()");
@@ -685,7 +690,8 @@ ConfigurationSet* ParetoCalculator::popConfigurationSet() throw(EParetoCalculato
 	return dynamic_cast<ConfigurationSet*>(so);
 }
 
-StorableObject* ParetoCalculator::peek() throw(EParetoCalculatorError){
+StorableObject* ParetoCalculator::peek() //throw(EParetoCalculatorError)
+{
 	if(stack.size()>0){
 		return stack.peek();}
 	else {
@@ -839,7 +845,7 @@ void ParetoCalculator::LoadOperations(){
 	this->verbose("Operations from input executed\n");
 }
 
-#ifdef _MSC_VER
+//#ifdef _MSC_VER
 void ParetoCalculator::SaveAllFile(const std::wstring& fn){
 	this->setStatus("Saving XML file");
 	this->verbose("Saving XML file...");
@@ -855,7 +861,7 @@ void ParetoCalculator::SaveItemFile(const std::string& itemToSave, const std::ws
 	this->setStatus("XML item saved");
 	this->verbose("saved\n");
 }
-#endif
+//#endif
 
 long int testComplexity(long int N, long int d){
 	if(N<=1) return 1;

@@ -59,19 +59,19 @@ class ParetoParser {
 public:
 		ParetoParser(ParetoCalculator* forPC);
 
-        void LoadFile(wstring f);
-        //void SaveAll(wstring f);						// forget abourt saving for now
-        //void Save(string itemToSave, wstring f);
+        void LoadFile(std::wstring f);
+        void SaveAll(std::wstring f);						// forget abourt saving for now
+        void Save(std::string itemToSave, std::wstring f);
         void LoadQuantityTypes();
         //void SaveQuantityTypes();
         void LoadConfigurationSpaces();
         //void SaveConfigurationSpaces();
         void LoadConfigurationSets();
         //void SaveConfigurationSets();
-        void LoadOperations() throw(EParetoCalculatorError);
-        vector<QuantityType*>& getQuantityTypes();
-        vector<QuantityType*>& getConfigurationSpaces();
-        vector<QuantityType*>& getConfigurationSets();
+		void LoadOperations(); // throw(EParetoCalculatorError);
+		std::vector<QuantityType*>& getQuantityTypes();
+		std::vector<QuantityType*>& getConfigurationSpaces();
+		std::vector<QuantityType*>& getConfigurationSets();
         ParetoCalculatorOperation& getNextOperation();
 
 private:

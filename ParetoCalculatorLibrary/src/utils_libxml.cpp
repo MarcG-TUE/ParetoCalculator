@@ -37,10 +37,11 @@
 
 std::string wstring_to_string(std::wstring& wstr) {
 	std::string str;
+	size_t ressz;
 	size_t len = wstr.length();
-	char* psz = new char[len + 1];
-	// secure version, seems specific to microsft: wcstombs_s(&len, psz, len+1, wstr.c_str(),len + 1);
-	wcstombs(psz, wstr.c_str(),len + 1);
+	size_t outputsz = len + 1;
+	char* psz = new char[outputsz];
+	wcstombs_s(&ressz, psz, outputsz, wstr.c_str(), len);
 	str = psz;
 	delete [] psz;
 	return str;
@@ -48,9 +49,12 @@ std::string wstring_to_string(std::wstring& wstr) {
 
 std::wstring string_to_wstring(std::string& str) {
 	std::wstring wstr;
+	size_t ressz;
 	size_t len = str.length();
+	size_t outputsz = len + 1;
 	wchar_t* psz = new wchar_t[len + 1];
-	mbstowcs(psz, str.c_str(),len + 1);
+	//mbstowcs(psz, str.c_str(),len + 1);
+	mbstowcs_s(&ressz, psz, outputsz, str.c_str(), len);
 	wstr = psz;
 	delete [] psz;
 	return wstr;

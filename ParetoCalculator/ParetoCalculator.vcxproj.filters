@@ -24,16 +24,7 @@
     <ClCompile Include="AssemblyInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="calculator\calculator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="calculator\configuration.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="excel\ExcelAutomation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="calculator\exceptions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dialogs\JoinDialog.cpp">
@@ -42,22 +33,13 @@
     <ClCompile Include="MainForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="calculator\operations.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ParetoCalculator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="calculator\paretoparser_vs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dialogs\PlotDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dialogs\prodcons.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="calculator\quantity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dialogs\SaveDialog.cpp">
@@ -70,9 +52,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="calculator\storage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dialogs\StoreDialog.cpp">
@@ -92,16 +71,7 @@
     <ClInclude Include="dialogs\AbstractionDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="calculator\calculator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="calculator\configuration.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="excel\ExcelAutomation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="calculator\exceptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="globals.h">
@@ -113,22 +83,10 @@
     <ClInclude Include="MainForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="calculator\msxmlsupport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="calculator\operations.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="calculator\paretoparser_vs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="dialogs\PlotDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dialogs\prodcons.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="calculator\quantity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
@@ -146,16 +104,13 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="calculator\storage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="dialogs\StoreDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dialogs\SumDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="calculator\support.h">
+    <ClInclude Include="calculator\msxmlsupport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="calculator\utils_vs.h">

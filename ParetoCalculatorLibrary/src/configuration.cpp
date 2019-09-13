@@ -65,7 +65,8 @@ void ConfigurationSpace::addQuantitiesOf(ConfigurationSpace& cs){
 
 
 
-QuantityType& ConfigurationSpace::getQuantity(const QuantityName& qn) throw(EParetoCalculatorError){
+QuantityType& ConfigurationSpace::getQuantity(const QuantityName& qn) //throw(EParetoCalculatorError)
+{
 	if(quantityNames.find(qn)!=quantityNames.end()) return *quantities[quantityNames[qn]];
 	ListOfQuantityTypes::iterator i;
 	for(i=quantities.begin(); i!=quantities.end(); i++){
@@ -84,7 +85,8 @@ unsigned int ConfigurationSpace::nrOfVisibleQuantities(void){
 }
 
 
-unsigned int ConfigurationSpace::indexOfQuantity(const QuantityName& qn) throw(EParetoCalculatorError){
+unsigned int ConfigurationSpace::indexOfQuantity(const QuantityName& qn) //throw(EParetoCalculatorError)
+{
 	if(quantityNames.find(qn)==quantityNames.end()) {
 		throw *new EParetoCalculatorError("quantity "+qn+" not found in ConfigurationSpace::indexOfQuantity");
 	}
