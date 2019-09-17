@@ -41,7 +41,7 @@
 using namespace System;
 
 
-std::string wstring_to_string(std::wstring& wstr);
+//std::string wstring_to_string(std::wstring& wstr);
 bool To_string( String^ source, std::string &target );
 std::string& system_to_std_string( String^ source);
 

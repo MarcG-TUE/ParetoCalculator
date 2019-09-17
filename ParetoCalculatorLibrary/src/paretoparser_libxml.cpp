@@ -266,3 +266,16 @@ std::vector<QuantityType*>& ParetoParser::getQuantityTypes(){
 	std::vector<QuantityType*>* v = new(std::vector<QuantityType*>);
         return *v;
 }
+
+
+void ParetoParser::SaveAll(std::wstring f)
+{
+	throw EParetoCalculatorError("ParetoParser::SaveAll is not implemented!");
+}
+
+
+void ParetoParser::Save(std::string itemToSave, std::wstring f)
+{
+	throw EParetoCalculatorError("ParetoParser::Save is not implemented!");
+}
+

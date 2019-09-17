@@ -35,15 +35,15 @@
 
 // Strings
 
-std::string wstring_to_string(std::wstring& wstr) {
-	std::string str;
-	size_t len = wstr.length();
-	char* psz = new char[len + 1];
-	wcstombs_s(&len, psz, len+1, wstr.c_str(),len + 1);
-	str = psz;
-	delete [] psz;
-	return str;
-}
+//std::string wstring_to_string(std::wstring& wstr) {
+//	std::string str;
+//	size_t len = wstr.length();
+//	char* psz = new char[len + 1];
+//	wcstombs_s(&len, psz, len+1, wstr.c_str(),len + 1);
+//	str = psz;
+//	delete [] psz;
+//	return str;
+//}
 
 bool To_string( String^ source, std::string &target ) {
 	pin_ptr<const wchar_t> wch = PtrToStringChars( source );
