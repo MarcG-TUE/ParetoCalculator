@@ -1,7 +1,7 @@
 // ParetoCalculator.cpp : main project file.
 
 #include "stdafx.h"
-#include "statusmediator.h"
+#include "utils/statusmediator.h"
 #include "MainForm.h"
 
 using namespace Pareto::Calculator;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../calculator/calculator.h"
-#include "../calculator/utils_vs.h"
+#include <calculator.h>
+#include "utils/utils_vs.h"
 
 using namespace System;
 using namespace System::ComponentModel;

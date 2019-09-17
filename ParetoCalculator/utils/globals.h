@@ -4,7 +4,7 @@
 #define PARETOCALCULATORGLOBALS_H
 
 #include <string>
-#include "calculator/calculator.h"
+#include "calculator.h"
 
 using namespace System;
 using namespace Pareto;

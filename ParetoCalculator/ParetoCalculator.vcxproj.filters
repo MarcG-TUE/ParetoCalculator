@@ -48,9 +48,6 @@
     <ClCompile Include="dialogs\SelectionDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="statusmediator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -60,7 +57,10 @@
     <ClCompile Include="dialogs\SumDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="calculator\utils_vs.cpp">
+    <ClCompile Include="utils\statusmediator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\utils_vs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,9 +72,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="excel\ExcelAutomation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dialogs\JoinDialog.h">
@@ -98,9 +95,6 @@
     <ClInclude Include="dialogs\SelectionDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="statusmediator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -113,7 +107,13 @@
     <ClInclude Include="calculator\msxmlsupport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="calculator\utils_vs.h">
+    <ClInclude Include="utils\globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\statusmediator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\utils_vs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

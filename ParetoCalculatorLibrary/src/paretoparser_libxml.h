@@ -78,7 +78,7 @@ private:
 
 	ParetoCalculator* pc;
 
-	xmlXPathContextPtr xpathCtx;
+	xmlXPathContextPtr xpathCtx = NULL;
 
 	// Save/Load support
 	//void Save_PrepareXMLDoc(void);

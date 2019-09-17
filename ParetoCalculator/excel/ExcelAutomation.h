@@ -1,8 +1,8 @@
 #ifndef EXCELAUTOMATION_H
 #define EXCELAUTOMATION_H
 
-#include "../calculator/configuration.h"
-#include "../calculator/quantity.h"
+#include "configuration.h"
+#include "quantity.h"
 
 // On some machines / version of Visual Studio the following 3 lines
 // need to be commented out; on others they should not. Don't know why...

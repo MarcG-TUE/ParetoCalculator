@@ -1,9 +1,9 @@
 #pragma once
 
 #include <string>
-#include "globals.h"
-#include "statusmediator.h"
-#include "calculator/utils_vs.h"
+#include "utils/globals.h"
+#include "utils/statusmediator.h"
+#include "utils/utils_vs.h"
 
 using namespace System;
 using namespace System::ComponentModel;

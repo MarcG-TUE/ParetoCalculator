@@ -9,7 +9,7 @@
 #include "dialogs/SaveDialog.h"
 #include "dialogs/StoreDialog.h"
 #include "dialogs/prodcons.h"
-#include "calculator/operations.h"
+#include <operations.h>
 
 #include <math.h>
 #include <strstream>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../excel/ExcelAutomation.h"
-#include "../calculator/configuration.h"
+#include "configuration.h"
 
 using namespace System;
 using namespace System::ComponentModel;

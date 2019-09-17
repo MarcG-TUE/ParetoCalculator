@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../calculator/calculator.h"
+#include <calculator.h>
 
 using namespace System;
 using namespace System::ComponentModel;

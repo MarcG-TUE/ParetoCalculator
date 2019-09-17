@@ -1,5 +1,5 @@
 #include "../stdafx.h"
-#include "../calculator/utils_vs.h"
+#include "utils/utils_vs.h"
 #include "PlotDialog.h"
 
 using namespace Pareto::Calculator;

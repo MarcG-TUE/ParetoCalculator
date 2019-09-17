@@ -1,7 +1,7 @@
 #ifndef STATUSMEDIATOR_H
 #define STATUSMEDIATOR_H
 
-#include "calculator/calculator.h"
+#include "calculator.h"
 
 #include <vcclr.h>
 #using <mscorlib.dll>
