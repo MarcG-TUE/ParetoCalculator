@@ -210,7 +210,7 @@ xcopy /Y $(ProjectDir)src\*.h $(SolutionDir)inc\</Command>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(LibxmlDir)\include;</AdditionalIncludeDirectories>
     </ClCompile>

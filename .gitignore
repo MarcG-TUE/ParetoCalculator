@@ -1,5 +1,7 @@
 .vs
 Debug
+CLR\ Debug
+CLR\ Release
 Release
 *.user
 inc/*
