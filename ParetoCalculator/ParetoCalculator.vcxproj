@@ -83,7 +83,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)inc\;$(ProjectDir)\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>%(AdditionalDependencies);ParetoCalculatorLibrary_clr.lib;kernel32.lib</AdditionalDependencies>
+      <AdditionalDependencies>comsuppw.lib;ws2_32.lib;ParetoCalculatorLibrary_clr.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>

@@ -286,7 +286,7 @@ xcopy /Y $(ProjectDir)src\*.h $(SolutionDir)inc\</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(LibxmlDir)\include;</AdditionalIncludeDirectories>
       <EnablePREfast>true</EnablePREfast>
