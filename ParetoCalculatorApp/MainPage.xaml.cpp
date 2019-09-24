@@ -5,6 +5,7 @@
 
 #include "pch.h"
 #include "MainPage.xaml.h"
+#include "AboutDialog.xaml.h"
 
 using namespace ParetoCalculatorApp;
 
@@ -24,4 +25,11 @@ using namespace Windows::UI::Xaml::Navigation;
 MainPage::MainPage()
 {
 	InitializeComponent();
+}
+
+
+void ParetoCalculatorApp::MainPage::aboutButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+	AboutDialog^ aboutDialog1 = gcnew AboutDialog();
+	aboutDialog1->ShowDialog();
 }

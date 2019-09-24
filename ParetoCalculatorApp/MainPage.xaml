@@ -29,8 +29,8 @@
             </Grid>
             <Grid x:Name="Right_TopDown" Grid.Column="1">
                 <TextBlock x:Name="stackLabel" HorizontalAlignment="Left" Height="38" Margin="52,35,0,0" Text="Stack" TextWrapping="Wrap" VerticalAlignment="Top" Width="116"/>
-                <ListView x:Name="stackListView" Margin="10,80,10,0" Background="#FFA7EE97" Height="456" VerticalAlignment="Top"/>
-                <Grid x:Name="RightButtons" Margin="5,480,5,5">
+                <ListView x:Name="stackListView" Margin="10,80,10,0" Background="#FFA7EE97" Height="232" VerticalAlignment="Top" d:LayoutOverrides="VerticalAlignment"/>
+                <Grid x:Name="RightButtons" Margin="5,342,5,5" d:LayoutOverrides="VerticalAlignment">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
@@ -63,7 +63,7 @@
                     <Button x:Name="plotButton" Content="Plot" Margin="5,5,5,5" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     <Button x:Name="saveButton" Content="Save" Margin="5,5,5,5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="6"/>
                     <Button x:Name="testButton" Content="Test" VerticalAlignment="Stretch" Grid.Column="2" HorizontalAlignment="Stretch" Grid.Row="6" Margin="5,5,5,5"/>
-                    <Button x:Name="aboutButton" Content="About" Margin="5,5,5,5" VerticalAlignment="Stretch" Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="6"/>
+                    <Button x:Name="aboutButton" Content="About" Margin="5,5,5,5" VerticalAlignment="Stretch" Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="6" Click="aboutButton_Click"/>
                 </Grid>
             </Grid>
         </Grid>
@@ -71,6 +71,6 @@
             <TextBlock x:Name="statusLabel" HorizontalAlignment="Left"  Text="Status" TextWrapping="Wrap" Width="247"/>
             <TextBlock x:Name="statusContent"  Text="Status Content" TextWrapping="Wrap" Margin="300,0,12,0 " Height="19" VerticalAlignment="Bottom"/>
         </Grid>
+        <controls:AboutDialog x:Name="AboutDialog" />
     </Grid>
-
 </Page>

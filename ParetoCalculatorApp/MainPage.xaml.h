@@ -17,5 +17,7 @@ namespace ParetoCalculatorApp
 	public:
 		MainPage();
 
+	private:
+		void aboutButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 	};
 }
