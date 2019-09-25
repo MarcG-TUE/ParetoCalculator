@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 
 namespace ParetoCalculatorUI
 {
@@ -36,5 +37,31 @@ namespace ParetoCalculatorUI
             // NOTE: Returns only when window is closed
             Nullable<bool> dialogResult = dialogBox.ShowDialog();
         }
-    }
+
+        private void fileSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.RestoreDirectory = true;
+
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                try
+                {
+                    pc->LoadFile(openFileDialog.FileName);
+                    pc->LoadQuantityTypes();
+                    pc->LoadConfigurationSpaces();
+                    pc->LoadConfigurationSets();
+                }
+                catch (EParetoCalculatorErrorW&e) {
+                    this->ParetoCalculatorExceptionOccurred(e);
+                }
+                }
+                this->updateStack();
+            }
+        }
 }

@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="AboutDialog" Height="450" Width="800">
     <Grid>
-        
+        <Button x:Name="okButton" Content="OK" Height="85.682" Margin="211.368,0,247.65,47.425" VerticalAlignment="Bottom" Click="okButton_Click"/>
+
     </Grid>
 </Window>
