@@ -101,5 +101,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ParetoCalculatorWrapper\ParetoCalculatorWrapper.vcxproj">
+      <Project>{4dac4124-392d-4b5c-907a-9ae4038f4fd4}</Project>
+      <Name>ParetoCalculatorWrapper</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

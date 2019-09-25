@@ -27,6 +27,8 @@ namespace ParetoCalculatorUI
 
         private void aboutButton_Click(object sender, RoutedEventArgs e)
         {
+            ParetoCalculatorW pc = new ParetoCalculatorW();
+
             // Instantiate window
             AboutDialog dialogBox = new AboutDialog();
 

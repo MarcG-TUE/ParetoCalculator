@@ -15,6 +15,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParetoCalculatorUI", "ParetoCalculatorUI\ParetoCalculatorUI.csproj", "{DD6460EF-575A-4B09-B7D2-5261528E38DB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParetoCalculatorWrapper", "ParetoCalculatorWrapper\ParetoCalculatorWrapper.vcxproj", "{4DAC4124-392D-4B5C-907A-9AE4038F4FD4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{769B27CD-8B54-4D2A-A1BB-8C07EB07C653} = {769B27CD-8B54-4D2A-A1BB-8C07EB07C653}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
