@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 
+
 namespace ParetoCalculatorUI
 {
     /// <summary>
@@ -25,6 +26,8 @@ namespace ParetoCalculatorUI
         {
             InitializeComponent();
         }
+
+        private ParetoCalculatorW paretocalculator;
 
         private void aboutButton_Click(object sender, RoutedEventArgs e)
         {
@@ -52,16 +55,36 @@ namespace ParetoCalculatorUI
             {
                 try
                 {
-                    pc->LoadFile(openFileDialog.FileName);
-                    pc->LoadQuantityTypes();
-                    pc->LoadConfigurationSpaces();
-                    pc->LoadConfigurationSets();
+                    this.paretocalculator.LoadFile(openFileDialog.FileName);
+                    this.paretocalculator.LoadQuantityTypes();
+                    this.paretocalculator.LoadConfigurationSpaces();
+                    this.paretocalculator.LoadConfigurationSets();
                 }
-                catch (EParetoCalculatorErrorW&e) {
-                    this->ParetoCalculatorExceptionOccurred(e);
+                catch (ParetoCalculatorExceptionW exc) {
+                    this.ParetoCalculatorExceptionOccurred(exc);
                 }
                 }
-                this->updateStack();
+                this.updateStack();
             }
+
+        private void ParetoCalculatorExceptionOccurred(ParetoCalculatorExceptionW e)
+        {
+            this.verbose("An exception occurred: " + e.Message + "\n");
+            this.updateStack();
         }
+
+        private void verbose(String s)
+        {
+            throw new NotImplementedException("Not implemented yet.");
+        }   
+
+        private void updateStack()
+        {
+            throw new NotImplementedException("Not implemented yet.");
+        }
+
+    }
+
+
+
 }

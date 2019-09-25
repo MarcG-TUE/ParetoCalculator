@@ -127,10 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ParetoCalculatorExceptionW.cpp" />
     <ClCompile Include="ParetoCalculatorW.cpp" />
+    <ClCompile Include="utils\utils_vs.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ParetoCalculatorExceptionW.h" />
     <ClInclude Include="ParetoCalculatorW.h" />
+    <ClInclude Include="utils\utils_vs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

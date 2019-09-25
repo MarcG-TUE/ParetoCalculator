@@ -222,8 +222,8 @@ xcopy /Y $(ProjectDir)src\*.h $(SolutionDir)inc\</Command>
       <AdditionalLibraryDirectories>$(LibxmlDir)\lib</AdditionalLibraryDirectories>
     </Lib>
     <CustomBuildStep>
-      <Command>del /F $(SolutionDir)inc\*.h
-xcopy /Y $(ProjectDir)src\*.h $(SolutionDir)inc\</Command>
+      <Command>del /F "$(SolutionDir)inc\*.h"
+xcopy /Y "$(ProjectDir)src\*.h" "$(SolutionDir)inc\"</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copying Incude Files</Message>

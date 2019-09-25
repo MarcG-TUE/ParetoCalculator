@@ -13,14 +13,32 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{eb382495-f818-44c6-935e-e6f10058787f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils">
+      <UniqueIdentifier>{67784e97-60a7-4cfc-a1a9-5be39eb74a32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ParetoCalculatorW.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="utils\utils_vs.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ParetoCalculatorExceptionW.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ParetoCalculatorW.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\utils_vs.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ParetoCalculatorExceptionW.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
