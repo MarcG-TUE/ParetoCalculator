@@ -3,6 +3,7 @@
 #include "calculator.h"
 
 using namespace System;
+using namespace System::Collections;
 
 public ref class ParetoCalculatorW
 {
@@ -23,6 +24,10 @@ public:
 
 	/// not yet implemented in the current version, sorry
 	void LoadOperations();
+
+
+	// new wrapper functions
+	ArrayList^ getStackItemStrings();
 
 private:
 	Pareto::ParetoCalculator* pc;

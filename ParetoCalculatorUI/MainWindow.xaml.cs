@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,7 @@ namespace ParetoCalculatorUI
         public MainWindow()
         {
             InitializeComponent();
+            this.paretocalculator = new ParetoCalculatorW();
         }
 
         private ParetoCalculatorW paretocalculator;
@@ -60,7 +62,7 @@ namespace ParetoCalculatorUI
                     this.paretocalculator.LoadConfigurationSpaces();
                     this.paretocalculator.LoadConfigurationSets();
                 }
-                catch (ParetoCalculatorExceptionW exc) {
+               catch (ParetoCalculatorExceptionW exc) {
                     this.ParetoCalculatorExceptionOccurred(exc);
                 }
                 }
@@ -80,7 +82,12 @@ namespace ParetoCalculatorUI
 
         private void updateStack()
         {
-            throw new NotImplementedException("Not implemented yet.");
+            this.stackListView.Items.Clear();
+            ArrayList l = this.paretocalculator.getStackItemStrings();
+            foreach (String^ s in l)
+            {
+                this.stackListView.Items.Add(s);
+            }
         }
 
     }
