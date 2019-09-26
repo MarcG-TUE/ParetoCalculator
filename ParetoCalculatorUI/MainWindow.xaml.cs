@@ -76,6 +76,7 @@ namespace ParetoCalculatorUI
         {
             this.consoleText.Text += s;
             this.consoleText.Text += System.Environment.NewLine;
+            this.consoleText.ScrollToEnd();
         }
 
         private void updateStack()
@@ -155,6 +156,83 @@ namespace ParetoCalculatorUI
                 this.updateStack();
             }
         }
-    }
+
+        private void printButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // print selected item from stack
+                int n = this.stackListView.SelectedIndex;
+                if ((n >= 0) && (n < this.paretocalculator.stackSize()))
+                {
+//                    StorableObject* o = stack[n];
+                    this.verbose(this.paretocalculator.peek(n));
+                }
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
+        }
+
+        private void duplicateButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!this.paretocalculator.stackEmpty())
+                {
+                    this.paretocalculator.duplicate();
+                    this.updateStack();
+                }
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
+        }
+
+        private void productButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (this.paretocalculator.stackSize() >= 2)
+                {
+                    this.paretocalculator.product();
+                    this.updateStack();
+                }
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
+        }
+
+        private void prodconsButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!this.paretocalculator.stackEmpty())
+                {
+                    ProdConsDialog dialogBox = new ProdConsDialog(this.paretocalculator.peek());
+                    Nullable<bool> dialogResult = dialogBox.ShowDialog();
+
+                    if (dialogResult == true)
+                    {
+                        string pq = dialogBox.prodCombo.SelectedItem;
+                        string cq = dialogBox.consCombo.SelectedItem;
+                        this.paretocalculator.executeProdCons(pq, cq);
+                        this->updateStack();
+                        delete & pco;
+                    }
+                }
+            }
+            catch (EParetoCalculatorError&e) {
+                this->ParetoCalculatorExceptionOccurred(e);
+            }
+            }
+        }
 
 }

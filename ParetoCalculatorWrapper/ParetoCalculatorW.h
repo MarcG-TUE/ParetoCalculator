@@ -28,14 +28,20 @@ public:
 	/// push an object named s onto the calculator stack
 	void push(String^ s);
 
+	void duplicate();
+	
+	void product();
+
 	// new wrapper functions 
 	ArrayList^ getStackItemStrings();
 	ArrayList^ getMemoryItemStrings();
 	int stackSize();
 	String^ pop();
 	String^ peek();
+	String^ peek(int n);
 	bool stackEmpty();
 	void storePop(String^ name);
+	void executeProdCons(String^ pq, String^ cq);
 
 private:
 	Pareto::ParetoCalculator* pc;

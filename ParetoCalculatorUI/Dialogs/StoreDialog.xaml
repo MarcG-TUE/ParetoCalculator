@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="StoreDialog" Height="450" Width="800">
     <Grid>
-        <TextBox x:Name="textLabel" HorizontalAlignment="Left" Height="49.25" Margin="50.798,35.045,0,0" TextWrapping="Wrap" Text="Name for new object:" VerticalAlignment="Top" Width="285.383"/>
+        <TextBox x:Name="textLabel" HorizontalAlignment="Left" Height="49.25" Margin="50.798,35.045,0,0" TextWrapping="Wrap" Text="Name for new object:" VerticalAlignment="Top" Width="285.383" IsReadOnly="True"/>
         <TextBox x:Name="nameEditBox" Height="41.829" Margin="50.798,105.21,108.669,0" TextWrapping="Wrap" Text="NewName" VerticalAlignment="Top"/>
         <Button x:Name="storeButton" Content="Store" HorizontalAlignment="Left" Height="47.901" Margin="50.798,0,0,57.545" VerticalAlignment="Bottom" Width="247.602" Click="storeButton_Click"/>
         <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Right" Height="47.901" Margin="0,0,149.149,57.545" VerticalAlignment="Bottom" Width="242.879" Click="cancelButton_Click"/>

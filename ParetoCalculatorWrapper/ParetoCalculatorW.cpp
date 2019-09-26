@@ -46,6 +46,16 @@ void ParetoCalculatorW::push(String^ s)
 	this->pc->push(system_to_std_string(s));
 }
 
+void ParetoCalculatorW::duplicate()
+{
+	this->pc->duplicate();
+}
+
+void ParetoCalculatorW::product()
+{
+	this->pc->product();
+}
+
 ArrayList^ ParetoCalculatorW::getStackItemStrings()
 {
 	ArrayList^ res = gcnew ArrayList();
@@ -53,7 +63,7 @@ ArrayList^ ParetoCalculatorW::getStackItemStrings()
 	std::vector<StorableObject*>::iterator i;
 	for (i = stack.begin(); i != stack.end(); i++)
 	{
-		res->Add(gcnew System::String((*i)->asString().c_str()));
+		res->Insert(0, gcnew System::String((*i)->asString().c_str()));
 	}
 	return res;
 }
@@ -86,6 +96,12 @@ String^ ParetoCalculatorW::peek()
 	return gcnew System::String(so->asString().c_str());
 }
 
+String^ ParetoCalculatorW::peek(int n)
+{
+	StorableObject* so = this->pc->stack[n];
+	return gcnew System::String(so->asString().c_str());
+}
+
 bool ParetoCalculatorW::stackEmpty()
 {
 	return this->pc->stack.empty();
@@ -96,4 +112,10 @@ void ParetoCalculatorW::storePop(String^ name)
 	StorableObject* so = this->pc->pop();
 	so->name = system_to_std_string(name);
 	this->pc->store(*so);
+}
+
+void ParetoCalculatorW::executeProdCons(String^ pq, String^ cq)
+{
+	POperation_ProdCons& pco = *new POperation_ProdCons(system_to_std_string(pq), system_to_std_string(cq));
+	pco.executeOn(*this->pc);
 }

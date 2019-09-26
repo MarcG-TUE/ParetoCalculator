@@ -21,7 +21,7 @@
                 <Button x:Name="fileSelectButton" Content="Select File" Height="36" Margin="57,83,228,0" VerticalAlignment="Top" Click="fileSelectButton_Click"/>
                 <Button x:Name="executeButton" Content="Execute" Height="36" Margin="238,83,31,0" VerticalAlignment="Top" Click="executeButton_Click"/>
                 <Grid Margin="57,142,10,134">
-                    <TextBlock x:Name="consoleText" Margin="5,5,5,5" TextWrapping="Wrap" Grid.RowSpan="2"/>
+                    <TextBox x:Name="consoleText" Margin="5,5,5,5" TextWrapping="Wrap" Grid.RowSpan="2" IsReadOnly="True" VerticalScrollBarVisibility="Auto"/>
                 </Grid>
 
             </Grid>
@@ -47,10 +47,10 @@
                     <Button x:Name="pushButton" Content="Push" Margin="5,5,5,0" HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Top" Click="pushButton_Click"/>
                     <Button x:Name="popButton" Grid.Column="1" Content="Pop" Margin="5,5,5,5"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="popButton_Click"/>
                     <Button x:Name="storeButton" Grid.Column="2" Content="Store" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="storeButton_Click"/>
-                    <Button x:Name="printButton" Grid.Column="3" Content="Print" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Button x:Name="duplicateButton" Content="Duplicate" Margin="5,5,5,5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1"/>
-                    <Button x:Name="productButton" Content="Product" Margin="5,5,5,5" VerticalAlignment="Stretch" Grid.Row="2" HorizontalAlignment="Stretch"/>
-                    <Button x:Name="prodconsButton" Content="Prod.Cons." Margin="5,5,5,5" VerticalAlignment="Stretch" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="2"/>
+                    <Button x:Name="printButton" Grid.Column="3" Content="Print" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="printButton_Click"/>
+                    <Button x:Name="duplicateButton" Content="Duplicate" Margin="5,5,5,5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Click="duplicateButton_Click"/>
+                    <Button x:Name="productButton" Content="Product" Margin="5,5,5,5" VerticalAlignment="Stretch" Grid.Row="2" HorizontalAlignment="Stretch" Click="productButton_Click"/>
+                    <Button x:Name="prodconsButton" Content="Prod.Cons." Margin="5,5,5,5" VerticalAlignment="Stretch" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="2" Click="prodconsButton_Click"/>
                     <Button x:Name="abstractButton" Content="Abstract" Margin="5,5,5,5" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     <Button x:Name="joinButton" Content="Join" Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" Margin="5,5,5,5"/>
                     <Button x:Name="minimizeButton" Content="Minimize" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Margin="5,5,5,5"/>

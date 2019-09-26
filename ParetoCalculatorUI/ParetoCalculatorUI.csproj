@@ -59,6 +59,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\ProdConsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\SelectionDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -77,6 +81,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ProdConsDialog.xaml.cs">
+      <DependentUpon>ProdConsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\SelectionDialog.xaml.cs">
       <DependentUpon>SelectionDialog.xaml</DependentUpon>
