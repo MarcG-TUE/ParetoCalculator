@@ -62,12 +62,13 @@ namespace ParetoCalculatorUI
                     this.paretocalculator.LoadConfigurationSpaces();
                     this.paretocalculator.LoadConfigurationSets();
                 }
-               catch (ParetoCalculatorExceptionW exc) {
+                catch (ParetoCalculatorExceptionW exc)
+                {
                     this.ParetoCalculatorExceptionOccurred(exc);
                 }
-                }
-                this.updateStack();
             }
+            this.updateStack();
+        }
 
         private void ParetoCalculatorExceptionOccurred(ParetoCalculatorExceptionW e)
         {
@@ -78,20 +79,32 @@ namespace ParetoCalculatorUI
         private void verbose(String s)
         {
             throw new NotImplementedException("Not implemented yet.");
-        }   
+        }
 
         private void updateStack()
         {
             this.stackListView.Items.Clear();
             ArrayList l = this.paretocalculator.getStackItemStrings();
-            foreach (String^ s in l)
+            foreach (String s in l)
             {
                 this.stackListView.Items.Add(s);
             }
         }
 
+        private void executeButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                this.paretocalculator.LoadOperations();
+                this.updateStack();
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
+        }
+
     }
-
-
 
 }
