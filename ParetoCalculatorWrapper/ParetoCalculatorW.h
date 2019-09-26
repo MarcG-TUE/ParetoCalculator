@@ -33,6 +33,9 @@ public:
 	ArrayList^ getMemoryItemStrings();
 	int stackSize();
 	String^ pop();
+	String^ peek();
+	bool stackEmpty();
+	void storePop(String^ name);
 
 private:
 	Pareto::ParetoCalculator* pc;

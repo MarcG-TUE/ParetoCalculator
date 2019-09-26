@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
-
+using ParetoCalculatorUI.Dialogs;
 
 namespace ParetoCalculatorUI
 {
@@ -124,6 +124,29 @@ namespace ParetoCalculatorUI
                     string s = this.paretocalculator.pop();
                     this.verbose(s);
                     this.updateStack();
+                }
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
+        }
+
+        private void storeButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!this.paretocalculator.stackEmpty())
+                {
+                    StoreDialog dialogBox = new StoreDialog(this.paretocalculator.peek());
+                    Nullable<bool> dialogResult = dialogBox.ShowDialog();
+
+                    if (dialogResult == true)
+                    {
+                        this.paretocalculator.storePop(dialogBox.NameResult);
+                        this.updateStack();
+                    }
                 }
             }
             catch (ParetoCalculatorExceptionW exc)

@@ -79,3 +79,21 @@ String^ ParetoCalculatorW::pop()
 	StorableObject* so = this->pc->pop();
 	return gcnew System::String(so->asString().c_str());
 }
+
+String^ ParetoCalculatorW::peek()
+{
+	StorableObject* so = this->pc->peek();
+	return gcnew System::String(so->asString().c_str());
+}
+
+bool ParetoCalculatorW::stackEmpty()
+{
+	return this->pc->stack.empty();
+}
+
+void ParetoCalculatorW::storePop(String^ name)
+{
+	StorableObject* so = this->pc->pop();
+	so->name = system_to_std_string(name);
+	this->pc->store(*so);
+}
