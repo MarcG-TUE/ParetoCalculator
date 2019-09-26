@@ -35,11 +35,7 @@ namespace ParetoCalculatorUI
         {
             ParetoCalculatorW pc = new ParetoCalculatorW();
 
-            // Instantiate window
             AboutDialog dialogBox = new AboutDialog();
-
-            // Show window modally
-            // NOTE: Returns only when window is closed
             Nullable<bool> dialogResult = dialogBox.ShowDialog();
         }
 
@@ -78,7 +74,8 @@ namespace ParetoCalculatorUI
 
         private void verbose(String s)
         {
-            throw new NotImplementedException("Not implemented yet.");
+            this.consoleText.Text += s;
+            this.consoleText.Text += System.Environment.NewLine;
         }
 
         private void updateStack()
@@ -105,6 +102,36 @@ namespace ParetoCalculatorUI
             }
         }
 
+        private void pushButton_Click(object sender, RoutedEventArgs e)
+        {
+            SelectionDialog dialogBox = new SelectionDialog(paretocalculator);
+            Nullable<bool> dialogResult = dialogBox.ShowDialog();
+
+            if (dialogResult == true)
+            {
+                string s = (string) dialogBox.selectionListbox.SelectedItem;
+                this.paretocalculator.push(s);
+            }
+            this.updateStack();
+        }
+
+        private void popButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (this.paretocalculator.stackSize() > 0)
+                {
+                    string s = this.paretocalculator.pop();
+                    this.verbose(s);
+                    this.updateStack();
+                }
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
+        }
     }
 
 }

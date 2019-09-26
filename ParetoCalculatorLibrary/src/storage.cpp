@@ -44,7 +44,8 @@ namespace Pareto {
 
 
 	const void StorableObject::streamOn(std::ostream& os){
-		os << "a storable object";
+		
+		os << "[" << this->name << "]";
 	}
 
     std::string& StorableObject::asString(void) {

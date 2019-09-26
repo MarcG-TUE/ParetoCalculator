@@ -25,9 +25,14 @@ public:
 	/// not yet implemented in the current version, sorry
 	void LoadOperations();
 
+	/// push an object named s onto the calculator stack
+	void push(String^ s);
 
-	// new wrapper functions
+	// new wrapper functions 
 	ArrayList^ getStackItemStrings();
+	ArrayList^ getMemoryItemStrings();
+	int stackSize();
+	String^ pop();
 
 private:
 	Pareto::ParetoCalculator* pc;

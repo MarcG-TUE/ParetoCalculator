@@ -41,6 +41,11 @@ void ParetoCalculatorW::LoadOperations()
 	this->pc->LoadOperations();
 }
 
+void ParetoCalculatorW::push(String^ s)
+{
+	this->pc->push(system_to_std_string(s));
+}
+
 ArrayList^ ParetoCalculatorW::getStackItemStrings()
 {
 	ArrayList^ res = gcnew ArrayList();
@@ -51,4 +56,26 @@ ArrayList^ ParetoCalculatorW::getStackItemStrings()
 		res->Add(gcnew System::String((*i)->asString().c_str()));
 	}
 	return res;
+}
+
+ArrayList^ ParetoCalculatorW::getMemoryItemStrings()
+{
+	ArrayList^ res = gcnew ArrayList();
+	StorageMap::iterator i;
+	for (i = this->pc->memory.begin(); i != this->pc->memory.end(); i++)
+	{
+		res->Add(gcnew System::String((*i).first.c_str()));
+	}
+	return res;
+}
+
+int ParetoCalculatorW::stackSize()
+{
+	return this->pc->stack.size();
+}
+
+String^ ParetoCalculatorW::pop()
+{
+	StorableObject* so = this->pc->pop();
+	return gcnew System::String(so->asString().c_str());
 }
