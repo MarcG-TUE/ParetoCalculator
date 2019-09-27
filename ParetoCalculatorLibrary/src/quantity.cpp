@@ -145,13 +145,6 @@ namespace Pareto {
 	}
 
 	bool QuantityType_Enum::totalOrderSmaller(const QuantityValue& v1, const QuantityValue& v2) const {
-		//ListOfQuantityValueEnum::iterator i;
-		//for(i = this->quantities.begin(); i != this->quantities.end(); i++){
-		//	if((**i==v1) && !(**i==v2)) { return true;}
-		//	if(**i==v2) { return false;}
-		//}
-		//throw *new EParetoCalculatorError("Error in QuantityType_Enum::totalOrderSmaller");
-		//return false;
 #ifdef _DEBUG
 		const QuantityValue_Enum qe1 = dynamic_cast<const QuantityValue_Enum&>(v1);
 		const QuantityValue_Enum qe2 = dynamic_cast<const QuantityValue_Enum&>(v2);
@@ -163,7 +156,7 @@ namespace Pareto {
 
 	StorableObject& QuantityType_Enum::copy(void) const
 	{
-		return * new QuantityType_Enum(*this);
+		return *new QuantityType_Enum(*this);
 	}
 
 
@@ -179,7 +172,7 @@ namespace Pareto {
 
 	StorableObject& QuantityType_Enum_Unordered::copy(void) const
 	{
-		return * new QuantityType_Enum_Unordered(*this);
+		return *new QuantityType_Enum_Unordered(*this);
 	}
 
 
@@ -283,13 +276,13 @@ namespace Pareto {
 
 	StorableObject& QuantityType_Integer::copy(void) const
 	{
-		return * new QuantityType_Integer(*this);
+		return *new QuantityType_Integer(*this);
 	}
 
 	///////////////// QuantityValue_Integer ///////////////////
 
 
-	QuantityValue_Integer::QuantityValue_Integer(const QuantityType& t, int n): QuantityValue(t), value(n)
+	QuantityValue_Integer::QuantityValue_Integer(const QuantityType& t, int n) : QuantityValue(t), value(n)
 	{
 	}
 
@@ -349,14 +342,14 @@ namespace Pareto {
 
 	StorableObject& QuantityType_Real::copy(void) const
 	{
-		return * new QuantityType_Real(*this);
+		return *new QuantityType_Real(*this);
 	}
 
 
 	///////////////// QuantityValue_Real ///////////////////
 
 
-	QuantityValue_Real::QuantityValue_Real(const QuantityType& t, double n): QuantityValue(t), value(n)
+	QuantityValue_Real::QuantityValue_Real(const QuantityType& t, double n) : QuantityValue(t), value(n)
 	{
 	}
 

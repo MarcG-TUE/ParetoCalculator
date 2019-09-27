@@ -36,9 +36,6 @@
 #ifndef PARETO_CONFIGURATION_H
 #define PARETO_CONFIGURATION_H
 
-#ifdef _MSC_VER
-#pragma warning( disable : 4290 ) // to ignore the exception specification warnings in Visual Studio
-#endif
 
 #include <vector>
 #include <list>
@@ -124,7 +121,7 @@ namespace Pareto {
 		bool includesQuantityNamed(const QuantityName& qn) const;
 
 		/// retrieve a quantity of the configuration space by its name
-		const QuantityType& getQuantity(const QuantityName& qn) const; // throw(EParetoCalculatorError);
+		const QuantityType& getQuantity(const QuantityName& qn) const; 
 
 		/// create a new configuration in this configuration space
 		Configuration* newConfiguration(void);
@@ -133,7 +130,7 @@ namespace Pareto {
 		unsigned int nrOfVisibleQuantities(void) const;
 
 		/// returns the index of quantity with name 'qn' in the list of quantities
-		unsigned int indexOfQuantity(const QuantityName& qn) const; // throw(EParetoCalculatorError);
+		unsigned int indexOfQuantity(const QuantityName& qn) const; 
 
 		/// returns an arbitrary unordered quantity from the configuration space if one exists.
 		///

@@ -35,12 +35,7 @@
 #include <sstream>
 #include <math.h>
 
-//#ifdef _MSC_VER
-//#pragma warning( disable : 4290 ) // to ignore the exception specification warnings in Visual Studio
-//#include "paretoparser_vs.h"
-//#else
 #include "paretoparser_libxml.h"
-//#endif
 
 
 using namespace Pareto;
@@ -649,7 +644,7 @@ void ParetoCalculator::store(const std::string& key) {
 }
 
 
-const StorableObject* ParetoCalculator::retrieve(const std::string& oname) // throw(EParetoCalculatorError)
+const StorableObject* ParetoCalculator::retrieve(const std::string& oname)
 {
 	// find object in memory
 	StorageMap::iterator p = memory.find(oname);

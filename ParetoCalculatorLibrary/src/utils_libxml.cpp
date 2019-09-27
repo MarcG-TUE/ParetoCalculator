@@ -43,7 +43,7 @@ std::string wstring_to_string(std::wstring& wstr) {
 	char* psz = new char[outputsz];
 	wcstombs_s(&ressz, psz, outputsz, wstr.c_str(), len);
 	str = psz;
-	delete [] psz;
+	delete[] psz;
 	return str;
 }
 
@@ -56,69 +56,66 @@ std::wstring string_to_wstring(std::string& str) {
 	//mbstowcs(psz, str.c_str(),len + 1);
 	mbstowcs_s(&ressz, psz, outputsz, str.c_str(), len);
 	wstr = psz;
-	delete [] psz;
+	delete[] psz;
 	return wstr;
 }
 
-std::string xml_to_std_string(xmlChar* s){
-	std::string *ns = new std::string((char*)s);
+std::string xml_to_std_string(xmlChar* s) {
+	std::string* ns = new std::string((char*)s);
 	return *ns;
 }
 
-xmlXPathObjectPtr getNodeSetXPath (xmlDocPtr doc, xmlChar *xpath, xmlXPathContextPtr xpathCtx){
-    
-    xmlXPathObjectPtr result;
+xmlXPathObjectPtr getNodeSetXPath(xmlDocPtr doc, xmlChar* xpath, xmlXPathContextPtr xpathCtx) {
 
-    result = xmlXPathEvalExpression(xpath, xpathCtx);
-    if (result == NULL) {
-        printf("Error in xmlXPathEvalExpression\n");
-        return NULL;
-    }
-    if(xmlXPathNodeSetIsEmpty(result->nodesetval)){
-        xmlXPathFreeObject(result);
-                printf("No result\n");
-        return NULL;
-    }
-    return result;
+	xmlXPathObjectPtr result;
+
+	result = xmlXPathEvalExpression(xpath, xpathCtx);
+	if (result == NULL) {
+		printf("Error in xmlXPathEvalExpression\n");
+		return NULL;
+	}
+	if (xmlXPathNodeSetIsEmpty(result->nodesetval)) {
+		xmlXPathFreeObject(result);
+		printf("No result\n");
+		return NULL;
+	}
+	return result;
 }
 
-xmlXPathObjectPtr getNodeSetXPathNode (xmlDocPtr doc, xmlNodePtr node, xmlChar *xpath, xmlXPathContextPtr xpathCtx){
-    
-    xmlXPathObjectPtr result;
+xmlXPathObjectPtr getNodeSetXPathNode(xmlDocPtr doc, xmlNodePtr node, xmlChar* xpath, xmlXPathContextPtr xpathCtx) {
+
+	xmlXPathObjectPtr result;
 
 	xpathCtx->node = node;
-    
+
 	result = xmlXPathEvalExpression(xpath, xpathCtx);
 
 	if (result == NULL) {
-        printf("Error in xmlXPathEvalExpression\n");
-        return NULL;
-    }
-    if(xmlXPathNodeSetIsEmpty(result->nodesetval)){
-        xmlXPathFreeObject(result);
-                printf("No result\n");
-        return NULL;
-    }
-    return result;
+		printf("Error in xmlXPathEvalExpression\n");
+		return NULL;
+	}
+	if (xmlXPathNodeSetIsEmpty(result->nodesetval)) {
+		xmlXPathFreeObject(result);
+		printf("No result\n");
+		return NULL;
+	}
+	return result;
 }
 
-std::string getNodeAttribute(xmlNodePtr n, xmlChar* attr){
+std::string getNodeAttribute(xmlNodePtr n, xmlChar* attr) {
 
 	// porting, retrieve without namespace awareness for now
-	// xmlChar* a = xmlGetNsProp(n, attr, BAD_CAST "pa");
 	xmlChar* a = xmlGetProp(n, attr);
 	return xml_to_std_string(a);
 }
 
-bool hasNodeAttribute(xmlNodePtr n, xmlChar* attr){
+bool hasNodeAttribute(xmlNodePtr n, xmlChar* attr) {
 
 	// porting, retrieve without namespace awareness for now
-	// xmlChar* a = xmlGetNsProp(n, attr, BAD_CAST "pa");
 	bool b = (xmlHasProp(n, attr) != NULL);
 	return b;
 }
 
-std::string getNodeText(xmlDocPtr doc, xmlNodePtr n){
-//	return xml_to_std_string(xmlNodeListGetString(doc,n,true));
+std::string getNodeText(xmlDocPtr doc, xmlNodePtr n) {
 	return xml_to_std_string(xmlNodeGetContent(n));
 }

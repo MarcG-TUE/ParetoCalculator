@@ -49,20 +49,17 @@ using namespace Pareto;
 static xmlDocPtr pXMLDoc;
 
 
-ParetoParser::ParetoParser(Pareto::ParetoCalculator *forPC){
-    //   NameTable^ nt = gcnew NameTable();
-    //   nsmgr = gcnew XmlNamespaceManager(nt);
-    //   nsmgr->AddNamespace("pa", "uri:pareto"); //default namespace
-
-    pc = forPC;
+ParetoParser::ParetoParser(Pareto::ParetoCalculator* forPC)
+{
+	pc = forPC;
 }
 
 
-void ParetoParser::LoadFile(std::wstring f){
+void ParetoParser::LoadFile(std::wstring f) {
 	pXMLDoc = xmlParseFile(wstring_to_string(f).c_str());
-    if (pXMLDoc == NULL ) {
-        pc->verbose("Document not parsed successfully. \n");
-    }
+	if (pXMLDoc == NULL) {
+		pc->verbose("Document not parsed successfully. \n");
+	}
 	xpathCtx = xmlXPathNewContext(pXMLDoc);
 	xmlXPathRegisterNs(xpathCtx, (xmlChar*)"pa", (xmlChar*)"uri:pareto");
 }
@@ -71,83 +68,83 @@ void ParetoParser::LoadFile(std::wstring f){
 
 
 
-void ParetoParser::LoadQuantityTypes(){
-    // Load Quantity types from XML document
+void ParetoParser::LoadQuantityTypes() {
+	// Load Quantity types from XML document
 
-    // Select the quantity definition nodes
-    xmlChar *xpath = (xmlChar*) "//pa:pareto_specification/pa:quantity_definitions/pa:quantity_definition";
-    xmlXPathObjectPtr result = getNodeSetXPath (pXMLDoc, xpath, xpathCtx);
-    if (result) {
+	// Select the quantity definition nodes
+	xmlChar* xpath = (xmlChar*)"//pa:pareto_specification/pa:quantity_definitions/pa:quantity_definition";
+	xmlXPathObjectPtr result = getNodeSetXPath(pXMLDoc, xpath, xpathCtx);
+	if (result) {
 
 		xmlNodeSetPtr nodeset = result->nodesetval;
 
-		for (int i=0; i < nodeset->nodeNr; i++) {
+		for (int i = 0; i < nodeset->nodeNr; i++) {
 
-            QuantityType* qn = NULL;
-            std::string pTypeStr;
-            bool typeDetermined = false;
+			QuantityType* qn = NULL;
+			std::string pTypeStr;
+			bool typeDetermined = false;
 
-            // for each quantity_definition node pQuantNode ...
-            xmlNodePtr pQuantNode = nodeset->nodeTab[i];
+			// for each quantity_definition node pQuantNode ...
+			xmlNodePtr pQuantNode = nodeset->nodeTab[i];
 
-            // get the type 
-            pTypeStr = getNodeAttribute(pQuantNode, (xmlChar*)"type");  
+			// get the type 
+			pTypeStr = getNodeAttribute(pQuantNode, (xmlChar*)"type");
 
-            // real quantities
-            if(pTypeStr=="real"){
-                typeDetermined = true;
-                qn = new QuantityType_Real(getNodeAttribute(pQuantNode, (xmlChar*)"name"));
+			// real quantities
+			if (pTypeStr == "real") {
+				typeDetermined = true;
+				qn = new QuantityType_Real(getNodeAttribute(pQuantNode, (xmlChar*)"name"));
 			}
 
-            //integer quantities
-            if(pTypeStr == "integer"){
-                typeDetermined = true;
-                qn = new QuantityType_Integer(getNodeAttribute(pQuantNode, (xmlChar*)"name"));
-            }
+			//integer quantities
+			if (pTypeStr == "integer") {
+				typeDetermined = true;
+				qn = new QuantityType_Integer(getNodeAttribute(pQuantNode, (xmlChar*)"name"));
+			}
 
 
-            // totally ordered and unordered enumeration type
-            bool ordered;
+			// totally ordered and unordered enumeration type
+			bool ordered;
 
-            if((ordered = (pTypeStr == "enumeration")) || (pTypeStr == "unordered")){
-                typeDetermined = true;
-                QuantityType_Enum *qne;
+			if ((ordered = (pTypeStr == "enumeration")) || (pTypeStr == "unordered")) {
+				typeDetermined = true;
+				QuantityType_Enum* qne;
 
 				// make a QuantityType of the appropriate kind
-                if(ordered) 
-                    qne = new QuantityType_Enum(getNodeAttribute(pQuantNode, (xmlChar*)"name"));
-                else   
-                    qne = new QuantityType_Enum_Unordered(getNodeAttribute(pQuantNode, (xmlChar*)"name"));
+				if (ordered)
+					qne = new QuantityType_Enum(getNodeAttribute(pQuantNode, (xmlChar*)"name"));
+				else
+					qne = new QuantityType_Enum_Unordered(getNodeAttribute(pQuantNode, (xmlChar*)"name"));
 
 
 				// get all the values of the enumeration type and add them
-                xmlChar *xpath_values = (xmlChar*) "pa:values/pa:value";
-                xmlXPathObjectPtr result_values = getNodeSetXPathNode (pXMLDoc, pQuantNode, xpath_values, xpathCtx);
+				xmlChar* xpath_values = (xmlChar*)"pa:values/pa:value";
+				xmlXPathObjectPtr result_values = getNodeSetXPathNode(pXMLDoc, pQuantNode, xpath_values, xpathCtx);
 
-				
+
 				if (result_values) {
-                    xmlNodeSetPtr nodeset_values = result_values->nodesetval;
-                    for (int j=0; j < nodeset_values->nodeNr; j++) {
-                        xmlNodePtr pValueNode = nodeset_values->nodeTab[j];
+					xmlNodeSetPtr nodeset_values = result_values->nodesetval;
+					for (int j = 0; j < nodeset_values->nodeNr; j++) {
+						xmlNodePtr pValueNode = nodeset_values->nodeTab[j];
 
 						qne->addQuantity(getNodeText(pXMLDoc, pValueNode));
 
-					
+
 					}
-                    xmlXPathFreeObject (result_values);
-                    }
-                qn = qne; // temp qne is to avoid type casting
+					xmlXPathFreeObject(result_values);
+				}
+				qn = qne; // temp qne is to avoid type casting
 
-            }
-        
-            if(!typeDetermined){
-                throw *new EParetoCalculatorError(std::string("Quantity of unknown type "+pTypeStr));
-            }
-            pc->store(*qn);
+			}
 
-        }
-        xmlXPathFreeObject (result);
-    }
+			if (!typeDetermined) {
+				throw* new EParetoCalculatorError(std::string("Quantity of unknown type " + pTypeStr));
+			}
+			pc->store(*qn);
+
+		}
+		xmlXPathFreeObject(result);
+	}
 
 }
 
@@ -156,84 +153,84 @@ void ParetoParser::LoadQuantityTypes(){
 
 
 
-void ParetoParser::LoadConfigurationSpaces(){
-    // Load Configuration Spaces from XML document
+void ParetoParser::LoadConfigurationSpaces() {
+	// Load Configuration Spaces from XML document
 
-    // Select the configuration space nodes
-    xmlChar *xpath = (xmlChar*) "//pa:pareto_specification/pa:configuration_spaces/pa:space";
-    xmlXPathObjectPtr result = getNodeSetXPath (pXMLDoc, xpath, xpathCtx);
-    if (result) {
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        for (int i=0; i < nodeset->nodeNr; i++) {
+	// Select the configuration space nodes
+	xmlChar* xpath = (xmlChar*)"//pa:pareto_specification/pa:configuration_spaces/pa:space";
+	xmlXPathObjectPtr result = getNodeSetXPath(pXMLDoc, xpath, xpathCtx);
+	if (result) {
+		xmlNodeSetPtr nodeset = result->nodesetval;
+		for (int i = 0; i < nodeset->nodeNr; i++) {
 
-            // for each configuration space node pSpaceNode ...
-            xmlNodePtr pSpaceNode = nodeset->nodeTab[i];
+			// for each configuration space node pSpaceNode ...
+			xmlNodePtr pSpaceNode = nodeset->nodeTab[i];
 
-            ConfigurationSpace* cs = new ConfigurationSpace(getNodeAttribute(pSpaceNode, (xmlChar*)"name"));
+			ConfigurationSpace* cs = new ConfigurationSpace(getNodeAttribute(pSpaceNode, (xmlChar*)"name"));
 
-            xmlChar *xpath_quantities = (xmlChar*) "pa:quantity";
-            xmlXPathObjectPtr result_quantities = getNodeSetXPathNode (pXMLDoc, pSpaceNode, xpath_quantities, xpathCtx);
-            if (result_quantities) {
-                xmlNodeSetPtr nodeset_quantities = result_quantities->nodesetval;
-                for (int j=0; j < nodeset_quantities->nodeNr; j++) {
-                    xmlNodePtr pQuantityNode = nodeset_quantities->nodeTab[j];
-                    const QuantityType& qu = dynamic_cast<const QuantityType&>(*pc->retrieve(getNodeAttribute(pQuantityNode, (xmlChar*)"name")));
-                    QuantityName qn;
-                    if(hasNodeAttribute(pQuantityNode, (xmlChar*)"referBy")){
-                        qn = getNodeAttribute(pQuantityNode, (xmlChar*)"referBy");
-                    }
-                    else {
-                        qn = qu.name;                        
-                    }
-                    cs->addQuantityAs(qu,qn);
-                }
-            }
-            pc->store(*cs);
-        }
-        xmlXPathFreeObject (result);
-    }
+			xmlChar* xpath_quantities = (xmlChar*)"pa:quantity";
+			xmlXPathObjectPtr result_quantities = getNodeSetXPathNode(pXMLDoc, pSpaceNode, xpath_quantities, xpathCtx);
+			if (result_quantities) {
+				xmlNodeSetPtr nodeset_quantities = result_quantities->nodesetval;
+				for (int j = 0; j < nodeset_quantities->nodeNr; j++) {
+					xmlNodePtr pQuantityNode = nodeset_quantities->nodeTab[j];
+					const QuantityType& qu = dynamic_cast<const QuantityType&>(*pc->retrieve(getNodeAttribute(pQuantityNode, (xmlChar*)"name")));
+					QuantityName qn;
+					if (hasNodeAttribute(pQuantityNode, (xmlChar*)"referBy")) {
+						qn = getNodeAttribute(pQuantityNode, (xmlChar*)"referBy");
+					}
+					else {
+						qn = qu.name;
+					}
+					cs->addQuantityAs(qu, qn);
+				}
+			}
+			pc->store(*cs);
+		}
+		xmlXPathFreeObject(result);
+	}
 }
 
 
 
 
-void ParetoParser::LoadConfigurationSets(){
-    // Configuration Sets from XML document
+void ParetoParser::LoadConfigurationSets() {
+	// Configuration Sets from XML document
 
-    // Select the configuration set nodes
-    xmlChar *xpath = (xmlChar*) "//pa:pareto_specification/pa:configuration_sets/pa:configuration_set";
-    xmlXPathObjectPtr result = getNodeSetXPath (pXMLDoc, xpath, xpathCtx);
-    if (result) {
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        for (int i=0; i < nodeset->nodeNr; i++) {
+	// Select the configuration set nodes
+	xmlChar* xpath = (xmlChar*)"//pa:pareto_specification/pa:configuration_sets/pa:configuration_set";
+	xmlXPathObjectPtr result = getNodeSetXPath(pXMLDoc, xpath, xpathCtx);
+	if (result) {
+		xmlNodeSetPtr nodeset = result->nodesetval;
+		for (int i = 0; i < nodeset->nodeNr; i++) {
 
-            // for each configuration space node pSpaceNode ...
-            xmlNodePtr pConfSetNode = nodeset->nodeTab[i];
+			// for each configuration space node pSpaceNode ...
+			xmlNodePtr pConfSetNode = nodeset->nodeTab[i];
 
-            const ConfigurationSpace* sp = dynamic_cast<const ConfigurationSpace*>(pc->retrieve(getNodeAttribute(pConfSetNode, (xmlChar*)"space_id")));
-			
+			const ConfigurationSpace* sp = dynamic_cast<const ConfigurationSpace*>(pc->retrieve(getNodeAttribute(pConfSetNode, (xmlChar*)"space_id")));
+
 			ConfigurationSet* cs = new ConfigurationSet(sp, getNodeAttribute(pConfSetNode, (xmlChar*)"name"));
-			const ListOfQuantityTypes *qts = &sp->quantities;
+			const ListOfQuantityTypes* qts = &sp->quantities;
 
-            // get all the configurations and add them to the set
-            xmlChar *xpath_confs = (xmlChar*) "pa:configurations/pa:configuration";
-            xmlXPathObjectPtr result_confs = getNodeSetXPathNode (pXMLDoc, pConfSetNode, xpath_confs, xpathCtx);
-            if (result_confs) {
-                xmlNodeSetPtr nodeset_confs = result_confs->nodesetval;			
-				for (int j=0; j < nodeset_confs->nodeNr; j++) {
+			// get all the configurations and add them to the set
+			xmlChar* xpath_confs = (xmlChar*)"pa:configurations/pa:configuration";
+			xmlXPathObjectPtr result_confs = getNodeSetXPathNode(pXMLDoc, pConfSetNode, xpath_confs, xpathCtx);
+			if (result_confs) {
+				xmlNodeSetPtr nodeset_confs = result_confs->nodesetval;
+				for (int j = 0; j < nodeset_confs->nodeNr; j++) {
 
 					// for each configuration node pConfNode ...
-		            xmlNodePtr pConfNode = nodeset_confs->nodeTab[j];
+					xmlNodePtr pConfNode = nodeset_confs->nodeTab[j];
 					Configuration* cf = new Configuration(sp);
 
 					// get all the values and add them to the configuration
-					xmlChar *xpath_value = (xmlChar*) "pa:value";
-			        xmlXPathObjectPtr result_value = getNodeSetXPathNode (pXMLDoc, pConfNode, xpath_value, xpathCtx);
-			        if (result_value) {
+					xmlChar* xpath_value = (xmlChar*)"pa:value";
+					xmlXPathObjectPtr result_value = getNodeSetXPathNode(pXMLDoc, pConfNode, xpath_value, xpathCtx);
+					if (result_value) {
 						xmlNodeSetPtr nodeset_value = result_value->nodesetval;
-				        for (int k=0; k < nodeset_value->nodeNr; k++) {
+						for (int k = 0; k < nodeset_value->nodeNr; k++) {
 							// for each value node pValueNode ...
-				            xmlNodePtr pValueNode = nodeset_value->nodeTab[k];
+							xmlNodePtr pValueNode = nodeset_value->nodeTab[k];
 							const QuantityValue& qv = (*qts)[k]->valueFromString(getNodeText(pXMLDoc, pValueNode));
 							cf->addQuantity(qv);
 						}
@@ -241,30 +238,30 @@ void ParetoParser::LoadConfigurationSets(){
 					cs->addConfiguration(*cf);
 
 				}
-				xmlXPathFreeObject (result_confs);
-            } 
-            pc->store(*cs);
-        }
-    xmlXPathFreeObject (result);
-    }
+				xmlXPathFreeObject(result_confs);
+			}
+			pc->store(*cs);
+		}
+		xmlXPathFreeObject(result);
+	}
 }
 
 
 
 
 
-void ParetoParser::LoadOperations() // throw(EParetoCalculatorError)
+void ParetoParser::LoadOperations()
 {
-    // Load the operations from XML document
+	// Load the operations from XML document
 	// To be ported later if necessary...
 }
-    
 
 
 
-std::vector<QuantityType*>& ParetoParser::getQuantityTypes(){
+
+std::vector<QuantityType*>& ParetoParser::getQuantityTypes() {
 	std::vector<QuantityType*>* v = new(std::vector<QuantityType*>);
-        return *v;
+	return *v;
 }
 
 

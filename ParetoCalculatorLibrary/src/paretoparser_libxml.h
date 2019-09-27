@@ -46,47 +46,35 @@
 
 namespace Pareto {
 
-class ParetoCalculator;
+	class ParetoCalculator;
 
-//public ref class ValidationEventHandler {
-//public:
-//	static void eventHandler (System::Object^ /*sender*/, System::Xml::Schema::ValidationEventArgs^ args);
-//	static ParetoCalculator* forCalculator=0L;
-//};
-
-//Encapsulates the libXML specific XML parser classes
-class ParetoParser {
-public:
+	//Encapsulates the libXML specific XML parser classes
+	class ParetoParser {
+	public:
 		ParetoParser(ParetoCalculator* forPC);
 
-        void LoadFile(std::wstring f);
-        void SaveAll(std::wstring f);						// forget abourt saving for now
-        void Save(std::string itemToSave, std::wstring f);
-        void LoadQuantityTypes();
-        //void SaveQuantityTypes();
-        void LoadConfigurationSpaces();
-        //void SaveConfigurationSpaces();
-        void LoadConfigurationSets();
-        //void SaveConfigurationSets();
-		void LoadOperations(); // throw(EParetoCalculatorError);
+		void LoadFile(std::wstring f);
+		void SaveAll(std::wstring f);						// forget abourt saving for now
+		void Save(std::string itemToSave, std::wstring f);
+		void LoadQuantityTypes();
+		//void SaveQuantityTypes();
+		void LoadConfigurationSpaces();
+		//void SaveConfigurationSpaces();
+		void LoadConfigurationSets();
+		//void SaveConfigurationSets();
+		void LoadOperations();
 		std::vector<QuantityType*>& getQuantityTypes();
 		std::vector<QuantityType*>& getConfigurationSpaces();
 		std::vector<QuantityType*>& getConfigurationSets();
-        ParetoCalculatorOperation& getNextOperation();
+		ParetoCalculatorOperation& getNextOperation();
 
-private:
+	private:
 
-	ParetoCalculator* pc;
+		ParetoCalculator* pc;
 
-	xmlXPathContextPtr xpathCtx = NULL;
+		xmlXPathContextPtr xpathCtx = NULL;
 
-	// Save/Load support
-	//void Save_PrepareXMLDoc(void);
-	//void Save_OutputFile(wstring f);
-	//XmlElement^ Save_XMLBuildConfigurationSetNode(ConfigurationSet* cs);
-	//XmlElement^ Save_XMLBuildConfigurationSpaceNode(ConfigurationSpace* cs);
-	//XmlElement^ ParetoParser::Save_XMLBuildQuantityTypeNode(QuantityType* qt);
-};
+	};
 
 }
 
