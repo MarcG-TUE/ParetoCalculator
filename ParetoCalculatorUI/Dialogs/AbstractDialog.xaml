@@ -5,7 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParetoCalculatorUI.Dialogs"
         mc:Ignorable="d"
-        Title="AbstractDialog" Height="450" Width="800">
+        Title="AbstractDialog" Height="450" Width="800"
+        Style="{DynamicResource PCWindowStyle}">
+    <Window.Resources>
+        <ResourceDictionary Source="/Resources/Styles.xaml" />
+    </Window.Resources>
+
     <Grid>
         <TextBlock x:Name="labelText" Height="25.637" Margin="46.076,36.394,351.548,0" TextWrapping="Wrap" Text="Select quantity to abstract:" VerticalAlignment="Top"/>
         <ComboBox x:Name="abstractCombo" Height="43.853" Margin="46.076,96.439,210.543,0" VerticalAlignment="Top"/>

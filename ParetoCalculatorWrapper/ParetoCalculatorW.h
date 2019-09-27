@@ -1,13 +1,14 @@
 #pragma once
 
 #include "calculator.h"
-#include "StatusMediatorW.h"
+#include "StatusCollectorW.h"
 
 using namespace System;
 using namespace System::Collections;
+using namespace System::Threading;
 
-public delegate void PCSetStatus(void);
-public delegate void PCVerbose(void);
+public delegate void PCSetStatus(String^ s);
+public delegate void PCVerbose(String^ s);
 
 public ref class ParetoCalculatorW
 {
@@ -33,7 +34,7 @@ public:
 	void push(String^ s);
 
 	void duplicate();
-	
+
 	void product();
 
 	void minimize();
@@ -61,8 +62,10 @@ public:
 	void setStatusCallbacks(PCSetStatus^ s, PCVerbose^ v, int pollingTimeMs);
 
 private:
-	Pareto::ParetoCalculator* pc;
-	Pareto::StatusCollector* sc;
+	ParetoCalculator* pc;
+	StatusCollector* sc;
+	PCSetStatus^ cbstat;
+	PCVerbose^ cbverb;
+	Timer^ callbackTimer;
 };
-
 

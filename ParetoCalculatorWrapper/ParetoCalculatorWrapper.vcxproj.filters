@@ -41,7 +41,7 @@
     <ClInclude Include="ParetoCalculatorExceptionW.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StatusMediatorW.h">
+    <ClInclude Include="StatusCollectorW.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

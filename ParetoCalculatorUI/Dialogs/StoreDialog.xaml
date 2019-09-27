@@ -5,7 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParetoCalculatorUI.Dialogs"
         mc:Ignorable="d"
-        Title="StoreDialog" Height="450" Width="800">
+        Title="StoreDialog" Height="450" Width="800"
+                Style="{DynamicResource PCWindowStyle}">
+    <Window.Resources>
+        <ResourceDictionary Source="/Resources/Styles.xaml" />
+    </Window.Resources>
+
     <Grid>
         <TextBox x:Name="textLabel" HorizontalAlignment="Left" Height="49.25" Margin="50.798,35.045,0,0" TextWrapping="Wrap" Text="Name for new object:" VerticalAlignment="Top" Width="285.383" IsReadOnly="True"/>
         <TextBox x:Name="nameEditBox" Height="41.829" Margin="50.798,105.21,108.669,0" TextWrapping="Wrap" Text="NewName" VerticalAlignment="Top"/>

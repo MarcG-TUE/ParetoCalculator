@@ -27,8 +27,14 @@ namespace ParetoCalculatorUI
         {
             InitializeComponent();
             this.paretocalculator = new ParetoCalculatorW();
-            this.paretocalculator.setStatusCallbacks(MainWindow::verbose, MainWindow.verbose, 100);
+            this.paretocalculator.setStatusCallbacks(s => { this.setStatus(s); }, s => { this.verbose(s); }, 100);
 
+        }
+
+        private void setStatus(string s)
+        {
+            this.statusLabel.Text = s;
+            //this.statusLabel.Update();
         }
 
         private ParetoCalculatorW paretocalculator;

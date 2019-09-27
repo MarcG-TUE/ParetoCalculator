@@ -187,12 +187,25 @@ ArrayList^ ParetoCalculatorW::confsetConfspaceQuantityNames()
 
 void ParetoCalculatorW::StatusChecker(System::Object^ o)
 {
+	if (this->sc != NULL) {
+		while (! this->sc->stats.empty()) {
+			(this->cbstat)(std_to_system_string(*this->sc->stats.begin()));
+			this->sc->stats.erase(this->sc->stats.begin());
+		}
+		while (!this->sc->verbs.empty()) {
+			(this->cbverb)(std_to_system_string(*this->sc->verbs.begin()));
+			this->sc->verbs.erase(this->sc->verbs.begin());
+		}
+	}
 }
 
 void ParetoCalculatorW::setStatusCallbacks(PCSetStatus^ s, PCVerbose^ v, int pollingTimeMs)
 {
+	this->cbstat = s;
+	this->cbverb = v;
 	this->sc = new StatusCollector();
+	this->pc->setStatusCallbackObject(this->sc);
 	TimerCallback^ tcb = gcnew TimerCallback(this, &ParetoCalculatorW::StatusChecker);
-	System::Threading::Timer tt(tcb, NULL, 5* pollingTimeMs, pollingTimeMs);
+	this->callbackTimer = gcnew Timer(tcb, NULL, 5* pollingTimeMs, pollingTimeMs);
 
 }

@@ -17,7 +17,7 @@ namespace Pareto {
 	public:
 		StatusCollector() {};
 
-	private:
+	public:
 		std::vector<std::string> stats;
 		std::vector<std::string> verbs;
 	public:

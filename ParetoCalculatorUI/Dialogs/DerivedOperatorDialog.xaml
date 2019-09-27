@@ -5,7 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParetoCalculatorUI.Dialogs"
         mc:Ignorable="d"
-        Title="DerivedOperatorDialog" Height="450" Width="800">
+        Title="DerivedOperatorDialog" Height="450" Width="800"
+        Style="{DynamicResource PCWindowStyle}">
+    <Window.Resources>
+        <ResourceDictionary Source="/Resources/Styles.xaml" />
+    </Window.Resources>
+    
     <Grid>
         <TextBlock x:Name="titleLabel" HorizontalAlignment="Left" Height="25.776" Margin="31.442,38.513,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" Width="370.525"/>
         <TextBlock x:Name="quantALabel" HorizontalAlignment="Left" Height="23.628" Margin="32.516,121.21,0,0" TextWrapping="Wrap" Text="Quantity A" VerticalAlignment="Top" Width="369.451"/>

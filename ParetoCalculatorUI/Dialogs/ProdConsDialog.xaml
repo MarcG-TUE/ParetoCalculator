@@ -5,7 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParetoCalculatorUI.Dialogs"
         mc:Ignorable="d"
-        Title="ProdConsDialog" Height="450" Width="800">
+        Title="ProdConsDialog" Height="450" Width="800"
+                Style="{DynamicResource PCWindowStyle}">
+    <Window.Resources>
+        <ResourceDictionary Source="/Resources/Styles.xaml" />
+    </Window.Resources>
+
     <Grid>
         <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="33.685" Margin="49.551,38.643,0,0" TextWrapping="Wrap" Text="Producer Quantity" VerticalAlignment="Top" Width="248.752"/>
         <TextBox IsReadOnly="True" HorizontalAlignment="Left" Margin="49.551,194.113,0,198.975" TextWrapping="Wrap" Text="Consumer Quantity" Width="255.662"/>

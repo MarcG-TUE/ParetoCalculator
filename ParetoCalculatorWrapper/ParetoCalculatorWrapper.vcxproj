@@ -134,7 +134,7 @@
   <ItemGroup>
     <ClInclude Include="ParetoCalculatorExceptionW.h" />
     <ClInclude Include="ParetoCalculatorW.h" />
-    <ClInclude Include="StatusMediatorW.h" />
+    <ClInclude Include="StatusCollectorW.h" />
     <ClInclude Include="utils\utils_vs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

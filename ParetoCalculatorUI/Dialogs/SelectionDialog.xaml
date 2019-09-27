@@ -5,7 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParetoCalculatorUI.Dialogs"
         mc:Ignorable="d"
-        Title="SelectionDialog" Height="450" Width="800">
+        Title="SelectionDialog" Height="450" Width="800"
+        Style="{DynamicResource PCWindowStyle}">
+    <Window.Resources>
+        <ResourceDictionary Source="/Resources/Styles.xaml" />
+    </Window.Resources>
+    
     <Grid>
         <Button x:Name="okButton" Content="OK" HorizontalAlignment="Left" Height="49.404" Margin="240.869,332.785,0,0" VerticalAlignment="Top" Width="310.382" Click="okButton_Click"/>
         <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" Height="49.404" Margin="578.1,332.785,0,0" VerticalAlignment="Top" Width="161.098" Click="cancelButton_Click"/>

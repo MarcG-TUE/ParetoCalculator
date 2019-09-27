@@ -5,7 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParetoCalculatorUI.Dialogs"
         mc:Ignorable="d"
-        Title="JoinDialog" Height="450" Width="800">
+        Title="JoinDialog" Height="450" Width="800"
+        Style="{DynamicResource PCWindowStyle}">
+    <Window.Resources>
+        <ResourceDictionary Source="/Resources/Styles.xaml" />
+    </Window.Resources>
+
     <Grid>
         <TextBlock x:Name="textLabel" HorizontalAlignment="Left" Height="26.85" Margin="41.107,41.735,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="301.79"><Run Text="S"/><Run Text="elect quantity to join:"/></TextBlock>
         <ComboBox x:Name="quantCombo" HorizontalAlignment="Left" Height="26.85" Margin="41.107,112.618,0,0" VerticalAlignment="Top" Width="345.824"/>
