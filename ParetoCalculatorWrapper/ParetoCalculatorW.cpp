@@ -56,6 +56,11 @@ void ParetoCalculatorW::product()
 	this->pc->product();
 }
 
+void ParetoCalculatorW::minimize()
+{
+	this->pc->minimize();
+}
+
 ArrayList^ ParetoCalculatorW::getStackItemStrings()
 {
 	ArrayList^ res = gcnew ArrayList();
@@ -136,6 +141,35 @@ void ParetoCalculatorW::executeJoin(String^ qn)
 	POperation_EfficientJoin& jo = *new POperation_EfficientJoin(&jm);
 	jo.executeOn(*this->pc);
 }
+
+void ParetoCalculatorW::executeSum(String^ qa, String^ qb)
+{
+	POperation_Sum& so = *new POperation_Sum(system_to_std_string(qa), system_to_std_string(qb));
+	so.executeOn(*this->pc);
+	delete& so;
+}
+
+void ParetoCalculatorW::executeMin(String^ qa, String^ qb)
+{
+	POperation_Min& so = *new POperation_Min(system_to_std_string(qa), system_to_std_string(qb));
+	so.executeOn(*this->pc);
+	delete& so;
+}
+
+void ParetoCalculatorW::executeMax(String^ qa, String^ qb)
+{
+	POperation_Max& so = *new POperation_Max(system_to_std_string(qa), system_to_std_string(qb));
+	so.executeOn(*this->pc);
+	delete& so;
+}
+
+void ParetoCalculatorW::executeMultiply(String^ qa, String^ qb)
+{
+	POperation_Max& so = *new POperation_Max(system_to_std_string(qa), system_to_std_string(qb));
+	so.executeOn(*this->pc);
+	delete& so;
+}
+
 
 ArrayList^ ParetoCalculatorW::confsetConfspaceQuantityNames()
 {

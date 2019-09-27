@@ -166,7 +166,7 @@ namespace ParetoCalculatorUI
                 if ((n >= 0) && (n < this.paretocalculator.stackSize()))
                 {
 //                    StorableObject* o = stack[n];
-                    this.verbose(this.paretocalculator.peek(n));
+                    this.verbose(this.paretocalculator.peek(paretocalculator.stackSize()-n-1));
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
@@ -261,7 +261,143 @@ namespace ParetoCalculatorUI
 
         private void joinButton_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (!this.paretocalculator.stackEmpty())
+                {
+                    JoinDialog dialogBox = new JoinDialog(this.paretocalculator);
+                    Nullable<bool> dialogResult = dialogBox.ShowDialog();
 
+                    if (dialogResult == true)
+                    {
+                        string q = (string)dialogBox.quantCombo.SelectedItem;
+                        this.paretocalculator.executeJoin(q);
+                        this.updateStack();
+                    }
+                }
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
+        }
+
+        private void minimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!this.paretocalculator.stackEmpty())
+                {
+                    this.paretocalculator.minimize();
+                    this.updateStack();
+                }
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
+        }
+
+        private void sumButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!this.paretocalculator.stackEmpty())
+                {
+                    DerivedOperatorDialog dialogBox = new DerivedOperatorDialog(this.paretocalculator, "Sum of quantities");
+                    Nullable<bool> dialogResult = dialogBox.ShowDialog();
+
+                    if (dialogResult == true)
+                    {
+                        string qa = (string)dialogBox.quantACombo.SelectedItem;
+                        string qb = (string)dialogBox.quantBCombo.SelectedItem;
+                        this.paretocalculator.executeSum(qa, qb);
+                        this.updateStack();
+                    }
+                }
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
+        }
+
+        private void maxButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!this.paretocalculator.stackEmpty())
+                {
+                    DerivedOperatorDialog dialogBox = new DerivedOperatorDialog(this.paretocalculator, "Maximum of quantities");
+                    Nullable<bool> dialogResult = dialogBox.ShowDialog();
+
+                    if (dialogResult == true)
+                    {
+                        string qa = (string)dialogBox.quantACombo.SelectedItem;
+                        string qb = (string)dialogBox.quantBCombo.SelectedItem;
+                        this.paretocalculator.executeMax(qa, qb);
+                        this.updateStack();
+                    }
+                }
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
+        }
+
+        private void minButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!this.paretocalculator.stackEmpty())
+                {
+                    DerivedOperatorDialog dialogBox = new DerivedOperatorDialog(this.paretocalculator, "Minimum of quantities");
+                    Nullable<bool> dialogResult = dialogBox.ShowDialog();
+
+                    if (dialogResult == true)
+                    {
+                        string qa = (string)dialogBox.quantACombo.SelectedItem;
+                        string qb = (string)dialogBox.quantBCombo.SelectedItem;
+                        this.paretocalculator.executeMin(qa, qb);
+                        this.updateStack();
+                    }
+                }
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
+        }
+
+        private void multiplyButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!this.paretocalculator.stackEmpty())
+                {
+                    DerivedOperatorDialog dialogBox = new DerivedOperatorDialog(this.paretocalculator, "Product of quantities");
+                    Nullable<bool> dialogResult = dialogBox.ShowDialog();
+
+                    if (dialogResult == true)
+                    {
+                        string qa = (string)dialogBox.quantACombo.SelectedItem;
+                        string qb = (string)dialogBox.quantBCombo.SelectedItem;
+                        this.paretocalculator.executeMultiply(qa, qb);
+                        this.updateStack();
+                    }
+                }
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
         }
     }
 

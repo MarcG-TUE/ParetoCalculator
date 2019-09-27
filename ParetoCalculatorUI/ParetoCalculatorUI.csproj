@@ -63,6 +63,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\DerivedOperatorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\JoinDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\ProdConsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -88,6 +96,12 @@
     </Compile>
     <Compile Include="Dialogs\AbstractDialog.xaml.cs">
       <DependentUpon>AbstractDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\DerivedOperatorDialog.xaml.cs">
+      <DependentUpon>DerivedOperatorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\JoinDialog.xaml.cs">
+      <DependentUpon>JoinDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\ProdConsDialog.xaml.cs">
       <DependentUpon>ProdConsDialog.xaml</DependentUpon>

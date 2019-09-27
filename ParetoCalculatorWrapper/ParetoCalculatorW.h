@@ -32,6 +32,8 @@ public:
 	
 	void product();
 
+	void minimize();
+
 	// new wrapper functions 
 	ArrayList^ getStackItemStrings();
 	ArrayList^ getMemoryItemStrings();
@@ -44,6 +46,11 @@ public:
 	void executeProdCons(String^ pq, String^ cq);
 	void executeAbstract(String^ qn);
 	void executeJoin(String^ qn);
+	void executeSum(String^ qa, String^ qb);
+	void executeMin(String^ qa, String^ qb);
+	void executeMax(String^ qa, String^ qb);
+	void executeMultiply(String^ qa, String^ qb);
+
 	ArrayList^ confsetConfspaceQuantityNames();
 
 private:

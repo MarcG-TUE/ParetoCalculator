@@ -18,17 +18,17 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid x:Name="Left_TopDown"  Grid.Column="0">
-                <Button x:Name="fileSelectButton" Content="Select File" Height="36" Margin="57,83,228,0" VerticalAlignment="Top" Click="fileSelectButton_Click"/>
-                <Button x:Name="executeButton" Content="Execute" Height="36" Margin="238,83,31,0" VerticalAlignment="Top" Click="executeButton_Click"/>
-                <Grid Margin="57,142,10,134">
+                <Button x:Name="fileSelectButton" Content="Select File" Height="20" Margin="10,10,0,0" VerticalAlignment="Top" Click="fileSelectButton_Click" HorizontalAlignment="Left" Width="100"/>
+                <Button x:Name="executeButton" Content="Execute" Height="20" Margin="120,10,0,0" VerticalAlignment="Top" Click="executeButton_Click" HorizontalAlignment="Left" Width="100"/>
+                <Grid Margin="10,35,10,0">
                     <TextBox x:Name="consoleText" Margin="5,5,5,5" TextWrapping="Wrap" Grid.RowSpan="2" IsReadOnly="True" VerticalScrollBarVisibility="Auto"/>
                 </Grid>
 
             </Grid>
             <Grid x:Name="Right_TopDown" Grid.Column="1">
-                <TextBlock x:Name="stackLabel" HorizontalAlignment="Left" Height="38" Margin="52,35,0,0" Text="Stack" TextWrapping="Wrap" VerticalAlignment="Top" Width="116"/>
-                <ListView x:Name="stackListView" Margin="10,80,10,0" Background="#FFA7EE97" Height="232" VerticalAlignment="Top" d:LayoutOverrides="VerticalAlignment"/>
-                <Grid x:Name="RightButtons" Margin="5,342,5,5" d:LayoutOverrides="VerticalAlignment">
+                <TextBlock x:Name="stackLabel" HorizontalAlignment="Left" Margin="10,10,0,0" Text="Stack" TextWrapping="Wrap" Width="100" Height="20" VerticalAlignment="Top"/>
+                <ListView x:Name="stackListView" Margin="10,35,10,0" Background="#FFA7EE97" Height="277" VerticalAlignment="Top"/>
+                <Grid x:Name="RightButtons" Margin="0,0,0,5" Height="213.968" VerticalAlignment="Bottom">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
@@ -44,30 +44,30 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="pushButton" Content="Push" Margin="5,5,5,0" HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Top" Click="pushButton_Click"/>
+                    <Button x:Name="pushButton" Content="Push" Margin="10,5,10,0" HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Top" Click="pushButton_Click"/>
                     <Button x:Name="popButton" Grid.Column="1" Content="Pop" Margin="5,5,5,5"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="popButton_Click"/>
                     <Button x:Name="storeButton" Grid.Column="2" Content="Store" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="storeButton_Click"/>
                     <Button x:Name="printButton" Grid.Column="3" Content="Print" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="printButton_Click"/>
-                    <Button x:Name="duplicateButton" Content="Duplicate" Margin="5,5,5,5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Click="duplicateButton_Click"/>
-                    <Button x:Name="productButton" Content="Product" Margin="5,5,5,5" VerticalAlignment="Stretch" Grid.Row="2" HorizontalAlignment="Stretch" Click="productButton_Click"/>
+                    <Button x:Name="duplicateButton" Content="Duplicate" Margin="10,5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Click="duplicateButton_Click"/>
+                    <Button x:Name="productButton" Content="Product" Margin="10,5" VerticalAlignment="Stretch" Grid.Row="2" HorizontalAlignment="Stretch" Click="productButton_Click"/>
                     <Button x:Name="prodconsButton" Content="Prod.Cons." Margin="5,5,5,5" VerticalAlignment="Stretch" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="2" Click="prodconsButton_Click"/>
                     <Button x:Name="abstractButton" Content="Abstract" Margin="5,5,5,0" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="21" Click="abstractButton_Click"/>
                     <Button x:Name="joinButton" Content="Join" Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" Margin="5,5,5,5" Click="joinButton_Click"/>
-                    <Button x:Name="minimizeButton" Content="Minimize" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Margin="5,5,5,5"/>
-                    <Button x:Name="sumButton" Content="Sum" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Margin="5,5,5,5"/>
-                    <Button x:Name="maxButton" Content="Max" Margin="5,5,5,5" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Button x:Name="minButton" Content="Min" Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Margin="5,5,5,5"/>
-                    <Button x:Name="multiplyButton" Content="Multiply" Margin="5,5,5,5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="4"/>
-                    <Button x:Name="plotButton" Content="Plot" Margin="5,5,5,5" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Button x:Name="saveButton" Content="Save" Margin="5,5,5,5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="6"/>
+                    <Button x:Name="minimizeButton" Content="Minimize" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Margin="10,5" Click="minimizeButton_Click"/>
+                    <Button x:Name="sumButton" Content="Sum" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Margin="5,5,5,5" Click="sumButton_Click"/>
+                    <Button x:Name="maxButton" Content="Max" Margin="5,5,5,5" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="maxButton_Click"/>
+                    <Button x:Name="minButton" Content="Min" Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Margin="5,5,5,5" Click="minButton_Click"/>
+                    <Button x:Name="multiplyButton" Content="Multiply" Margin="10,5" VerticalAlignment="Stretch" Grid.Row="4" Click="multiplyButton_Click"/>
+                    <Button x:Name="plotButton" Content="Plot" Margin="10,5" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Button x:Name="saveButton" Content="Save" Margin="10,5,5,5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="6"/>
                     <Button x:Name="testButton" Content="Test" VerticalAlignment="Stretch" Grid.Column="2" HorizontalAlignment="Stretch" Grid.Row="6" Margin="5,5,5,5"/>
                     <Button x:Name="aboutButton" Content="About" Margin="5,5.5,5.5,0" VerticalAlignment="Top" Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="6" Height="20" Click="aboutButton_Click" />
                 </Grid>
             </Grid>
         </Grid>
         <Grid x:Name="Footer" Grid.Row="2">
-            <TextBlock x:Name="statusLabel" HorizontalAlignment="Left"  Text="Status" TextWrapping="Wrap" Width="247"/>
-            <TextBlock x:Name="statusContent"  Text="Status Content" TextWrapping="Wrap" Margin="300,0,12,0 " Height="19" VerticalAlignment="Bottom"/>
+            <TextBlock x:Name="statusLabel" HorizontalAlignment="Left"  Text="Status" TextWrapping="Wrap" Width="71.667" VerticalAlignment="Center" Margin="10,10.02,0,10.02"/>
+            <TextBlock x:Name="statusContent"  Text="Status Content" TextWrapping="Wrap" Margin="86.667,10,10,10" Height="16" VerticalAlignment="Center"/>
         </Grid>
     </Grid>
 </Window>
