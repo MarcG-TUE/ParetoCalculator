@@ -16,18 +16,17 @@ using System.Windows.Shapes;
 namespace ParetoCalculatorUI.Dialogs
 {
     /// <summary>
-    /// Interaction logic for ProdConsDialog.xaml
+    /// Interaction logic for AbstractDialog.xaml
     /// </summary>
-    public partial class ProdConsDialog : Window
+    public partial class AbstractDialog : Window
     {
-        public ProdConsDialog(ParetoCalculatorW pc)
+        public AbstractDialog(ParetoCalculatorW pc)
         {
             InitializeComponent();
             ArrayList quants = pc.confsetConfspaceQuantityNames();
             foreach (String s in quants)
             {
-                this.prodCombo.Items.Add(s);
-                this.consCombo.Items.Add(s);
+                this.abstractCombo.Items.Add(s);
             }
         }
 

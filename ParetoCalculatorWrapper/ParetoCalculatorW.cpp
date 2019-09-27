@@ -119,3 +119,33 @@ void ParetoCalculatorW::executeProdCons(String^ pq, String^ cq)
 	POperation_ProdCons& pco = *new POperation_ProdCons(system_to_std_string(pq), system_to_std_string(cq));
 	pco.executeOn(*this->pc);
 }
+
+void ParetoCalculatorW::executeAbstract(String^ qn)
+{
+	ListOfQuantityNames lqn;
+	lqn.push_back(system_to_std_string(qn));
+	POperation_Abstract& ao = *new POperation_Abstract(&lqn);
+	ao.executeOn(*this->pc);
+}
+
+void ParetoCalculatorW::executeJoin(String^ qn)
+{
+	JoinMap jm;
+	std::string q = system_to_std_string(qn);
+	jm[q] = q;
+	POperation_EfficientJoin& jo = *new POperation_EfficientJoin(&jm);
+	jo.executeOn(*this->pc);
+}
+
+ArrayList^ ParetoCalculatorW::confsetConfspaceQuantityNames()
+{
+	ArrayList^ res = gcnew ArrayList();
+	ConfigurationSet* cs = dynamic_cast<ConfigurationSet*>(this->pc->peek());
+	QuantityIntMap& qm = cs->confspace->quantityNames;
+	QuantityIntMap::iterator i;
+	for (i = qm.begin(); i != qm.end(); i++) {
+		const std::string ns = (*i).first;
+		res->Add(gcnew System::String(ns.c_str()));
+	}
+	return res;
+}

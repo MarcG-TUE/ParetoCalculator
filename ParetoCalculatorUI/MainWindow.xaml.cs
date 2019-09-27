@@ -216,23 +216,53 @@ namespace ParetoCalculatorUI
             {
                 if (!this.paretocalculator.stackEmpty())
                 {
-                    ProdConsDialog dialogBox = new ProdConsDialog(this.paretocalculator.peek());
+                    ProdConsDialog dialogBox = new ProdConsDialog(this.paretocalculator);
                     Nullable<bool> dialogResult = dialogBox.ShowDialog();
 
                     if (dialogResult == true)
                     {
-                        string pq = dialogBox.prodCombo.SelectedItem;
-                        string cq = dialogBox.consCombo.SelectedItem;
+                        string pq = (string) dialogBox.prodCombo.SelectedItem;
+                        string cq = (string) dialogBox.consCombo.SelectedItem;
                         this.paretocalculator.executeProdCons(pq, cq);
-                        this->updateStack();
-                        delete & pco;
+                        this.updateStack();
                     }
                 }
             }
-            catch (EParetoCalculatorError&e) {
-                this->ParetoCalculatorExceptionOccurred(e);
-            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
             }
         }
+
+        private void abstractButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!this.paretocalculator.stackEmpty())
+                {
+                    AbstractDialog dialogBox = new AbstractDialog(this.paretocalculator);
+                    Nullable<bool> dialogResult = dialogBox.ShowDialog();
+
+                    if (dialogResult == true)
+                    {
+                        string aq = (string)dialogBox.abstractCombo.SelectedItem;
+                        this.paretocalculator.executeAbstract(aq);
+                        this.updateStack();
+                    }
+                }
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
+        }
+
+        private void joinButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+    }
 
 }

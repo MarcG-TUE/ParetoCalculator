@@ -42,6 +42,9 @@ public:
 	bool stackEmpty();
 	void storePop(String^ name);
 	void executeProdCons(String^ pq, String^ cq);
+	void executeAbstract(String^ qn);
+	void executeJoin(String^ qn);
+	ArrayList^ confsetConfspaceQuantityNames();
 
 private:
 	Pareto::ParetoCalculator* pc;
