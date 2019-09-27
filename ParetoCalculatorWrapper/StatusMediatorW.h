@@ -14,11 +14,10 @@ namespace Pareto {
 
 
 	public class StatusCollector : public StatusCallback {
-
-	private:
-
+	public:
 		StatusCollector() {};
 
+	private:
 		std::vector<std::string> stats;
 		std::vector<std::string> verbs;
 	public:

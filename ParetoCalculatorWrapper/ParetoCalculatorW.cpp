@@ -6,6 +6,7 @@
 
 using namespace Pareto;
 using namespace System::Collections;
+using namespace System::Threading;
 
 ParetoCalculatorW::ParetoCalculatorW() {
 	this->pc = new ParetoCalculator();
@@ -184,9 +185,14 @@ ArrayList^ ParetoCalculatorW::confsetConfspaceQuantityNames()
 	return res;
 }
 
+void ParetoCalculatorW::StatusChecker(System::Object^ o)
+{
+}
+
 void ParetoCalculatorW::setStatusCallbacks(PCSetStatus^ s, PCVerbose^ v, int pollingTimeMs)
 {
 	this->sc = new StatusCollector();
-	set polling timer
-	
+	TimerCallback^ tcb = gcnew TimerCallback(this, &ParetoCalculatorW::StatusChecker);
+	System::Threading::Timer tt(tcb, NULL, 5* pollingTimeMs, pollingTimeMs);
+
 }

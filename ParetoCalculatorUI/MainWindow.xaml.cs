@@ -27,8 +27,7 @@ namespace ParetoCalculatorUI
         {
             InitializeComponent();
             this.paretocalculator = new ParetoCalculatorW();
-            this.sm = new StatusMediatorW(this);
-            paretocalculator->setStatusCallbackObject(sm);
+            this.paretocalculator.setStatusCallbacks(MainWindow::verbose, MainWindow.verbose, 100);
 
         }
 

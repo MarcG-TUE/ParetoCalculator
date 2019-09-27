@@ -6,7 +6,8 @@
 using namespace System;
 using namespace System::Collections;
 
-
+public delegate void PCSetStatus(void);
+public delegate void PCVerbose(void);
 
 public ref class ParetoCalculatorW
 {
@@ -55,11 +56,13 @@ public:
 	void executeMultiply(String^ qa, String^ qb);
 
 	ArrayList^ confsetConfspaceQuantityNames();
+	void StatusChecker(System::Object^ o);
 
-	void setStatusCallbacks(PCSetStatus^ s, PCVerbose^ v);
+	void setStatusCallbacks(PCSetStatus^ s, PCVerbose^ v, int pollingTimeMs);
 
 private:
 	Pareto::ParetoCalculator* pc;
+	Pareto::StatusCollector* sc;
 };
 
 
