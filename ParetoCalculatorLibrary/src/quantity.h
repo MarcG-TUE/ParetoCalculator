@@ -61,32 +61,32 @@ namespace Pareto {
 		virtual bool equal(const QuantityValue& q1, const QuantityValue& q2) const;
 
 		// Implements an arbitrary total order on the quantity values of this type
-		virtual bool totalOrderSmaller(const QuantityValue& v1, const QuantityValue& v2);
+		virtual bool totalOrderSmaller(const QuantityValue& v1, const QuantityValue& v2) const;
 
 		/// Stream a string representation of this quantity type to the stream 'os'
 		virtual void streamOn(std::ostream& os) const;
 
 		/// returns a default value for this quantity type
-		virtual QuantityValue& defaultValue(void);
+		virtual QuantityValue& defaultValue(void) const;
 
 		/// converts a string into a value of this quantity type.
-		virtual QuantityValue& valueFromString(const std::string s);
+		virtual QuantityValue& valueFromString(const std::string s) const;
 
 		/// returns a string representation of this quantity type.
 		virtual std::string& asString(){return this->name;}
 
 		// Run-time type checking
-		virtual bool isConfigurationSet(void) { return false;}
-		virtual bool isConfigurationSpace(void) { return false;}
-		virtual bool isString(void) { return false;}
-		virtual bool isQuantityType(void) { return true;}
+		virtual bool isConfigurationSet(void) const { return false;}
+		virtual bool isConfigurationSpace(void) const { return false;}
+		virtual bool isString(void) const { return false;}
+		virtual bool isQuantityType(void) const { return true;}
 
 		/// test whether this quantity type is an enumerated type
-		virtual bool isQuantityTypeEnum(void) = 0;
+		virtual bool isQuantityTypeEnum(void) const = 0;
 		/// test whether this quantity type is totally ordered
-		virtual bool isTotallyOrdered(void) = 0;
+		virtual bool isTotallyOrdered(void) const = 0;
 		/// test whether this quantity type is unordered
-		virtual bool isUnordered(void) = 0;
+		virtual bool isUnordered(void) const = 0;
 
 		// XML support
 		virtual std::string* xmlTypeString(void) = 0;
@@ -101,7 +101,7 @@ namespace Pareto {
 
 	public:
 		/// Constructr of a quantity value of type 't'	
-		QuantityValue(QuantityType& t);
+		QuantityValue(const QuantityType& t);
 
 		virtual ~QuantityValue(){};
 
@@ -112,7 +112,7 @@ namespace Pareto {
 		std::string& asString(void) const;
 
 		/// The quantity type of this quantity value
-		QuantityType& qtype;
+		const QuantityType& qtype;
 
 		// an arbitrary total order on values
 		bool totalOrderSmaller(const QuantityValue& v) const {
@@ -142,10 +142,10 @@ namespace Pareto {
 		virtual void streamOn(std::ostream& os) const;
 
 		/// return a default value for this type
-		virtual QuantityValue& defaultValue(void);
+		virtual QuantityValue& defaultValue(void) const;
 
 		/// create a value object from a string representation
-		virtual QuantityValue& valueFromString(const std::string s);
+		virtual QuantityValue& valueFromString(const std::string s) const;
 
 		/// compare two values of this type (<=)
 		virtual bool compare(const QuantityValue& q1, const QuantityValue& q2) const;
@@ -154,12 +154,15 @@ namespace Pareto {
 		virtual bool equal(const QuantityValue& q1, const QuantityValue& q2) const;
 
 		// implements an arbitrary total order on values of this type
-		virtual bool totalOrderSmaller(const QuantityValue& v1, const QuantityValue& v2);
+		virtual bool totalOrderSmaller(const QuantityValue& v1, const QuantityValue& v2) const;
 
 		// Run-time type checking
-		virtual bool isQuantityTypeEnum(void) {return true;}
-		virtual bool isTotallyOrdered(void) {return true;}
-		virtual bool isUnordered(void) {return false;}
+		virtual bool isQuantityTypeEnum(void) const {return true;}
+		virtual bool isTotallyOrdered(void) const {return true;}
+		virtual bool isUnordered(void) const {return false;}
+
+		// copying
+		virtual StorableObject& copy(void) const;
 
 		// XML support
 		virtual std::string* xmlTypeString(void) {return new std::string("enum");}
@@ -189,8 +192,11 @@ namespace Pareto {
 		/// Constructor 
 		QuantityType_Enum_Unordered(std::string n);
 		virtual bool compare(const QuantityValue& q1, const QuantityValue& q2) const;
-		virtual bool isTotallyOrdered(void) {return false;}
-		virtual bool isUnordered(void) {return true;}
+		virtual bool isTotallyOrdered(void) const {return false;}
+		virtual bool isUnordered(void) const {return true;}
+
+		// copying
+		virtual StorableObject& copy(void) const;
 
 		// XML support
 		virtual std::string* xmlTypeString(void) {return new std::string("unordered");}
@@ -210,16 +216,19 @@ namespace Pareto {
 		virtual QuantityValue& defaultValue(void);
 
 		/// create a value of this type from a string
-		virtual QuantityValue& valueFromString(const std::string s);
+		virtual QuantityValue& valueFromString(const std::string s) const;
 
 		virtual bool compare(const QuantityValue& q1, const QuantityValue& q2) const;
 		virtual bool equal(const QuantityValue& q1, const QuantityValue& q2) const;
-		virtual bool totalOrderSmaller(const QuantityValue& v1, const QuantityValue& v2);
+		virtual bool totalOrderSmaller(const QuantityValue& v1, const QuantityValue& v2) const;
 
 		// Run-time type checking
-		virtual bool isQuantityTypeEnum(void) {return false;}
-		virtual bool isTotallyOrdered(void) {return true;}
-		virtual bool isUnordered(void) {return false;}
+		virtual bool isQuantityTypeEnum(void) const {return false;}
+		virtual bool isTotallyOrdered(void) const {return true;}
+		virtual bool isUnordered(void) const {return false;}
+
+		// copying
+		virtual StorableObject& copy(void) const;
 
 		// XML support
 		virtual std::string* xmlTypeString(void) {return new std::string("integer");}
@@ -230,7 +239,7 @@ namespace Pareto {
 	class QuantityValue_Integer: public QuantityValue{
 	public:
 		/// Constructor. Quantity type 't' and integer value 'n'
-		QuantityValue_Integer(QuantityType& t, int n);
+		QuantityValue_Integer(const QuantityType& t, int n);
 
 		/// stream a string representation of the value to 'os'
 		virtual void streamOn(std::ostream& os) const;
@@ -253,16 +262,19 @@ namespace Pareto {
 		virtual QuantityValue& defaultValue(void);
 
 		/// create a value of this type from a string
-		virtual QuantityValue& valueFromString(const std::string s);
+		virtual QuantityValue& valueFromString(const std::string s) const;
 
 		virtual bool compare(const QuantityValue& q1, const QuantityValue& q2) const;
 		virtual bool equal(const QuantityValue& q1, const QuantityValue& q2) const;
-		virtual bool totalOrderSmaller(const QuantityValue& v1, const QuantityValue& v2);
+		virtual bool totalOrderSmaller(const QuantityValue& v1, const QuantityValue& v2) const;
 
 		// Run-time type checking
-		virtual bool isQuantityTypeEnum(void) {return false;}
-		virtual bool isTotallyOrdered(void) {return true;}
-		virtual bool isUnordered(void) {return false;}
+		virtual bool isQuantityTypeEnum(void) const {return false;}
+		virtual bool isTotallyOrdered(void) const {return true;}
+		virtual bool isUnordered(void) const {return false;}
+
+		// copying
+		virtual StorableObject& copy(void) const;
 
 		// XML support
 		virtual std::string* xmlTypeString(void) {return new std::string("real");}
@@ -274,7 +286,7 @@ namespace Pareto {
 	public:
 
 		/// Constructor. Quantity type 't' and integer value 'r'
-		QuantityValue_Real(QuantityType& t, double r);
+		QuantityValue_Real(const QuantityType& t, double r);
 
 		/// stream a string representation of the value to 'os'
 		virtual void streamOn(std::ostream& os) const;

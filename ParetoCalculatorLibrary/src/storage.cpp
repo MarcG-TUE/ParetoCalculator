@@ -43,39 +43,44 @@ namespace Pareto {
 	}
 
 
-	const void StorableObject::streamOn(std::ostream& os){
+	void StorableObject::streamOn(std::ostream& os) const {
 		
 		os << "[" << this->name << "]";
 	}
 
-    std::string& StorableObject::asString(void) {
+    std::string& StorableObject::asString(void) const {
         std::ostringstream myString;
 		this->streamOn(myString);
 		return *new std::string(myString.str());
 	}
 
 
-    std::ostream& operator<<(std::ostream& os, StorableObject& o){
+    std::ostream& operator<<(std::ostream& os, const StorableObject& o){
 		o.streamOn(os);
 		return os;
 	}
 
-	StorableObject* StackOfStorageObjects::pop(void){
-		StorableObject* b = this->back();
+	const StorableObject* StackOfStorageObjects::pop(void){
+		const StorableObject* b = this->back();
 		this->pop_back();
 		return b;
 	}
 
-	void StackOfStorageObjects::push(StorableObject* o){
+	void StackOfStorageObjects::push(const StorableObject* o){
 		this->push_back(o);
 	}
 
-	StorableObject* StackOfStorageObjects::peek(void){
+	const StorableObject* StackOfStorageObjects::peek(void){
 		return this->back();
 	}
 
 	void StackOfStorageObjects::duplicate(void){
 		this->push_back(this->back());
+	}
+
+	StorableObject& StorableString::copy(void) const
+	{
+		return *new StorableString(*this);
 	}
 
 };

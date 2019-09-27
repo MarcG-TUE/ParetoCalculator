@@ -27,13 +27,11 @@ namespace Pareto {
 		public ref class PlotDialog : public System::Windows::Forms::Form
 		{
 		private:
-			ConfigurationSet* confset;
+			const ConfigurationSet* confset;
 		public:
-			PlotDialog(ConfigurationSet* cs)
+			PlotDialog(const ConfigurationSet* cs)
 			{
 				InitializeComponent();
-				//
-				//TODO: Add the constructor code here
 				//
 				confset = cs;
 

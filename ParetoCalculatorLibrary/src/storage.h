@@ -53,25 +53,28 @@ namespace Pareto {
 		/// name of the object
         std::string name;
 
-		virtual const void streamOn(std::ostream& os);
-        std::string& asString(void);
+		virtual void streamOn(std::ostream& os) const;
+        std::string& asString(void) const;
 
 		// Run-time type checking. The price we pay...
 		
 		/// test whether the object is a configuration set
-		virtual bool isConfigurationSet(void) = 0;
+		virtual bool isConfigurationSet(void) const = 0;
 
 		/// test whether the object is a configuration space
-		virtual bool isConfigurationSpace(void) = 0;
+		virtual bool isConfigurationSpace(void) const = 0;
 
 		/// test whether the object is a quantity type
-		virtual bool isQuantityType(void) = 0;
+		virtual bool isQuantityType(void) const = 0;
 
 		/// test whether the object is a string
-		virtual bool isString(void) = 0;
+		virtual bool isString(void) const = 0;
+
+		/// copy the object
+		virtual StorableObject& copy(void) const = 0;
 	};
 
-	class StorageMap : public std::map<std::string,StorableObject*>{};
+	class StorageMap : public std::map<const std::string,const StorableObject*>{};
 
 	/// A string that can be stored in calculator storage
 	class StorableString : public StorableObject {
@@ -79,21 +82,22 @@ namespace Pareto {
 		StorableString(std::string n): StorableObject(n){};
 		virtual const void streamOn(std::ostream& os){ os << name ;}
         std::string& asString(void){return name;}
-		virtual bool isConfigurationSet(void) {return false;}
-		virtual bool isConfigurationSpace(void) {return false;}
-		virtual bool isQuantityType(void) {return false;}
-		virtual bool isString(void) {return true;}
+		virtual bool isConfigurationSet(void) const {return false;}
+		virtual bool isConfigurationSpace(void) const {return false;}
+		virtual bool isQuantityType(void) const {return false;}
+		virtual bool isString(void) const {return true;}
+		virtual StorableObject& copy(void) const;
 	};
 
 
-    std::ostream& operator<<(std::ostream& os, StorableObject& o);
+    std::ostream& operator<<(std::ostream& os, const StorableObject& o);
 
 	/// A stack of StorableObjects
-	class StackOfStorageObjects: public std::vector<StorableObject*>{
+	class StackOfStorageObjects: public std::vector<const StorableObject*>{
 	public:
-		StorableObject* pop(void);
-		void push(StorableObject* o);
-		StorableObject* peek(void);
+		const StorableObject* pop(void);
+		void push(const StorableObject* o);
+		const StorableObject* peek(void);
 		void duplicate(void);
 	};
 }

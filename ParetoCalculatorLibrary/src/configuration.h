@@ -57,14 +57,14 @@ namespace Pareto {
 
 	// An STL vector of pointers to quantity types
 	// 
-	class ListOfQuantityTypes : public std::vector<QuantityType*> {};
+	class ListOfQuantityTypes : public std::vector<const QuantityType*> {};
 
 	/// An STL vector of quantity names
 	/// 
 	class ListOfQuantityNames: public std::vector<QuantityName>{
 	public:
-		bool includes(const QuantityName& s){
-			for(iterator i=this->begin(); i!=this->end(); i++){
+		bool includes(const QuantityName& s) const {
+			for(const_iterator i=this->begin(); i!=this->end(); i++){
 				if((*i)==s) return true;
 			}
 			return false;
@@ -73,7 +73,7 @@ namespace Pareto {
 
 	// An STL map from QuantityNames to integers
 	// 
-	class QuantityIntMap: public std::map<QuantityName, unsigned int> {};
+	class QuantityIntMap: public std::map<const QuantityName, unsigned int> {};
 
 	// An STL vector of bools
 	// 
@@ -99,70 +99,70 @@ namespace Pareto {
 		ConfigurationSpace(std::string n);
 
 		/// compare tests the dominance relation between configurations
-		bool compare(const Configuration& c1, const Configuration& c2);
+		bool compare(const Configuration& c1, const Configuration& c2) const;
 
 		/// equal tests whether the configurations are the same
-		bool equal(const Configuration& c1, const Configuration& c2);
+		bool equal(const Configuration& c1, const Configuration& c2) const;
 
 		/// make a lexicographical <= comparison between two configurations
 		static bool LexicographicCompare(const Configuration& c1, const Configuration& c2);
 
 		/// add a single quantity to the space, with the default name
-		void addQuantity(QuantityType& q);
+		void addQuantity(const QuantityType& q);
 
 		/// add a quantity to the space using the name 'qname'
-		void addQuantityAs(QuantityType& q, QuantityName qname);
+		void addQuantityAs(const QuantityType& q, const QuantityName qname);
 
 		/// add a quantity to the space using the name 'qname' and explicitly
 		/// specify visibility.
-		void addQuantityAsVisibility(QuantityType& q, QuantityName qname, bool vis);
+		void addQuantityAsVisibility(const QuantityType& q, const QuantityName qname, bool vis);
 		
 		/// copy quantities of another configuration space to this configuration space
-		void addQuantitiesOf(ConfigurationSpace& cs);
+		void addQuantitiesOf(const ConfigurationSpace& cs);
 
 		/// test if the configuration space includes a quantity by the name 'qn'
-		bool includesQuantityNamed(const QuantityName& qn);
+		bool includesQuantityNamed(const QuantityName& qn) const;
 
 		/// retrieve a quantity of the configuration space by its name
-		QuantityType& getQuantity(const QuantityName& qn); // throw(EParetoCalculatorError);
+		const QuantityType& getQuantity(const QuantityName& qn) const; // throw(EParetoCalculatorError);
 
 		/// create a new configuration in this configuration space
 		Configuration* newConfiguration(void);
 
 		/// returns the number of visible (not hidden) quantities in the space
-		unsigned int nrOfVisibleQuantities(void);
+		unsigned int nrOfVisibleQuantities(void) const;
 
 		/// returns the index of quantity with name 'qn' in the list of quantities
-		unsigned int indexOfQuantity(const QuantityName& qn); // throw(EParetoCalculatorError);
+		unsigned int indexOfQuantity(const QuantityName& qn) const; // throw(EParetoCalculatorError);
 
 		/// returns an arbitrary unordered quantity from the configuration space if one exists.
 		///
 		/// returns NULL otherwise
-		const QuantityName* getUnorderedQuantity();
+		const QuantityName* getUnorderedQuantity() const;
 
 		/// returns an arbitrary totally ordered quantity from the configuration space if one exists.
 		///
 		/// returns NULL otherwise
-		const QuantityName* getTotallyOrderedQuantity();
+		const QuantityName* getTotallyOrderedQuantity() const;
 
 		/// retrieve the name of quantity number 'n'
-		const QuantityName nameOfQuantityNr(const unsigned int n);
+		const QuantityName nameOfQuantityNr(const unsigned int n) const;
 
 		/// returns the first visible quantity of the space. Assumes there is at least one. 
 		/// Throws exception otherwise
-		const unsigned int firstVisibleQuantity();
+		const unsigned int firstVisibleQuantity() const;
 
 		/// generates a NEW configuration space in which quantity 'qn' is hidden
 		ConfigurationSpace* hide(const QuantityName& qn);
 
 		/// generates a NEW configuration space in which quantities 'lqn' are hidden
-		ConfigurationSpace* hide(ListOfQuantityNames *lqn);
+		ConfigurationSpace* hide(const ListOfQuantityNames *lqn) const;
 
 		/// generates a NEW configuration space in which quantity 'qn' is unhidden
-		ConfigurationSpace* unhide(const QuantityName& qn);
+		ConfigurationSpace* unhide(const QuantityName& qn) const;
 
 		/// generates a NEW configuration space in which quantities 'lqn' are unhidden
-		ConfigurationSpace* unhide(ListOfQuantityNames *lqn);
+		ConfigurationSpace* unhide(const ListOfQuantityNames *lqn) const;
 
 		/// stream a string representation of the configuration space to 'os'
 		const void streamOn(std::ostream& os);
@@ -170,10 +170,14 @@ namespace Pareto {
 
 		// Run-time type checking.
 
-		virtual bool isConfigurationSet(void) { return false;}  // override
-		virtual bool isConfigurationSpace(void) { return true;} // override
-		virtual bool isQuantityType(void) { return false;} // override
-		virtual bool isString(void) { return false;} // override
+		virtual bool isConfigurationSet(void) const { return false;}  // override
+		virtual bool isConfigurationSpace(void) const { return true;} // override
+		virtual bool isQuantityType(void) const { return false;} // override
+		virtual bool isString(void) const { return false;} // override
+
+		// copying
+		virtual StorableObject& copy(void) const;
+
 	};
 
 	bool operator!=(ConfigurationSpace& cs1, ConfigurationSpace& cs2);
@@ -189,12 +193,12 @@ namespace Pareto {
 	class Configuration{
 	public:
 		/// The member 'confspace' refers to this space
-		ConfigurationSpace* confspace;
+		const ConfigurationSpace* confspace;
 		/// 'quantities' is a list of quantity values that defines the configuration.
 		ListOfQuantityValues quantities;
 
 		/// Use ConfigurationSpace::newConfiguration() to create configurations!
-		Configuration(ConfigurationSpace* cs);
+		Configuration(const ConfigurationSpace* cs);
 
 		virtual ~Configuration(){};
 
@@ -266,7 +270,7 @@ namespace Pareto {
 	public:
 		const QuantityName& quantity;
 		const ConfigurationSet* confset;
-		IndexOnConfigurationSet(const QuantityName& qn, ConfigurationSet* cs);
+		IndexOnConfigurationSet(const QuantityName& qn, const ConfigurationSet* cs);
 		virtual ~IndexOnConfigurationSet(){}
 		virtual ConfigurationSet* copyFromTo(int f, int t);
 		int lower(const ConfigurationIndexReference& v);
@@ -278,7 +282,7 @@ namespace Pareto {
 	// used for sorting the configurations w.r.t. different quantities.
 	class IndexOnTotalOrderConfigurationSet: public std::vector<ConfigurationIndexOnTotalOrderReference>, public IndexOnConfigurationSet {
 	public:
-		IndexOnTotalOrderConfigurationSet(const QuantityName& qn, ConfigurationSet* cs);
+		IndexOnTotalOrderConfigurationSet(const QuantityName& qn, const ConfigurationSet* cs);
 		virtual ConfigurationIndexReference* get(int n) {return &(this->at(n));}
 		virtual ConfigurationSet* copyFromTo(int f, int t);
 	};
@@ -287,7 +291,7 @@ namespace Pareto {
 	// representation of the quantity values
 	class IndexOnUnorderedConfigurationSet: public std::vector<ConfigurationIndexOnUnorderedReference>, public IndexOnConfigurationSet {
 	public:
-		IndexOnUnorderedConfigurationSet(const QuantityName& qn, ConfigurationSet* cs);
+		IndexOnUnorderedConfigurationSet(const QuantityName& qn, const ConfigurationSet* cs);
 		virtual ConfigurationIndexReference* get(int n) {return &(this->at(n));}
 		virtual ConfigurationSet* copyFromTo(int f, int t);
 	};
@@ -309,10 +313,10 @@ namespace Pareto {
 
 
 	/// Represents a set of configurations
-	class ConfigurationSet: public StorableObject{
+	class ConfigurationSet : public StorableObject {
 	public:
 		/// constructor of a set of configurations on configuration space 'cs' and with name 'n'
-		ConfigurationSet(ConfigurationSpace* cs, std::string n);
+		ConfigurationSet(const ConfigurationSpace* cs, const std::string n);
 
 		/// add a configuration to the set
 		void addConfiguration(const Configuration& c);
@@ -337,16 +341,20 @@ namespace Pareto {
 		virtual const void streamOn(std::ostream& os);
 
 		// Run-time type checking.
-		virtual bool isConfigurationSet(void) { return true;}
-		virtual bool isConfigurationSpace(void) { return false;}
-		virtual bool isQuantityType(void) { return false;}
-		virtual bool isString(void) { return false;}
+		virtual bool isConfigurationSet(void) const { return true; }
+		virtual bool isConfigurationSpace(void) const { return false; }
+		virtual bool isQuantityType(void) const { return false; }
+		virtual bool isString(void) const { return false; }
+
+		// copying
+		virtual StorableObject& copy(void) const;
+	
 
 		// the actual configurations
 		SetOfConfigurations confs;
 		
 		/// reference to the configuration space of the configurations in this set.
-		ConfigurationSpace* confspace;
+		const ConfigurationSpace* confspace;
 	};
 }
 

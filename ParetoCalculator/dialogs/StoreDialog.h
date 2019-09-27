@@ -26,7 +26,7 @@ namespace Pareto {
 		public ref class StoreDialog : public System::Windows::Forms::Form
 		{
 		public:
-			StoreDialog(std::string& suggestedName)
+			StoreDialog(const std::string& suggestedName)
 			{
 				InitializeComponent();
 				//

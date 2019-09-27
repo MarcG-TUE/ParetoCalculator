@@ -26,14 +26,14 @@ namespace Pareto {
 		public ref class prodcons : public System::Windows::Forms::Form
 		{
 		public:
-			prodcons(ConfigurationSet* cs)
+			prodcons(const ConfigurationSet* cs)
 			{
 				InitializeComponent();
 				//
 				//TODO: Add the constructor code here
 				//
-				QuantityIntMap& qm = cs->confspace->quantityNames;
-				QuantityIntMap::iterator i;
+				const QuantityIntMap& qm = cs->confspace->quantityNames;
+				QuantityIntMap::const_iterator i;
 				for(i = qm.begin(); i!=qm.end(); i++){
 					const std::string ns = (*i).first;
 					producerList->Items->Add(gcnew System::String(ns.c_str()));

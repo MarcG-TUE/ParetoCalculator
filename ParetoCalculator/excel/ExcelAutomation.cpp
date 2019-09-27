@@ -24,7 +24,7 @@ void ExcelAutomation::postExcelInteraction(){
 }
 
 
-void ExcelAutomation::createTable(ConfigurationSet* cs, std::string& qx, std::string& qy, std::string& qc, std::string& qs){
+void ExcelAutomation::createTable(const ConfigurationSet* cs, std::string& qx, std::string& qy, std::string& qc, std::string& qs){
 	System::Object^ missing = System::Type::Missing;
 
 	confset = cs;
@@ -37,7 +37,7 @@ void ExcelAutomation::createTable(ConfigurationSet* cs, std::string& qx, std::st
 	this->excelWorksheet = safe_cast<Excel::Worksheet^>(this->excelWorkbook->ActiveSheet);
 
 	int qix, qiy, qic, qis;
-	ConfigurationSpace* csp = cs->confspace;
+	const ConfigurationSpace* csp = cs->confspace;
 	if(csp->includesQuantityNamed(qx)){
 		qix = cs->confspace->indexOfQuantity(qx);
 	} else {qix = -1;}

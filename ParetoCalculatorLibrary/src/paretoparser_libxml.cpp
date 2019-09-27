@@ -177,7 +177,7 @@ void ParetoParser::LoadConfigurationSpaces(){
                 xmlNodeSetPtr nodeset_quantities = result_quantities->nodesetval;
                 for (int j=0; j < nodeset_quantities->nodeNr; j++) {
                     xmlNodePtr pQuantityNode = nodeset_quantities->nodeTab[j];
-                    QuantityType& qu = dynamic_cast<QuantityType&>(*pc->retrieve(getNodeAttribute(pQuantityNode, (xmlChar*)"name")));
+                    const QuantityType& qu = dynamic_cast<const QuantityType&>(*pc->retrieve(getNodeAttribute(pQuantityNode, (xmlChar*)"name")));
                     QuantityName qn;
                     if(hasNodeAttribute(pQuantityNode, (xmlChar*)"referBy")){
                         qn = getNodeAttribute(pQuantityNode, (xmlChar*)"referBy");
@@ -210,10 +210,10 @@ void ParetoParser::LoadConfigurationSets(){
             // for each configuration space node pSpaceNode ...
             xmlNodePtr pConfSetNode = nodeset->nodeTab[i];
 
-            ConfigurationSpace* sp = dynamic_cast<ConfigurationSpace*>(pc->retrieve(getNodeAttribute(pConfSetNode, (xmlChar*)"space_id")));
+            const ConfigurationSpace* sp = dynamic_cast<const ConfigurationSpace*>(pc->retrieve(getNodeAttribute(pConfSetNode, (xmlChar*)"space_id")));
 			
 			ConfigurationSet* cs = new ConfigurationSet(sp, getNodeAttribute(pConfSetNode, (xmlChar*)"name"));
-			std::vector<QuantityType*> *qts = &sp->quantities;
+			const ListOfQuantityTypes *qts = &sp->quantities;
 
             // get all the configurations and add them to the set
             xmlChar *xpath_confs = (xmlChar*) "pa:configurations/pa:configuration";
@@ -234,7 +234,7 @@ void ParetoParser::LoadConfigurationSets(){
 				        for (int k=0; k < nodeset_value->nodeNr; k++) {
 							// for each value node pValueNode ...
 				            xmlNodePtr pValueNode = nodeset_value->nodeTab[k];
-							QuantityValue& qv = (*qts)[k]->valueFromString(getNodeText(pXMLDoc, pValueNode));
+							const QuantityValue& qv = (*qts)[k]->valueFromString(getNodeText(pXMLDoc, pValueNode));
 							cf->addQuantity(qv);
 						}
 					}

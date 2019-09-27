@@ -26,14 +26,14 @@ namespace Pareto {
 		public ref class AbstractionDialog : public System::Windows::Forms::Form
 		{
 		public:
-			AbstractionDialog(ConfigurationSet* cs)
+			AbstractionDialog(const ConfigurationSet* cs)
 			{
 				InitializeComponent();
 				//
 				//TODO: Add the constructor code here
 				//
-				QuantityIntMap& qm = cs->confspace->quantityNames;
-				QuantityIntMap::iterator i;
+				const QuantityIntMap& qm = cs->confspace->quantityNames;
+				QuantityIntMap::const_iterator i;
 				for(i = qm.begin(); i!=qm.end(); i++){
 					const std::string ns = (i->first);
 					quantitiesBox->Items->Add(gcnew System::String(ns.c_str()));

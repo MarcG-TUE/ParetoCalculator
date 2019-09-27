@@ -64,8 +64,8 @@ void ParetoCalculatorW::minimize()
 ArrayList^ ParetoCalculatorW::getStackItemStrings()
 {
 	ArrayList^ res = gcnew ArrayList();
-	std::vector<StorableObject*> stack = this->pc->stack;
-	std::vector<StorableObject*>::iterator i;
+	std::vector<const StorableObject*> stack = this->pc->stack;
+	std::vector<const StorableObject*>::iterator i;
 	for (i = stack.begin(); i != stack.end(); i++)
 	{
 		res->Insert(0, gcnew System::String((*i)->asString().c_str()));
@@ -91,19 +91,19 @@ int ParetoCalculatorW::stackSize()
 
 String^ ParetoCalculatorW::pop()
 {
-	StorableObject* so = this->pc->pop();
+	const StorableObject* so = this->pc->pop();
 	return gcnew System::String(so->asString().c_str());
 }
 
 String^ ParetoCalculatorW::peek()
 {
-	StorableObject* so = this->pc->peek();
+	const StorableObject* so = this->pc->peek();
 	return gcnew System::String(so->asString().c_str());
 }
 
 String^ ParetoCalculatorW::peek(int n)
 {
-	StorableObject* so = this->pc->stack[n];
+	const StorableObject* so = this->pc->stack[n];
 	return gcnew System::String(so->asString().c_str());
 }
 
@@ -114,7 +114,7 @@ bool ParetoCalculatorW::stackEmpty()
 
 void ParetoCalculatorW::storePop(String^ name)
 {
-	StorableObject* so = this->pc->pop();
+	StorableObject* so = &this->pc->pop()->copy();
 	so->name = system_to_std_string(name);
 	this->pc->store(*so);
 }
@@ -174,9 +174,9 @@ void ParetoCalculatorW::executeMultiply(String^ qa, String^ qb)
 ArrayList^ ParetoCalculatorW::confsetConfspaceQuantityNames()
 {
 	ArrayList^ res = gcnew ArrayList();
-	ConfigurationSet* cs = dynamic_cast<ConfigurationSet*>(this->pc->peek());
-	QuantityIntMap& qm = cs->confspace->quantityNames;
-	QuantityIntMap::iterator i;
+	const ConfigurationSet* cs = dynamic_cast<const ConfigurationSet*>(this->pc->peek());
+	const QuantityIntMap& qm = cs->confspace->quantityNames;
+	QuantityIntMap::const_iterator i;
 	for (i = qm.begin(); i != qm.end(); i++) {
 		const std::string ns = (*i).first;
 		res->Add(gcnew System::String(ns.c_str()));

@@ -19,12 +19,12 @@ private:
 		Excel::Sheets^		excelSheets;
 		Excel::Worksheet^	excelWorksheet;
 
-		ConfigurationSet* confset;
+		const ConfigurationSet* confset;
 
 public:
 	ExcelAutomation();
 
-	void createTable(ConfigurationSet* cs, std::string& qx, std::string& qy, std::string& qc, std::string& qs);
+	void createTable(const ConfigurationSet* cs, std::string& qx, std::string& qy, std::string& qc, std::string& qs);
 	void plotGraph();
 
 private:

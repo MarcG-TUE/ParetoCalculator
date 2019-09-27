@@ -47,40 +47,40 @@ using namespace Pareto;
 
 
 
-ParetoCalculator::ParetoCalculator(){
-statusObject = NULL;
-parser = NULL;
+ParetoCalculator::ParetoCalculator() {
+	statusObject = NULL;
+	parser = NULL;
 }
 
-ConfigurationSet& ParetoCalculator::productInSpace(ConfigurationSet& cs1, ConfigurationSet& cs2, ConfigurationSpace* cspace){
+ConfigurationSet& ParetoCalculator::productInSpace(const ConfigurationSet& cs1, const ConfigurationSet& cs2, ConfigurationSpace* cspace) {
 
-ConfigurationSet* prod = new ConfigurationSet(cspace, "Product("+cs1.name+", "+cs2.name+")");
-SetOfConfigurations::iterator i;
-for(i=cs1.confs.begin(); i!=cs1.confs.end(); i++){
-        const Configuration* c1 = &(*i);
+	ConfigurationSet* prod = new ConfigurationSet(cspace, "Product(" + cs1.name + ", " + cs2.name + ")");
+	SetOfConfigurations::iterator i;
+	for (i = cs1.confs.begin(); i != cs1.confs.end(); i++) {
+		const Configuration* c1 = &(*i);
 		SetOfConfigurations::iterator j;
-		for(j=cs2.confs.begin(); j != cs2.confs.end(); j++){
-                const Configuration* c2 = &(*j);
-				Configuration* c = new Configuration(cspace);
-                c->addQuantitiesOf(*c1);
-                c->addQuantitiesOf(*c2);
-                prod->addUniqueConfiguration(*c);
-                }
-        }
-return *prod;
+		for (j = cs2.confs.begin(); j != cs2.confs.end(); j++) {
+			const Configuration* c2 = &(*j);
+			Configuration* c = new Configuration(cspace);
+			c->addQuantitiesOf(*c1);
+			c->addQuantitiesOf(*c2);
+			prod->addUniqueConfiguration(*c);
+		}
+	}
+	return *prod;
 }
 
-ConfigurationSet& ParetoCalculator::product(ConfigurationSet& cs1, ConfigurationSet& cs2){
-// Create a configuration space
-ConfigurationSpace* cspace = new ConfigurationSpace("Product("+cs1.confspace->name+";"+cs2.confspace->name+")");
-cspace->addQuantitiesOf(*cs1.confspace);
-cspace->addQuantitiesOf(*cs2.confspace);
+ConfigurationSet& ParetoCalculator::product(const ConfigurationSet& cs1, const ConfigurationSet& cs2) {
+	// Create a configuration space
+	ConfigurationSpace* cspace = new ConfigurationSpace("Product(" + cs1.confspace->name + ";" + cs2.confspace->name + ")");
+	cspace->addQuantitiesOf(*cs1.confspace);
+	cspace->addQuantitiesOf(*cs2.confspace);
 
-return ParetoCalculator::productInSpace(cs1, cs2, cspace);
+	return ParetoCalculator::productInSpace(cs1, cs2, cspace);
 }
 
 
-ConfigurationSet& ParetoCalculator::constraint(ConfigurationSet& cs1, ConfigurationSet& cs2){
+ConfigurationSet& ParetoCalculator::constraint(const ConfigurationSet& cs1, const ConfigurationSet& cs2) {
 	// not yet tested!!!
 	// assumptions: 
 	// - ConfigurationSet is a sorted collection according to the order defined
@@ -93,14 +93,14 @@ ConfigurationSet& ParetoCalculator::constraint(ConfigurationSet& cs1, Configurat
 	SetOfConfigurations::iterator i1 = cs1.confs.begin();
 	SetOfConfigurations::iterator i2 = cs2.confs.begin();
 
-	while((i1 != cs1.confs.end()) && (i2 != cs2.confs.end())){
+	while ((i1 != cs1.confs.end()) && (i2 != cs2.confs.end())) {
 		const Configuration& c1 = *i1;
 		const Configuration& c2 = *i2;
-		if(ConfigurationSpace::LexicographicCompare(c1, c2)){
+		if (ConfigurationSpace::LexicographicCompare(c1, c2)) {
 			// forget c1
 			i1++;
 		}
-		else if(ConfigurationSpace::LexicographicCompare(c2, c1)){
+		else if (ConfigurationSpace::LexicographicCompare(c2, c1)) {
 			// forget c2
 			i2++;
 		}
@@ -114,120 +114,121 @@ ConfigurationSet& ParetoCalculator::constraint(ConfigurationSet& cs1, Configurat
 }
 
 
-ConfigurationSet& ParetoCalculator::constraint(ConfigurationSet& cs, bool (*testConstraint)(const Pareto::Configuration&)){
+ConfigurationSet& ParetoCalculator::constraint(const ConfigurationSet& cs, bool (*testConstraint)(const Pareto::Configuration&)) {
 	ConfigurationSet* res = new ConfigurationSet(cs.confspace, "Constraint");
 	SetOfConfigurations::iterator i;
-	for(i=cs.confs.begin(); i != cs.confs.end(); i++){
+	for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
 		const Configuration& c = *i;
-		if((*testConstraint)(c)){res->addUniqueConfiguration(c);}
+		if ((*testConstraint)(c)) { res->addUniqueConfiguration(c); }
 	}
 	return *res;
 }
 
-ConfigurationSet& ParetoCalculator::alternative(ConfigurationSet& cs1, ConfigurationSet& cs2){
-ConfigurationSet* res = new ConfigurationSet(cs1.confspace, "Alternative");
+ConfigurationSet& ParetoCalculator::alternative(const ConfigurationSet& cs1, const ConfigurationSet& cs2) {
+	ConfigurationSet* res = new ConfigurationSet(cs1.confspace, "Alternative");
 
-SetOfConfigurations::iterator i;
-for(i=cs1.confs.begin(); i != cs1.confs.end(); i++){
-        const Configuration& c = *i;
-        res->addUniqueConfiguration(c);
-        }
-for(i=cs2.confs.begin(); i != cs2.confs.end(); i++){
+	SetOfConfigurations::iterator i;
+	for (i = cs1.confs.begin(); i != cs1.confs.end(); i++) {
+		const Configuration& c = *i;
+		res->addUniqueConfiguration(c);
+	}
+	for (i = cs2.confs.begin(); i != cs2.confs.end(); i++) {
 		Configuration* nc = new Configuration(res->confspace);
 		nc->addQuantitiesOf(*i);
-        res->addConfiguration(*nc);
-        }
-return *res;
+		res->addConfiguration(*nc);
+	}
+	return *res;
 }
 
 
-Pareto::Configuration& conf_abstraction(ConfigurationSpace* cs, const Pareto::Configuration& c, unsigned int n){
+Pareto::Configuration& conf_abstraction(ConfigurationSpace* cs, const Pareto::Configuration& c, unsigned int n) {
 	Pareto::Configuration* nc = new Pareto::Configuration(cs);
-	
+
 	// temporary fix for porting
 	Pareto::Configuration* d = const_cast<Pareto::Configuration*>(&c);
-		
+
 	ListOfQuantityValues::iterator i;
-	unsigned int k=0;
-	for(i=d->quantities.begin(); i != d->quantities.end(); i++, k++){
-		if(k!=n){
+	unsigned int k = 0;
+	for (i = d->quantities.begin(); i != d->quantities.end(); i++, k++) {
+		if (k != n) {
 			nc->addQuantity(d->getQuantity(k));
 		}
 	}
 	return *nc;
 }
 
-ConfigurationSet& ParetoCalculator::abstraction(ConfigurationSet& cs, unsigned int n){
+ConfigurationSet& ParetoCalculator::abstraction(const ConfigurationSet& cs, unsigned int n) {
 	// Create a configuration space
-	ConfigurationSpace* cspace = new ConfigurationSpace("Abstract("+cs.confspace->name+","+cs.confspace->nameOfQuantityNr(n)+")");
-	
-	unsigned int k=0;
-	for(ListOfQuantityTypes::iterator i=cs.confspace->quantities.begin(); i != cs.confspace->quantities.end(); i++, k++){
-		if(k!=n){
+	ConfigurationSpace* cspace = new ConfigurationSpace("Abstract(" + cs.confspace->name + "," + cs.confspace->nameOfQuantityNr(n) + ")");
+
+	unsigned int k = 0;
+	for (ListOfQuantityTypes::const_iterator i = cs.confspace->quantities.begin(); i != cs.confspace->quantities.end(); i++, k++) {
+		if (k != n) {
 			cspace->addQuantityAsVisibility(*(*i), cs.confspace->nameOfQuantityNr(k), cs.confspace->quantityVisibility[k]);
 		}
 	}
 
-	ConfigurationSet* res = new ConfigurationSet(cspace, ("Abstraction("+cs.name+", ").append(n,'a')+")");
+	ConfigurationSet* res = new ConfigurationSet(cspace, ("Abstraction(" + cs.name + ", ").append(n, 'a') + ")");
 	// add configurations
 	SetOfConfigurations::iterator i;
-	for(i=cs.confs.begin(); i != cs.confs.end(); i++){
-		const Configuration& nc = conf_abstraction(cspace, (*i),n);
+	for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
+		const Configuration& nc = conf_abstraction(cspace, (*i), n);
 		res->addConfiguration(nc);
 	}
 	return *res;
 }
 
 
-ConfigurationSet& ParetoCalculator::abstraction(ConfigurationSet& cs, StorableString& s){
+ConfigurationSet& ParetoCalculator::abstraction(const ConfigurationSet& cs, const StorableString& s) {
 	return ParetoCalculator::abstraction(cs, s.name);
 }
 
-ConfigurationSet& ParetoCalculator::abstraction(ConfigurationSet& cs, const QuantityName& qn){
+ConfigurationSet& ParetoCalculator::abstraction(const ConfigurationSet& cs, const QuantityName& qn) {
 
-	if(!cs.confspace->includesQuantityNamed(qn)){
-		throw *new EParetoCalculatorError("Quantity " + qn + "does not exist in ParetoCalculator::abstraction");}
+	if (!cs.confspace->includesQuantityNamed(qn)) {
+		throw* new EParetoCalculatorError("Quantity " + qn + "does not exist in ParetoCalculator::abstraction");
+	}
 
-	unsigned int n = cs.confspace->quantityNames[qn];
+	unsigned int n = cs.confspace->quantityNames.at(qn);
 	return ParetoCalculator::abstraction(cs, n);
 }
 
 
 
-void ParetoCalculator::abstract(void){
-	StorableObject& s = *this->pop();
-	if(!s.isString()){
-		throw *new EParetoCalculatorError("Abstraction requires quantity name and configuration set on the stack");
+void ParetoCalculator::abstract(void) {
+	const StorableObject& s = *this->pop();
+	if (!s.isString()) {
+		throw* new EParetoCalculatorError("Abstraction requires quantity name and configuration set on the stack");
 		return;
 	}
-	StorableString& ss = dynamic_cast<StorableString&>(s);
-	StorableObject& o = *this->pop();
-	if(!o.isConfigurationSet()){
-		throw *new EParetoCalculatorError("Abstraction requires quantity name and configuration set on the stack");
+	const StorableString& ss = dynamic_cast<const StorableString&>(s);
+	const StorableObject& o = *this->pop();
+	if (!o.isConfigurationSet()) {
+		throw* new EParetoCalculatorError("Abstraction requires quantity name and configuration set on the stack");
 		return;
 	}
-	ConfigurationSet& cs = dynamic_cast<ConfigurationSet&>(o);
+	const ConfigurationSet& cs = dynamic_cast<const ConfigurationSet&>(o);
 	this->push(this->abstraction(cs, ss));
 }
 
 
-void ParetoCalculator::hide(ListOfQuantityNames *lqn){
-	StorableObject& so = *this->pop();
-	if(!so.isConfigurationSet()){
-		throw *new EParetoCalculatorError("Hiding requires a configuration set on the stack");
+void ParetoCalculator::hide(ListOfQuantityNames* lqn) {
+	const StorableObject& so = *this->pop();
+	if (!so.isConfigurationSet()) {
+		throw* new EParetoCalculatorError("Hiding requires a configuration set on the stack");
 		return;
 	}
-	ConfigurationSet& cs = dynamic_cast<ConfigurationSet&>(so);
-	ConfigurationSet& ncs = ParetoCalculator::hiding(cs,lqn);
+	const ConfigurationSet& cs = dynamic_cast<const ConfigurationSet&>(so);
+	ConfigurationSet& ncs = ParetoCalculator::hiding(cs, lqn);
 	this->push(ncs);
 }
 
-ConfigurationSet& ParetoCalculator::hiding(ConfigurationSet& cs, ListOfQuantityNames *lqn){
-	ConfigurationSpace *csp = cs.confspace->hide(lqn);
-    std::string nm = "Hide of " + cs.name;
-	ConfigurationSet *ncs = new ConfigurationSet(csp, nm);
+ConfigurationSet& ParetoCalculator::hiding(const ConfigurationSet& cs, const ListOfQuantityNames* lqn) {
+	const ConfigurationSpace* csp = cs.confspace->hide(lqn);
+	std::string nm = "Hide of " + cs.name;
+	ConfigurationSet* ncs = new ConfigurationSet(csp, nm);
 	SetOfConfigurations::iterator i;
-	for(i=cs.confs.begin(); i!=cs.confs.end(); i++){
+	for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
 		Configuration* cf = new Configuration(csp);
 		cf->addQuantitiesOf(*i);
 		ncs->addConfiguration(*cf);
@@ -235,7 +236,7 @@ ConfigurationSet& ParetoCalculator::hiding(ConfigurationSet& cs, ListOfQuantityN
 	return *ncs;
 }
 
-ConfigurationSet& ParetoCalculator::hiding(ConfigurationSet& cs, const QuantityName& qn){
+ConfigurationSet& ParetoCalculator::hiding(const ConfigurationSet& cs, const QuantityName& qn) {
 	ListOfQuantityNames lqn;
 	lqn.push_back(qn);
 	return ParetoCalculator::hiding(cs, &lqn);
@@ -243,18 +244,18 @@ ConfigurationSet& ParetoCalculator::hiding(ConfigurationSet& cs, const QuantityN
 
 
 
-ConfigurationSet& ParetoCalculator::minimize(ConfigurationSet& cs){
+ConfigurationSet& ParetoCalculator::minimize(const ConfigurationSet& cs) {
 	// The naive way
 
-	ConfigurationSet* res = new ConfigurationSet(cs.confspace, "min("+cs.name+")");
-	
+	ConfigurationSet* res = new ConfigurationSet(cs.confspace, "min(" + cs.name + ")");
+
 	// Note that the following gives a copy of the set of configurations
 	SetOfConfigurations confs = cs.confs;
 
 	// invariants of the loop: 
 	// - the union of confs and res is Pareto equivalent to the original set cs.confs
 	// - res in Pareto minimal
-	while(!confs.empty()){
+	while (!confs.empty()) {
 		// remove arbitrary element from the set
 		SetOfConfigurations::iterator cfp = confs.begin();
 		Configuration c = *cfp;
@@ -264,26 +265,27 @@ ConfigurationSet& ParetoCalculator::minimize(ConfigurationSet& cs){
 		// find one configuration that is Pareto optimal with no points dominated by it left in the set.
 		// invariant of the loop: configuration c is optimal among the configurations up to the iterator and up to the iterator there are no configurations in the
 		// set that c dominates.
-		SetOfConfigurations::iterator i=confs.begin();
-		while(i!=confs.end()){
+		SetOfConfigurations::iterator i = confs.begin();
+		while (i != confs.end()) {
 			const Configuration* cc = &(*i);
-			if(c<=*cc){ // remove cc as it is dominated and continue
+			if (c <= *cc) { // remove cc as it is dominated and continue
 				// for port to linux, which does not support (apparently) the erase returning a new iterator
 				// some people on the internet claim the following code is safe.
 				SetOfConfigurations::iterator j;
 				j = i;
 				j++;
 				confs.erase(i);
-				i=j;} 
+				i = j;
+			}
 			else {
-				if(*cc<=c){ 
+				if (*cc <= c) {
 					// forget about c, it is dominated by cc. Continue with cc, but 
 					// start from the beginning to make sure all points it dominates will be removed.
-					c=*cc; 
+					c = *cc;
 					confs.erase(i);
-					i=confs.begin();
+					i = confs.begin();
 				}
-				else {i++;}
+				else { i++; }
 			}
 		}
 		res->addUniqueConfiguration(c);
@@ -291,48 +293,48 @@ ConfigurationSet& ParetoCalculator::minimize(ConfigurationSet& cs){
 	return *res;
 }
 
-ConfigurationSet& ParetoCalculator::minimize_SC(ConfigurationSet& cs){
+ConfigurationSet& ParetoCalculator::minimize_SC(ConfigurationSet& cs) {
 	// Simple Cull
 
-	ConfigurationSet* res = new ConfigurationSet(cs.confspace, "min("+cs.name+")");
-	
+	ConfigurationSet* res = new ConfigurationSet(cs.confspace, "min(" + cs.name + ")");
+
 	SetOfConfigurations::iterator i;
-	for(i=cs.confs.begin(); i!=cs.confs.end(); i++){
+	for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
 		const Configuration& c = *i;
 		res->addConfigurationAndFilter(c);
 	}
 	return *res;
 }
 
-ConfigurationSet* ParetoCalculator::efficient_minimize_unordered(ConfigurationSet* cs, const QuantityName& qn){
-	ConfigurationSet* res = new ConfigurationSet(cs->confspace, "min("+cs->name+")");
+ConfigurationSet* ParetoCalculator::efficient_minimize_unordered(const ConfigurationSet* cs, const QuantityName& qn) {
+	ConfigurationSet* res = new ConfigurationSet(cs->confspace, "min(" + cs->name + ")");
 
 	// split confset into classes with same value for qn
 	ListOfConfSet* cls = splitClasses(cs, qn);
 
 	// minimize each class separately and add to result
 	ListOfConfSet::iterator i;
-	for(i=cls->begin(); i!=cls->end(); i++){
+	for (i = cls->begin(); i != cls->end(); i++) {
 		ConfigurationSet* cx = *i;
 
 		// abstract from quantity qn
 		ConfigurationSet* cxa = &ParetoCalculator::abstraction(*cx, qn);
 
 		//minimize *i after abstraction of qn
-		ConfigurationSet* mcxa = &ParetoCalculator::efficient_minimize(*cxa);
+		const ConfigurationSet* mcxa = &ParetoCalculator::efficient_minimize(*cxa);
 
 		//add configurations of the result after adding qn again
 
 		// add all configurations of mcxa
 		unsigned int p = cs->confspace->indexOfQuantity(qn);
 		SetOfConfigurations::iterator j;
-		for(j = mcxa->confs.begin(); j != mcxa->confs.end(); j++){
+		for (j = mcxa->confs.begin(); j != mcxa->confs.end(); j++) {
 			Configuration* c = new Configuration(cs->confspace);
 			const Configuration& c_mcxa = *j;
 			const QuantityValue& x = (*cx->confs.begin()).getQuantity(p);
 			//c-> add quantities with x at the right place ....
-			for(unsigned int k = 0; k<mcxa->confspace->quantities.size(); k++){
-				if(k==p) c->addQuantity(x);
+			for (unsigned int k = 0; k < mcxa->confspace->quantities.size(); k++) {
+				if (k == p) c->addQuantity(x);
 				c->addQuantity(c_mcxa.getQuantity(k));
 			}
 			res->addConfiguration(*c);
@@ -342,44 +344,44 @@ ConfigurationSet* ParetoCalculator::efficient_minimize_unordered(ConfigurationSe
 }
 
 
-ListOfConfSet* ParetoCalculator::splitClasses(ConfigurationSet* cs, const QuantityName& qn){
+ListOfConfSet* ParetoCalculator::splitClasses(const ConfigurationSet* cs, const QuantityName& qn) {
 	ListOfConfSet* lcs = new ListOfConfSet();
 
-//	create unordered index on cs,qn
-	IndexOnUnorderedConfigurationSet i(qn,cs);
+	//	create unordered index on cs,qn
+	IndexOnUnorderedConfigurationSet i(qn, cs);
 
-	unsigned int l,u;
+	unsigned int l, u;
 	unsigned int k = 0;
-	while (k<i.size()){
+	while (k < i.size()) {
 		ConfigurationIndexReference& r = i.at(k);
 		l = i.lower(r);
 		u = i.upper(r);
-		ConfigurationSet* ncs = new ConfigurationSet(cs->confspace, "class "+r.value().asString());
-		for(unsigned int n=l; n<=u; n++){
+		ConfigurationSet* ncs = new ConfigurationSet(cs->confspace, "class " + r.value().asString());
+		for (unsigned int n = l; n <= u; n++) {
 			ncs->addConfiguration(*(i.at(n).conf));
 		}
 		lcs->push_back(ncs);
-		k = u+1;
+		k = u + 1;
 	}
 	return lcs;
 }
 
 
-ConfigurationSet* ParetoCalculator::efficient_minimize_filter1(ConfigurationSet* csl, ConfigurationSet* csh, const QuantityName* qn){
-// assume: csl is minimal set of configurations and csh is minimal set of configurations. Return 
-// set of configurations with configurations from csh removed that are strictly dominated by configurations
-// of csl.
-	// note: there cannot be any unordered quantities
+const ConfigurationSet* ParetoCalculator::efficient_minimize_filter1(const ConfigurationSet* csl, const ConfigurationSet* csh, const QuantityName* qn) {
+	// assume: csl is minimal set of configurations and csh is minimal set of configurations. Return 
+	// set of configurations with configurations from csh removed that are strictly dominated by configurations
+	// of csl.
+		// note: there cannot be any unordered quantities
 
-	if(csl->confs.size()==0){ return csh;}
-	if(csh->confs.size()==0){ return csh;}
+	if (csl->confs.size() == 0) { return csh; }
+	if (csh->confs.size() == 0) { return csh; }
 
 	ConfigurationSet* csla = &ParetoCalculator::hiding(*csl, *qn);
 	ConfigurationSet* csha = &ParetoCalculator::hiding(*csh, *qn);
-	ConfigurationSet* filtered =  ParetoCalculator::efficient_minimize_filter2(csla, csha);
+	const ConfigurationSet* filtered = ParetoCalculator::efficient_minimize_filter2(csla, csha);
 	ConfigurationSet* res = new ConfigurationSet(csl->confspace, "temp");
 	SetOfConfigurations::iterator i;
-	for(i=filtered->confs.begin(); i!=filtered->confs.end(); i++){
+	for (i = filtered->confs.begin(); i != filtered->confs.end(); i++) {
 		Configuration* c = new Configuration(res->confspace);
 		c->addQuantitiesOf(*i);
 		res->addConfiguration(*c);
@@ -388,59 +390,59 @@ ConfigurationSet* ParetoCalculator::efficient_minimize_filter1(ConfigurationSet*
 	return res;
 }
 
-const QuantityValue& ParetoCalculator::efficient_minimize_getPivot(ConfigurationSet* cs, const QuantityName* qn){
+const QuantityValue& ParetoCalculator::efficient_minimize_getPivot(const ConfigurationSet* cs, const QuantityName* qn) {
 	IndexOnTotalOrderConfigurationSet i = IndexOnTotalOrderConfigurationSet(*qn, cs);
-	return i.at(i.size()/2).conf->getQuantity(*qn);
+	return i.at(i.size() / 2).conf->getQuantity(*qn);
 }
 
-void ParetoCalculator::efficient_minimize_filter_split(ConfigurationSet* cs, const QuantityName* qn, const QuantityValue& pivot, ConfigurationSet* *csl, ConfigurationSet* *csh){
+void ParetoCalculator::efficient_minimize_filter_split(const ConfigurationSet* cs, const QuantityName* qn, const QuantityValue& pivot, ConfigurationSet** csl, ConfigurationSet** csh) {
 	IndexOnTotalOrderConfigurationSet i = IndexOnTotalOrderConfigurationSet(*qn, cs);
 	*csl = new ConfigurationSet(cs->confspace, "temp");
 	*csh = new ConfigurationSet(cs->confspace, "temp");
 	IndexOnTotalOrderConfigurationSet::iterator j;
-	for(j = i.begin(); j!=i.end(); j++){
-		const Configuration *c = (*j).conf;
-		if(c->getQuantity(*qn)<pivot){ (*csl)->addConfiguration(*c);}
+	for (j = i.begin(); j != i.end(); j++) {
+		const Configuration* c = (*j).conf;
+		if (c->getQuantity(*qn) < pivot) { (*csl)->addConfiguration(*c); }
 		else break;
 	}
-	for(; j!=i.end(); j++){
-		const Configuration *c = (*j).conf;
+	for (; j != i.end(); j++) {
+		const Configuration* c = (*j).conf;
 		(*csh)->addConfiguration(*c);
 	}
 }
 
 
 
-ConfigurationSet* ParetoCalculator::efficient_minimize_filter2(ConfigurationSet* csa, ConfigurationSet* csb){
-// assume: csl is minimal set of configurations and csh is minimal set of configurations. Return 
-// set of configurations with configurations from csh removed that are strictly dominated by configurations
-// of csl.
-	// note: there cannot be any unordered quantities
+const ConfigurationSet* ParetoCalculator::efficient_minimize_filter2(const ConfigurationSet* csa, const ConfigurationSet* csb) {
+	// assume: csl is minimal set of configurations and csh is minimal set of configurations. Return 
+	// set of configurations with configurations from csh removed that are strictly dominated by configurations
+	// of csl.
+		// note: there cannot be any unordered quantities
 
-	if(csa->confs.size()==0){ return csb;}
-	if(csb->confs.size()==0){ return csb;}
+	if (csa->confs.size() == 0) { return csb; }
+	if (csb->confs.size() == 0) { return csb; }
 
-	if(csa->confs.size()<FILTER_THRESHOLD) {
-		ConfigurationSet* res = ParetoCalculator::efficient_minimize_filter3(csa, csb);
+	if (csa->confs.size() < FILTER_THRESHOLD) {
+		const ConfigurationSet* res = ParetoCalculator::efficient_minimize_filter3(csa, csb);
 		return res;
 	}
 
-	const QuantityName* qn=csa->confspace->getTotallyOrderedQuantity();
-	if (qn){
-		if(csb->confspace->nrOfVisibleQuantities()==1){
+	const QuantityName* qn = csa->confspace->getTotallyOrderedQuantity();
+	if (qn) {
+		if (csb->confspace->nrOfVisibleQuantities() == 1) {
 			// there is only one, totally ordered quantity
-			ConfigurationSet* res = ParetoCalculator::efficient_minimize_filter4(csa, csb);
+			const ConfigurationSet* res = ParetoCalculator::efficient_minimize_filter4(csa, csb);
 			return res;
 		}
 		ConfigurationSet* total = &ParetoCalculator::alternative(*csa, *csb);
 		const QuantityValue& pivot = ParetoCalculator::efficient_minimize_getPivot(total, qn);
-		ConfigurationSet *csal, *csah;
-		ConfigurationSet *csbl, *csbh;
+		ConfigurationSet* csal, * csah;
+		ConfigurationSet* csbl, * csbh;
 		ParetoCalculator::efficient_minimize_filter_split(csa, qn, pivot, &csal, &csah);
 		ParetoCalculator::efficient_minimize_filter_split(csb, qn, pivot, &csbl, &csbh);
-		ConfigurationSet* csblf = ParetoCalculator::efficient_minimize_filter2(csal, csbl);
-		ConfigurationSet* csbhft = ParetoCalculator::efficient_minimize_filter2(csah, csbh);
-		ConfigurationSet* csbhf = ParetoCalculator::efficient_minimize_filter1(csal, csbhft, qn);
+		const ConfigurationSet* csblf = ParetoCalculator::efficient_minimize_filter2(csal, csbl);
+		const ConfigurationSet* csbhft = ParetoCalculator::efficient_minimize_filter2(csah, csbh);
+		const ConfigurationSet* csbhf = ParetoCalculator::efficient_minimize_filter1(csal, csbhft, qn);
 		ConfigurationSet* res = &ParetoCalculator::alternative(*csblf, *csbhf);
 		return res;
 	}
@@ -449,23 +451,24 @@ ConfigurationSet* ParetoCalculator::efficient_minimize_filter2(ConfigurationSet*
 	}
 }
 
-ConfigurationSet* ParetoCalculator::efficient_minimize_filter3(ConfigurationSet* csa, ConfigurationSet* csb){
-	if(csa->confs.size()==0){ return csb;}
-	if(csb->confs.size()==0){ return csb;}
+const ConfigurationSet* ParetoCalculator::efficient_minimize_filter3(const ConfigurationSet* csa, const ConfigurationSet* csb) {
+	if (csa->confs.size() == 0) { return csb; }
+	if (csb->confs.size() == 0) { return csb; }
 
 	ConfigurationSet* res = new ConfigurationSet(*csb);
-	SetOfConfigurations::iterator i,j;
-	for(i = csa->confs.begin(); i != csa->confs.end(); i++){
-		for(j = res->confs.begin(); j != res->confs.end();){
+	SetOfConfigurations::iterator i, j;
+	for (i = csa->confs.begin(); i != csa->confs.end(); i++) {
+		for (j = res->confs.begin(); j != res->confs.end();) {
 			const Configuration* c = &(*j);
-			if((*i)<=(*c)){ // remove cc as it is dominated and continue
+			if ((*i) <= (*c)) { // remove cc as it is dominated and continue
 				// port to linux/gcc, set erase does not return a new iterator here
 				// some people say the following is safe...
 				SetOfConfigurations::iterator k;
-				k=j;
+				k = j;
 				k++;
 				res->confs.erase(j);
-				j=k;}
+				j = k;
+			}
 			else j++;
 		}
 	}
@@ -473,24 +476,24 @@ ConfigurationSet* ParetoCalculator::efficient_minimize_filter3(ConfigurationSet*
 }
 
 
-ConfigurationSet* ParetoCalculator::efficient_minimize_filter4(ConfigurationSet* csa, ConfigurationSet* csb){
-// assume: csa and csb are 1-dimensional spaces with a total order
-	//find min of csa
+const ConfigurationSet* ParetoCalculator::efficient_minimize_filter4(const ConfigurationSet* csa, const ConfigurationSet* csb) {
+	// assume: csa and csb are 1-dimensional spaces with a total order
+		//find min of csa
 
-	if(csa->confs.size()==0){ return csb;}
-	if(csb->confs.size()==0){ return csb;}
+	if (csa->confs.size() == 0) { return csb; }
+	if (csb->confs.size() == 0) { return csb; }
 
-	const QuantityValue *v = NULL, *w;
-	if(csa->confs.size()==0) return csb;
+	const QuantityValue* v = NULL, * w;
+	if (csa->confs.size() == 0) return csb;
 	unsigned int n = csa->confspace->firstVisibleQuantity();
 	SetOfConfigurations::iterator i;
-	for(i=csa->confs.begin(); i!=csa->confs.end(); i++){
-		if(!v) {v =&(*i).getQuantity(n);}
-		else if((*(w=&(*i).getQuantity(n)))<=*v) {v=w;}
+	for (i = csa->confs.begin(); i != csa->confs.end(); i++) {
+		if (!v) { v = &(*i).getQuantity(n); }
+		else if ((*(w = &(*i).getQuantity(n))) <= *v) { v = w; }
 	}
 	//	return all confs of b which are smaller than a.
 	ConfigurationSet* res = new ConfigurationSet(csb->confspace, "temp");
-	for(i=csb->confs.begin(); i!=csb->confs.end(); i++){
+	for (i = csb->confs.begin(); i != csb->confs.end(); i++) {
 		res->addConfiguration(*i);
 	}
 	return res;
@@ -498,22 +501,22 @@ ConfigurationSet* ParetoCalculator::efficient_minimize_filter4(ConfigurationSet*
 
 
 
-ConfigurationSet* ParetoCalculator::efficient_minimize_dcmerge(ConfigurationSet* csl, ConfigurationSet* csh, const QuantityName& qn, const QuantityValue& v){
+const ConfigurationSet* ParetoCalculator::efficient_minimize_dcmerge(const ConfigurationSet* csl, const ConfigurationSet* csh, const QuantityName& qn, const QuantityValue& v) {
 	// csl and csh are minimized and sorted on qn, such that for any cl in csl and ch in csh, cl(qn)<=ch(qn)
 	// project on cut plane "hide qn"
 
 
-	if(csl->confspace->nrOfVisibleQuantities()==1){
+	if (csl->confspace->nrOfVisibleQuantities() == 1) {
 		// csl should contain only one element which dominates the element of csh
 #ifdef _DEBUG
-		if(csl->confs.size()>1){ // for debugging, just checking... shouldn't happen
-			throw *new EParetoCalculatorError("Should not be reachable. minimize_dcmerge()\n");
+		if (csl->confs.size() > 1) { // for debugging, just checking... shouldn't happen
+			throw* new EParetoCalculatorError("Should not be reachable. minimize_dcmerge()\n");
 		}
 #endif
 		return csl;
 	}
 
-	ConfigurationSet* cshf = ParetoCalculator::efficient_minimize_filter1(csl, csh, &qn);
+	const ConfigurationSet* cshf = ParetoCalculator::efficient_minimize_filter1(csl, csh, &qn);
 
 	ConfigurationSet* csp = &ParetoCalculator::alternative(*csl, *cshf);
 
@@ -521,54 +524,54 @@ ConfigurationSet* ParetoCalculator::efficient_minimize_dcmerge(ConfigurationSet*
 }
 
 
-ConfigurationSet* ParetoCalculator::efficient_minimize_totally_ordered_recursive(ConfigurationSet* cs, const QuantityName& qn){
+const ConfigurationSet* ParetoCalculator::efficient_minimize_totally_ordered_recursive(ConfigurationSet* cs, const QuantityName& qn) {
 	// Is called in the N-recursive part of totall_ordered
 
 	// Base case of recursion, when problem size small enough use
 	// ordinary minimization
-	if(cs->confs.size()<MINIMIZE_THRESHOLD){ 
+	if (cs->confs.size() < MINIMIZE_THRESHOLD) {
 		return &ParetoCalculator::minimize(*cs);
 	}
-	
-	QuantityValue* v;
+
+	const QuantityValue* v;
 	ListOfConfSet* l = ParetoCalculator::splitLowHigh(cs, qn, &v);
 	ListOfConfSet::iterator p = l->begin();
-	ConfigurationSet* mcsl = ParetoCalculator::efficient_minimize_totally_ordered_recursive(*p, qn);
+	const ConfigurationSet* mcsl = ParetoCalculator::efficient_minimize_totally_ordered_recursive(*p, qn);
 	p++;
-	ConfigurationSet* mcsh = ParetoCalculator::efficient_minimize_totally_ordered_recursive(*p, qn);
+	const ConfigurationSet* mcsh = ParetoCalculator::efficient_minimize_totally_ordered_recursive(*p, qn);
 
-	ConfigurationSet* res = ParetoCalculator::efficient_minimize_dcmerge(mcsl, mcsh, qn, *v);
-	
+	const ConfigurationSet* res = ParetoCalculator::efficient_minimize_dcmerge(mcsl, mcsh, qn, *v);
+
 	return res;
 }
 
 
-ConfigurationSet* ParetoCalculator::efficient_minimize_totally_ordered(ConfigurationSet* cs, const QuantityName& qn){
-	QuantityValue* v;
+const ConfigurationSet* ParetoCalculator::efficient_minimize_totally_ordered(const ConfigurationSet* cs, const QuantityName& qn) {
+	const QuantityValue* v;
 	ListOfConfSet* l = ParetoCalculator::splitLowHigh(cs, qn, &v);
 	ListOfConfSet::iterator p = l->begin();
-	ConfigurationSet* mcsl = ParetoCalculator::efficient_minimize_totally_ordered_recursive(*p, qn);
+	const ConfigurationSet* mcsl = ParetoCalculator::efficient_minimize_totally_ordered_recursive(*p, qn);
 	p++;
-	ConfigurationSet* mcsh = ParetoCalculator::efficient_minimize_totally_ordered_recursive(*p, qn);
+	const ConfigurationSet* mcsh = ParetoCalculator::efficient_minimize_totally_ordered_recursive(*p, qn);
 
-	ConfigurationSet* res = ParetoCalculator::efficient_minimize_dcmerge(mcsl, mcsh, qn, *v);
-	
+	const ConfigurationSet* res = ParetoCalculator::efficient_minimize_dcmerge(mcsl, mcsh, qn, *v);
+
 	return res;
 }
 
-ListOfConfSet* ParetoCalculator::splitLowHigh(ConfigurationSet* cs, const QuantityName& qn, QuantityValue **  v){
+ListOfConfSet* ParetoCalculator::splitLowHigh(const ConfigurationSet* cs, const QuantityName& qn, const QuantityValue** v) {
 	// pre: size of cs is at least two.
 
 	ListOfConfSet* lcs = new ListOfConfSet();
 
 	//	create index on cs,qn
-	IndexOnTotalOrderConfigurationSet i(qn,cs);
+	IndexOnTotalOrderConfigurationSet i(qn, cs);
 
 	unsigned int mid = i.size() / 2;
 	*v = const_cast<QuantityValue*>(&(i.at(mid).conf->getQuantity(qn)));  // try to get rid of the const_cast...
 
-	lcs->push_back(i.copyFromTo(0, mid-1));
-	lcs->push_back(i.copyFromTo(mid, i.size()-1));
+	lcs->push_back(i.copyFromTo(0, mid - 1));
+	lcs->push_back(i.copyFromTo(mid, i.size() - 1));
 	return lcs;
 }
 
@@ -600,24 +603,24 @@ ListOfConfSet* ParetoCalculator::splitLowHigh(ConfigurationSet* cs, const Quanti
 //	return lcs;
 //}
 //
-ConfigurationSet& ParetoCalculator::efficient_minimize(ConfigurationSet& cs){
+const ConfigurationSet& ParetoCalculator::efficient_minimize(const ConfigurationSet& cs) {
 
 	// The efficient way
-	
+
 	// Base case of recursion, when problem size small enough use
 	// ordinary minimization
-	if(cs.confs.size()<MINIMIZE_THRESHOLD){ 
+	if (cs.confs.size() < MINIMIZE_THRESHOLD) {
 		return ParetoCalculator::minimize(cs);
 	}
 
-	const QuantityName* qn=cs.confspace->getUnorderedQuantity();
-	if(qn){
-		return *ParetoCalculator::efficient_minimize_unordered(&cs,*qn);
+	const QuantityName* qn = cs.confspace->getUnorderedQuantity();
+	if (qn) {
+		return *ParetoCalculator::efficient_minimize_unordered(&cs, *qn);
 	}
 	else {
-		qn=cs.confspace->getTotallyOrderedQuantity();
-		if (qn){
-			return *ParetoCalculator::efficient_minimize_totally_ordered(&cs,*qn);
+		qn = cs.confspace->getTotallyOrderedQuantity();
+		if (qn) {
+			return *ParetoCalculator::efficient_minimize_totally_ordered(&cs, *qn);
 		}
 		else {
 			return ParetoCalculator::minimize(cs);
@@ -626,185 +629,198 @@ ConfigurationSet& ParetoCalculator::efficient_minimize(ConfigurationSet& cs){
 }
 
 
-
-void ParetoCalculator::store(StorableObject& o){
+void ParetoCalculator::store(const StorableObject& o, const std::string& key) {
 	// put the object in memory
-	memory.insert(std::pair<const std::string, StorableObject*>(o.name,&o));
+	memory.insert(std::pair<const std::string, const StorableObject*>(key, &o));
 }
 
-void ParetoCalculator::store(void){
+void ParetoCalculator::store(const StorableObject& o) {
+	this->store(o, o.name);
+}
+
+void ParetoCalculator::store(void) {
 	// store object from the stack
 	this->store(*this->pop());
 }
 
-StorableObject* ParetoCalculator::retrieve(const std::string& oname) // throw(EParetoCalculatorError)
+void ParetoCalculator::store(const std::string& key) {
+	// store object from the stack
+	this->store(*this->pop(), key);
+}
+
+
+const StorableObject* ParetoCalculator::retrieve(const std::string& oname) // throw(EParetoCalculatorError)
 {
 	// find object in memory
-	StorageMap::iterator p=memory.find(oname);
-	if(p==memory.end()){
+	StorageMap::iterator p = memory.find(oname);
+	if (p == memory.end()) {
 		//this->listStorage(cout);
-		throw *new EParetoCalculatorError("object not found in ParetoCalculator::retrieve");}
+		throw* new EParetoCalculatorError("object not found in ParetoCalculator::retrieve");
+	}
 	else {
 		return (*p).second;
 	}
 }
 
-QuantityType* ParetoCalculator::retrieveQuantityType(const std::string& oname) //throw (EParetoCalculatorError)
+const QuantityType* ParetoCalculator::retrieveQuantityType(const std::string& oname) //throw (EParetoCalculatorError)
 {
-	return dynamic_cast<QuantityType*>(this->retrieve(oname));
+	return dynamic_cast<const QuantityType*>(this->retrieve(oname));
 }
 
 
-void ParetoCalculator::push(StorableObject& o){
+void ParetoCalculator::push(const StorableObject& o) {
 	stack.push(&o);
 }
 
 void ParetoCalculator::push(const std::string& oname) //throw(EParetoCalculatorError)
 {
-StorableObject* o=this->retrieve(oname);
-if(o){
-        this->push(*o);
-        }
-else {
-		throw *new EParetoCalculatorError("object not found in ParetoCalculator::push");
-        }
+	const StorableObject* o = this->retrieve(oname);
+	if (o) {
+		this->push(*o);
+	}
+	else {
+		throw* new EParetoCalculatorError("object not found in ParetoCalculator::push");
+	}
 }
 
-StorableObject* ParetoCalculator::pop() //throw(EParetoCalculatorError)
+const StorableObject* ParetoCalculator::pop() //throw(EParetoCalculatorError)
 {
-	if(stack.size()>0){
+	if (stack.size() > 0) {
 		return stack.pop();
-	} else {
-		throw *new EParetoCalculatorError("Stack is empty in ParetoCalculator::pop()");
-		return NULL;
 	}
-}
-
-ConfigurationSet* ParetoCalculator::popConfigurationSet() //throw(EParetoCalculatorError)
-{
-	StorableObject* so = this->pop();
-	if(!so->isConfigurationSet()){
-		throw *new EParetoCalculatorError("Configuration set expected in ParetoCalculator::popConfigurationSet()");
-		return NULL;
-	}
-	return dynamic_cast<ConfigurationSet*>(so);
-}
-
-StorableObject* ParetoCalculator::peek() //throw(EParetoCalculatorError)
-{
-	if(stack.size()>0){
-		return stack.peek();}
 	else {
-		throw *new EParetoCalculatorError("Stack is empty in ParetoCalculator::peek()");
+		throw* new EParetoCalculatorError("Stack is empty in ParetoCalculator::pop()");
 		return NULL;
 	}
 }
 
-void ParetoCalculator::duplicate(){
-	if(stack.size()>0){
-		stack.duplicate();}
+const ConfigurationSet* ParetoCalculator::popConfigurationSet() //throw(EParetoCalculatorError)
+{
+	const StorableObject* so = this->pop();
+	if (!so->isConfigurationSet()) {
+		throw* new EParetoCalculatorError("Configuration set expected in ParetoCalculator::popConfigurationSet()");
+		return NULL;
+	}
+	return dynamic_cast<const ConfigurationSet*>(so);
+}
+
+const StorableObject* ParetoCalculator::peek() //throw(EParetoCalculatorError)
+{
+	if (stack.size() > 0) {
+		return stack.peek();
+	}
 	else {
-		throw *new EParetoCalculatorError("Stack is empty in ParetoCalculator::duplicate()");
+		throw* new EParetoCalculatorError("Stack is empty in ParetoCalculator::peek()");
+		return NULL;
 	}
 }
 
-void ParetoCalculator::minimize(void){
+void ParetoCalculator::duplicate() {
+	if (stack.size() > 0) {
+		stack.duplicate();
+	}
+	else {
+		throw* new EParetoCalculatorError("Stack is empty in ParetoCalculator::duplicate()");
+	}
+}
+
+void ParetoCalculator::minimize(void) {
 	// operate on the stack
-	StorableObject& so = *this->pop();
-	if(!so.isConfigurationSet()){
-		throw *new EParetoCalculatorError("Minimization requires configuration set on the stack");
+	const StorableObject& so = *this->pop();
+	if (!so.isConfigurationSet()) {
+		throw* new EParetoCalculatorError("Minimization requires configuration set on the stack");
 		return;
 	}
-	ConfigurationSet& cs = dynamic_cast<ConfigurationSet&>(so);
+	const ConfigurationSet& cs = dynamic_cast<const ConfigurationSet&>(so);
 	ConfigurationSet* csn = &this->minimize(cs);
 	this->push(*csn);
 }
 
-void ParetoCalculator::efficient_minimize(void){
+void ParetoCalculator::efficient_minimize(void) {
 	// operate on the stack
-	StorableObject& so = *this->pop();
-	if(!so.isConfigurationSet()){
-		throw *new EParetoCalculatorError("Minimization requires configuration set on the stack");
+	const StorableObject& so = *this->pop();
+	if (!so.isConfigurationSet()) {
+		throw* new EParetoCalculatorError("Minimization requires configuration set on the stack");
 		return;
 	}
-	ConfigurationSet& cs = dynamic_cast<ConfigurationSet&>(so);
-	ConfigurationSet* csn = &this->efficient_minimize(cs);
+	const ConfigurationSet& cs = dynamic_cast<const ConfigurationSet&>(so);
+	const ConfigurationSet* csn = &this->efficient_minimize(cs);
 	this->push(*csn);
 }
 
-void ParetoCalculator::product(void){
-// operate on the stack
-	StorableObject& o1 = *this->pop();
-	StorableObject& o2 = *this->pop();
-	if(!(o1.isConfigurationSet() && o2.isConfigurationSet())){
-		throw *new EParetoCalculatorError("Product requires two configuration sets");
+void ParetoCalculator::product(void) {
+	// operate on the stack
+	const StorableObject& o1 = *this->pop();
+	const StorableObject& o2 = *this->pop();
+	if (!(o1.isConfigurationSet() && o2.isConfigurationSet())) {
+		throw* new EParetoCalculatorError("Product requires two configuration sets");
 		return;
 	}
-	ConfigurationSet& cs1 = dynamic_cast<ConfigurationSet&>(o1);
-	ConfigurationSet& cs2 = dynamic_cast<ConfigurationSet&>(o2);
-	ConfigurationSet* csn = &this->product(cs1,cs2);
+	const ConfigurationSet& cs1 = dynamic_cast<const ConfigurationSet&>(o1);
+	const ConfigurationSet& cs2 = dynamic_cast<const ConfigurationSet&>(o2);
+	ConfigurationSet* csn = &this->product(cs1, cs2);
 	this->push(*csn);
 }
 
 
-void ParetoCalculator::listStorage(std::ostream& os){
+void ParetoCalculator::listStorage(std::ostream& os) {
 	StorageMap::iterator i;
-	for(i=memory.begin(); i!=memory.end(); i++){
+	for (i = memory.begin(); i != memory.end(); i++) {
 		os << (*i).first << std::endl;
 	}
 }
 
-void ParetoCalculator::printOn(std::ostream& os){
-os << *this->pop() << std::endl;
+void ParetoCalculator::printOn(std::ostream& os) {
+	os << *this->pop() << std::endl;
 }
 
-void ParetoCalculator::print(){
-    std::ostringstream myString;
+void ParetoCalculator::print() {
+	std::ostringstream myString;
 	this->pop()->streamOn(myString);
 	this->verbose(myString.str());
 }
 
 
-void ParetoCalculator::constraint(bool (*testConstraint)(const Pareto::Configuration&)){
+void ParetoCalculator::constraint(bool (*testConstraint)(const Pareto::Configuration&)) {
 	// operate on the stack
-	StorableObject& so = *this->pop();
-	if(!so.isConfigurationSet()){
-		throw *new EParetoCalculatorError("Constraint requires configuration set on the stack");
+	const StorableObject& so = *this->pop();
+	if (!so.isConfigurationSet()) {
+		throw* new EParetoCalculatorError("Constraint requires configuration set on the stack");
 		return;
 	}
-	ConfigurationSet& cs = dynamic_cast<ConfigurationSet&>(so);
-	ConfigurationSet* csn = &this->constraint(cs,testConstraint);
+	const ConfigurationSet& cs = dynamic_cast<const ConfigurationSet&>(so);
+	ConfigurationSet* csn = &this->constraint(cs, testConstraint);
 	this->push(*csn);
 }
 
 
-void ParetoCalculator::setStatus(const std::string& newStatus){
+void ParetoCalculator::setStatus(const std::string& newStatus) {
 	status = newStatus;
-	if(statusObject){
+	if (statusObject) {
 		statusObject->setStatus(status);
 	}
 }
 
-void ParetoCalculator::verbose(const std::string& addText){
-	if(statusObject){
+void ParetoCalculator::verbose(const std::string& addText) {
+	if (statusObject) {
 		statusObject->verbose(addText);
 	}
 }
 
 
-void ParetoCalculator::setStatusCallbackObject(StatusCallback* o){
+void ParetoCalculator::setStatusCallbackObject(StatusCallback* o) {
 	statusObject = o;
 }
 
-void ParetoCalculator::initParser(){
-	if(parser==NULL){
+void ParetoCalculator::initParser() {
+	if (parser == NULL) {
 		this->setStatus("Creating XML Parser");
 		this->verbose("Creating XML Parser\n");
 		parser = new ParetoParser(this);
 	}
 }
 
-void ParetoCalculator::LoadFile(const std::wstring& fn){
+void ParetoCalculator::LoadFile(const std::wstring& fn) {
 	this->initParser();
 	this->setStatus("Loading XML input");
 	this->verbose("Loading XML input...");
@@ -813,7 +829,7 @@ void ParetoCalculator::LoadFile(const std::wstring& fn){
 	this->verbose("loaded\n");
 }
 
-void ParetoCalculator::LoadQuantityTypes(){
+void ParetoCalculator::LoadQuantityTypes() {
 	this->setStatus("Loading quantity types from input");
 	this->verbose("Loading quantity types from input...");
 	parser->LoadQuantityTypes();
@@ -821,7 +837,7 @@ void ParetoCalculator::LoadQuantityTypes(){
 	this->verbose("loaded\n");
 }
 
-void ParetoCalculator::LoadConfigurationSpaces(){
+void ParetoCalculator::LoadConfigurationSpaces() {
 	this->setStatus("Loading configuration spaces from input");
 	this->verbose("Loading configuration spaces from input...");
 	parser->LoadConfigurationSpaces();
@@ -829,7 +845,7 @@ void ParetoCalculator::LoadConfigurationSpaces(){
 	this->verbose("loaded\n");
 }
 
-void ParetoCalculator::LoadConfigurationSets(){
+void ParetoCalculator::LoadConfigurationSets() {
 	this->setStatus("Loading configuration sets from input");
 	this->verbose("Loading configuration sets from input...");
 	parser->LoadConfigurationSets();
@@ -837,7 +853,7 @@ void ParetoCalculator::LoadConfigurationSets(){
 	this->verbose("loaded\n");
 }
 
-void ParetoCalculator::LoadOperations(){
+void ParetoCalculator::LoadOperations() {
 	this->setStatus("Executing operations from input");
 	this->verbose("Executing operations from input\n");
 	parser->LoadOperations();
@@ -846,7 +862,7 @@ void ParetoCalculator::LoadOperations(){
 }
 
 //#ifdef _MSC_VER
-void ParetoCalculator::SaveAllFile(const std::wstring& fn){
+void ParetoCalculator::SaveAllFile(const std::wstring& fn) {
 	this->setStatus("Saving XML file");
 	this->verbose("Saving XML file...");
 	parser->SaveAll(fn);
@@ -854,7 +870,7 @@ void ParetoCalculator::SaveAllFile(const std::wstring& fn){
 	this->verbose("saved\n");
 }
 
-void ParetoCalculator::SaveItemFile(const std::string& itemToSave, const std::wstring& fn){
+void ParetoCalculator::SaveItemFile(const std::string& itemToSave, const std::wstring& fn) {
 	this->setStatus("Saving XML item ");
 	this->verbose("Saving XML item...");
 	parser->Save(itemToSave, fn);
@@ -863,26 +879,26 @@ void ParetoCalculator::SaveItemFile(const std::string& itemToSave, const std::ws
 }
 //#endif
 
-long int testComplexity(long int N, long int d){
-	if(N<=1) return 1;
-	if(d==1) return N;
-	long int a = (long int) (log((double)(N))*((double) N));
-	long int b = testComplexity(N/2, d);
-	long int c = testComplexity(N, d-1);
-	return a+2*b+c;
+long int testComplexity(long int N, long int d) {
+	if (N <= 1) return 1;
+	if (d == 1) return N;
+	long int a = (long int)(log((double)(N)) * ((double)N));
+	long int b = testComplexity(N / 2, d);
+	long int c = testComplexity(N, d - 1);
+	return a + 2 * b + c;
 }
 
-void test(void){
+void test(void) {
 	long int a;
-	a = testComplexity(100,4);
-	a = testComplexity(1000,4);
-	a = testComplexity(10000,4);
-	a = testComplexity(100000,4);
-	a = testComplexity(1000000,4);
+	a = testComplexity(100, 4);
+	a = testComplexity(1000, 4);
+	a = testComplexity(10000, 4);
+	a = testComplexity(100000, 4);
+	a = testComplexity(1000000, 4);
 
-	a = testComplexity(100,6);
-	a = testComplexity(1000,6);
-	a = testComplexity(10000,6);
-	a = testComplexity(100000,6);
-	a = testComplexity(1000000,6);
+	a = testComplexity(100, 6);
+	a = testComplexity(1000, 6);
+	a = testComplexity(10000, 6);
+	a = testComplexity(100000, 6);
+	a = testComplexity(1000000, 6);
 }

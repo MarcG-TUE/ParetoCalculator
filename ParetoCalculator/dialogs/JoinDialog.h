@@ -27,14 +27,14 @@ namespace Pareto {
 		public ref class JoinDialog : public System::Windows::Forms::Form
 		{
 		public:
-			JoinDialog(ConfigurationSet* cs)
+			JoinDialog(const ConfigurationSet* cs)
 			{
 				InitializeComponent();
 				//
 				//TODO: Add the constructor code here
 				//
-                std::vector<QuantityType*> qtl = cs->confspace->quantities;
-                std::vector<QuantityType*>::iterator i;
+                std::vector<const QuantityType*> qtl = cs->confspace->quantities;
+                std::vector<const QuantityType*>::const_iterator i;
 				for(i = qtl.begin(); i!=qtl.end(); i++){
 					quantitiesList->Items->Add(gcnew System::String((*i)->name.c_str()));
 				}

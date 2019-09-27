@@ -26,16 +26,14 @@ namespace Pareto {
 		public ref class SumDialog : public System::Windows::Forms::Form
 		{
 		public:
-			SumDialog(ConfigurationSet* cs, System::String^ windowTitle)
+			SumDialog(const ConfigurationSet* cs, System::String^ windowTitle)
 			{
 				InitializeComponent();
 				//
-				//TODO: Add the constructor code here
-				//
 				this->Text = windowTitle;
 
-                std::vector<QuantityType*> qtl = cs->confspace->quantities;
-                std::vector<QuantityType*>::iterator i;
+                std::vector<const QuantityType*> qtl = cs->confspace->quantities;
+                std::vector<const QuantityType*>::iterator i;
 				for(i = qtl.begin(); i!=qtl.end(); i++){
 					quantABox->Items->Add(gcnew System::String((*i)->name.c_str()));
 					quantBBox->Items->Add(gcnew System::String((*i)->name.c_str()));

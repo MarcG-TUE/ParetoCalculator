@@ -75,8 +75,8 @@ namespace Pareto {
 
 		void MainForm::updateStack() {
 			this->stackListBox->Items->Clear();
-            std::vector<StorableObject*> stack = paretocalculator->stack;
-            std::vector<StorableObject*>::iterator i;
+            std::vector<const StorableObject*> stack = paretocalculator->stack;
+            std::vector<const StorableObject*>::const_iterator i;
 			for(i=stack.begin(); i!=stack.end(); i++){
 				this->stackListBox->Items->Add(gcnew System::String((*i)->asString().c_str()));
 			}
@@ -91,9 +91,9 @@ namespace Pareto {
 			try{
 				// print selected item from stack
 				unsigned int n = this->stackListBox->SelectedIndex;
-                std::vector<StorableObject*> stack = paretocalculator->stack;
+                std::vector<const StorableObject*> stack = paretocalculator->stack;
 				if((n>=0)&&(n<stack.size())){
-					StorableObject* o = stack[n];
+					const StorableObject* o = stack[n];
 					this->verbose(o->asString().c_str());
 				}
 			}
@@ -106,7 +106,7 @@ namespace Pareto {
 		System::Void MainForm::popButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			try{
 				if(paretocalculator->stack.size()>0){
-					StorableObject* o = paretocalculator->pop();
+					const StorableObject* o = paretocalculator->pop();
 					this->verbose(o->asString().c_str());
 					this->updateStack();
 				}
@@ -133,7 +133,7 @@ namespace Pareto {
 		System::Void MainForm::prodconsButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			try {
 				if(!paretocalculator->stack.empty()){
-					prodcons^ pc = gcnew prodcons(dynamic_cast<ConfigurationSet*>(paretocalculator->peek())); 
+					prodcons^ pc = gcnew prodcons(dynamic_cast<const ConfigurationSet*>(paretocalculator->peek())); 
 					Forms::DialogResult r = pc->ShowDialog();
 					if(r==Forms::DialogResult::OK) {
 						std::string& pq = system_to_std_string(safe_cast<System::String^>(pc->producerList->SelectedItem));
@@ -153,7 +153,7 @@ namespace Pareto {
 		System::Void MainForm::abstractionButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			try {
 				if(paretocalculator->stack.size()>0){
-					AbstractionDialog^ ad = gcnew AbstractionDialog(dynamic_cast<ConfigurationSet*>(paretocalculator->peek())); 
+					AbstractionDialog^ ad = gcnew AbstractionDialog(dynamic_cast<const ConfigurationSet*>(paretocalculator->peek())); 
 					Forms::DialogResult r = ad->ShowDialog();
 					if(r==Forms::DialogResult::OK) {
 						std::string& q = system_to_std_string(safe_cast<System::String^>(ad->quantitiesBox->SelectedItem));
@@ -174,7 +174,7 @@ namespace Pareto {
 		System::Void MainForm::SumButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			try {
 				if(paretocalculator->stack.size()>0){
-					SumDialog^ sd = gcnew SumDialog(dynamic_cast<ConfigurationSet*>(paretocalculator->peek()), "Sum of quantities"); 
+					SumDialog^ sd = gcnew SumDialog(dynamic_cast<const ConfigurationSet*>(paretocalculator->peek()), "Sum of quantities"); 
 					Forms::DialogResult r = sd->ShowDialog();
 					if(r==Forms::DialogResult::OK) {
 						std::string& qa = system_to_std_string(safe_cast<System::String^>(sd->quantABox->SelectedItem));
@@ -194,7 +194,7 @@ namespace Pareto {
 		System::Void MainForm::MaxButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			try {
 				if(paretocalculator->stack.size()>0){
-					SumDialog^ sd = gcnew SumDialog(dynamic_cast<ConfigurationSet*>(paretocalculator->peek()), "Maximum of quantities"); 
+					SumDialog^ sd = gcnew SumDialog(dynamic_cast<const ConfigurationSet*>(paretocalculator->peek()), "Maximum of quantities"); 
 					Forms::DialogResult r = sd->ShowDialog();
 					if(r==Forms::DialogResult::OK) {
 						std::string& qa = system_to_std_string(safe_cast<System::String^>(sd->quantABox->SelectedItem));
@@ -214,7 +214,7 @@ namespace Pareto {
 		System::Void MainForm::MinButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			try {
 				if(paretocalculator->stack.size()>0){
-					SumDialog^ sd = gcnew SumDialog(dynamic_cast<ConfigurationSet*>(paretocalculator->peek()), "Minimum of quantities"); 
+					SumDialog^ sd = gcnew SumDialog(dynamic_cast<const ConfigurationSet*>(paretocalculator->peek()), "Minimum of quantities"); 
 					Forms::DialogResult r = sd->ShowDialog();
 					if(r==Forms::DialogResult::OK) {
 						std::string& qa = system_to_std_string(safe_cast<System::String^>(sd->quantABox->SelectedItem));
@@ -234,7 +234,7 @@ namespace Pareto {
 		System::Void MainForm::MultiplyButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			try {
 				if(paretocalculator->stack.size()>0){
-					SumDialog^ sd = gcnew SumDialog(dynamic_cast<ConfigurationSet*>(paretocalculator->peek()), "Product of quantities"); 
+					SumDialog^ sd = gcnew SumDialog(dynamic_cast<const ConfigurationSet*>(paretocalculator->peek()), "Product of quantities"); 
 					Forms::DialogResult r = sd->ShowDialog();
 					if(r==Forms::DialogResult::OK) {
 						std::string& qa = system_to_std_string(safe_cast<System::String^>(sd->quantABox->SelectedItem));
@@ -254,7 +254,7 @@ namespace Pareto {
 		System::Void MainForm::JoinButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			try {
 				if(!paretocalculator->stack.empty()){
-					JoinDialog^ jd = gcnew JoinDialog(dynamic_cast<ConfigurationSet*>(paretocalculator->peek())); 
+					JoinDialog^ jd = gcnew JoinDialog(dynamic_cast<const ConfigurationSet*>(paretocalculator->peek())); 
 					Forms::DialogResult r = jd->ShowDialog();
 					if(r==Forms::DialogResult::OK) {
 						std::string& q = system_to_std_string(safe_cast<System::String^>(jd->quantitiesList->SelectedItem));
@@ -287,7 +287,7 @@ namespace Pareto {
 		System::Void MainForm::PlotButton_Click(System::Object^  sender, System::EventArgs^  e) {	
 			try {
 				if(paretocalculator->stack.size()>0){
-					PlotDialog^ pd = gcnew PlotDialog(dynamic_cast<ConfigurationSet*>(paretocalculator->peek())); 
+					PlotDialog^ pd = gcnew PlotDialog(dynamic_cast<const ConfigurationSet*>(paretocalculator->peek())); 
 					Forms::DialogResult r = pd->ShowDialog();
 					if(r==Forms::DialogResult::OK) {
 					}
@@ -321,7 +321,7 @@ namespace Pareto {
 					StoreDialog^ sd = gcnew StoreDialog(paretocalculator->peek()->name); 
 					Forms::DialogResult r = sd->ShowDialog();
 					if(r==Forms::DialogResult::OK){
-						StorableObject& o = *paretocalculator->pop();
+						StorableObject& o = paretocalculator->pop()->copy();
 						o.name=sd->getResult();
 						paretocalculator->store(o);
 						this->updateStack();
@@ -361,22 +361,22 @@ namespace Pareto {
 			const int L=5; // number of options per task
 			const int R=5; // number of resources;
 
-			ConfigurationSet* cs[N];
+			const ConfigurationSet* cs[N];
 
 			for(int k=0; k<N; k++){
 				std::stringstream ss;
 				std::string str;
 				ss << (k+1);
 				ss >> str;
-				cs[k] = dynamic_cast<ConfigurationSet*>(paretocalculator->retrieve("Set"+ str));
+				cs[k] = dynamic_cast<const ConfigurationSet*>(paretocalculator->retrieve("Set"+ str));
 			}
 
-			QuantityType& qtv = *paretocalculator->retrieveQuantityType("Value");
-			QuantityType& qtr1 = *paretocalculator->retrieveQuantityType("Resource1");
-			QuantityType& qtr2 = *paretocalculator->retrieveQuantityType("Resource2");
-			QuantityType& qtr3 = *paretocalculator->retrieveQuantityType("Resource3");
-			QuantityType& qtr4 = *paretocalculator->retrieveQuantityType("Resource4");
-			QuantityType& qtr5 = *paretocalculator->retrieveQuantityType("Resource5");
+			const QuantityType& qtv = *paretocalculator->retrieveQuantityType("Value");
+			const QuantityType& qtr1 = *paretocalculator->retrieveQuantityType("Resource1");
+			const QuantityType& qtr2 = *paretocalculator->retrieveQuantityType("Resource2");
+			const QuantityType& qtr3 = *paretocalculator->retrieveQuantityType("Resource3");
+			const QuantityType& qtr4 = *paretocalculator->retrieveQuantityType("Resource4");
+			const QuantityType& qtr5 = *paretocalculator->retrieveQuantityType("Resource5");
 
 			ConfigurationSpace* rsp = new ConfigurationSpace("SSetResult");
 			rsp->addQuantityAs(qtv,"TotalValue");
@@ -386,7 +386,7 @@ namespace Pareto {
 			rsp->addQuantity(*(paretocalculator->retrieveQuantityType("Resource4")));
 			rsp->addQuantity(*(paretocalculator->retrieveQuantityType("Resource5")));
 
-			ConfigurationSet* intermRes = cs[0];
+			const ConfigurationSet* intermRes = cs[0];
 
 			SetOfConfigurations::iterator i,j;
 
