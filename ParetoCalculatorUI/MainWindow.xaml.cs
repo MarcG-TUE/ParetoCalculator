@@ -27,6 +27,9 @@ namespace ParetoCalculatorUI
         {
             InitializeComponent();
             this.paretocalculator = new ParetoCalculatorW();
+            this.sm = new StatusMediatorW(this);
+            paretocalculator->setStatusCallbackObject(sm);
+
         }
 
         private ParetoCalculatorW paretocalculator;

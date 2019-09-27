@@ -1,9 +1,12 @@
 #pragma once
 
 #include "calculator.h"
+#include "StatusMediatorW.h"
 
 using namespace System;
 using namespace System::Collections;
+
+
 
 public ref class ParetoCalculatorW
 {
@@ -53,7 +56,10 @@ public:
 
 	ArrayList^ confsetConfspaceQuantityNames();
 
+	void setStatusCallbacks(PCSetStatus^ s, PCVerbose^ v);
+
 private:
 	Pareto::ParetoCalculator* pc;
 };
+
 

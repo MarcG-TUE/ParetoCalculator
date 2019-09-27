@@ -5,30 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParetoCalculatorUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="663.968" Width="800">
+        Title="Pareto Calculator" Height="663.968" Width="800"
+        Style="{DynamicResource PCWindowStyle}">
+    <Window.Resources>
+            <ResourceDictionary Source="Resources/Styles.xaml" />
+    </Window.Resources>
     <Grid x:Name="HeaderFooter">
         <Grid.RowDefinitions>
             <RowDefinition Height="36"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="36"/>
         </Grid.RowDefinitions>
+        <Grid x:Name="Header">
+            <TextBlock Margin="10,5,5,5" TextWrapping="Wrap" Text="The Pareto Calculator" FontSize="20" Foreground="White"/>
+        </Grid>
         <Grid x:Name="LeftRight" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid x:Name="Left_TopDown"  Grid.Column="0">
-                <Button x:Name="fileSelectButton" Content="Select File" Height="20" Margin="10,10,0,0" VerticalAlignment="Top" Click="fileSelectButton_Click" HorizontalAlignment="Left" Width="100"/>
-                <Button x:Name="executeButton" Content="Execute" Height="20" Margin="120,10,0,0" VerticalAlignment="Top" Click="executeButton_Click" HorizontalAlignment="Left" Width="100"/>
-                <Grid Margin="10,35,10,0">
-                    <TextBox x:Name="consoleText" Margin="5,5,5,5" TextWrapping="Wrap" Grid.RowSpan="2" IsReadOnly="True" VerticalScrollBarVisibility="Auto"/>
+                <Button x:Name="fileSelectButton" Content="Select File" Height="28" Margin="10,10,0,0" VerticalAlignment="Top" Click="fileSelectButton_Click" HorizontalAlignment="Left" Width="100"/>
+                <Button x:Name="executeButton" Content="Execute" Height="28" Margin="120,10,0,0" VerticalAlignment="Top" Click="executeButton_Click" HorizontalAlignment="Left" Width="100"/>
+                <Grid Margin="10,42,10,0">
+                    <TextBox x:Name="consoleText" Margin="0" TextWrapping="Wrap" Grid.RowSpan="2" IsReadOnly="True" VerticalScrollBarVisibility="Auto" Background="#FFECFAFF"/>
                 </Grid>
 
             </Grid>
             <Grid x:Name="Right_TopDown" Grid.Column="1">
-                <TextBlock x:Name="stackLabel" HorizontalAlignment="Left" Margin="10,10,0,0" Text="Stack" TextWrapping="Wrap" Width="100" Height="20" VerticalAlignment="Top"/>
-                <ListView x:Name="stackListView" Margin="10,35,10,0" Background="#FFA7EE97" Height="277" VerticalAlignment="Top"/>
-                <Grid x:Name="RightButtons" Margin="0,0,0,5" Height="213.968" VerticalAlignment="Bottom">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="ListViewItem">
+                        <Style.Triggers>
+                            <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                <Setter Property="Background" Value="LightBlue" />
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                                <Setter Property="Background" Value="#FFECECBE" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Resources>
+                <TextBlock x:Name="stackLabel" HorizontalAlignment="Left" Margin="10,10,0,0" Text="Stack" TextWrapping="Wrap" Width="100" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                <ListView x:Name="stackListView" Margin="5,42,5,5"  AlternationCount="2"/>
+                <Grid x:Name="RightButtons" Margin="2.5,0" Grid.Row="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
@@ -44,24 +67,24 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="pushButton" Content="Push" Margin="10,5,10,0" HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Top" Click="pushButton_Click"/>
-                    <Button x:Name="popButton" Grid.Column="1" Content="Pop" Margin="5,5,5,5"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="popButton_Click"/>
-                    <Button x:Name="storeButton" Grid.Column="2" Content="Store" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="storeButton_Click"/>
-                    <Button x:Name="printButton" Grid.Column="3" Content="Print" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="printButton_Click"/>
-                    <Button x:Name="duplicateButton" Content="Duplicate" Margin="10,5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Click="duplicateButton_Click"/>
-                    <Button x:Name="productButton" Content="Product" Margin="10,5" VerticalAlignment="Stretch" Grid.Row="2" HorizontalAlignment="Stretch" Click="productButton_Click"/>
-                    <Button x:Name="prodconsButton" Content="Prod.Cons." Margin="5,5,5,5" VerticalAlignment="Stretch" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="2" Click="prodconsButton_Click"/>
-                    <Button x:Name="abstractButton" Content="Abstract" Margin="5,5,5,0" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="21" Click="abstractButton_Click"/>
-                    <Button x:Name="joinButton" Content="Join" Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" Margin="5,5,5,5" Click="joinButton_Click"/>
-                    <Button x:Name="minimizeButton" Content="Minimize" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Margin="10,5" Click="minimizeButton_Click"/>
-                    <Button x:Name="sumButton" Content="Sum" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Margin="5,5,5,5" Click="sumButton_Click"/>
-                    <Button x:Name="maxButton" Content="Max" Margin="5,5,5,5" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="maxButton_Click"/>
-                    <Button x:Name="minButton" Content="Min" Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Margin="5,5,5,5" Click="minButton_Click"/>
-                    <Button x:Name="multiplyButton" Content="Multiply" Margin="10,5" VerticalAlignment="Stretch" Grid.Row="4" Click="multiplyButton_Click"/>
-                    <Button x:Name="plotButton" Content="Plot" Margin="10,5" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Button x:Name="saveButton" Content="Save" Margin="10,5,5,5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="6"/>
-                    <Button x:Name="testButton" Content="Test" VerticalAlignment="Stretch" Grid.Column="2" HorizontalAlignment="Stretch" Grid.Row="6" Margin="5,5,5,5"/>
-                    <Button x:Name="aboutButton" Content="About" Margin="5,5.5,5.5,0" VerticalAlignment="Top" Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="6" Height="20" Click="aboutButton_Click" />
+                    <Button x:Name="pushButton" Content="Push" Margin="2.5" HorizontalAlignment="Stretch" Click="pushButton_Click"/>
+                    <Button x:Name="popButton" Grid.Column="1" Content="Pop" Margin="2.5"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="popButton_Click"/>
+                    <Button x:Name="storeButton" Grid.Column="2" Content="Store" Margin="2.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="storeButton_Click"/>
+                    <Button x:Name="printButton" Grid.Column="3" Content="Print" Margin="2.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="printButton_Click"/>
+                    <Button x:Name="duplicateButton" Content="Duplicate" Margin="2.5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Click="duplicateButton_Click"/>
+                    <Button x:Name="productButton" Content="Product" Margin="2.5" VerticalAlignment="Stretch" Grid.Row="2" HorizontalAlignment="Stretch" Click="productButton_Click"/>
+                    <Button x:Name="prodconsButton" Content="Prod.Cons." Margin="2.5" VerticalAlignment="Stretch" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="2" Click="prodconsButton_Click"/>
+                    <Button x:Name="abstractButton" Content="Abstract" Margin="2.5" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Stretch" Click="abstractButton_Click"/>
+                    <Button x:Name="joinButton" Content="Join" Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" Margin="2.5" Click="joinButton_Click"/>
+                    <Button x:Name="minimizeButton" Content="Minimize" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Margin="2.5" Click="minimizeButton_Click"/>
+                    <Button x:Name="sumButton" Content="Sum" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Margin="2.5" Click="sumButton_Click"/>
+                    <Button x:Name="maxButton" Content="Max" Margin="2.5" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="maxButton_Click"/>
+                    <Button x:Name="minButton" Content="Min" Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Stretch" Margin="2.5" Click="minButton_Click"/>
+                    <Button x:Name="multiplyButton" Content="Multiply" Margin="2.5" VerticalAlignment="Stretch" Grid.Row="4" Click="multiplyButton_Click"/>
+                    <Button x:Name="plotButton" Content="Plot" Margin="2.5" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Button x:Name="saveButton" Content="Save" Margin="2.5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="6"/>
+                    <Button x:Name="testButton" Content="Test" VerticalAlignment="Stretch" Grid.Column="2" HorizontalAlignment="Stretch" Grid.Row="6" Margin="2.5"/>
+                    <Button x:Name="aboutButton" Content="About" Margin="2.5" Grid.Column="3" HorizontalAlignment="Stretch" Grid.Row="6" Click="aboutButton_Click" />
                 </Grid>
             </Grid>
         </Grid>

@@ -183,3 +183,10 @@ ArrayList^ ParetoCalculatorW::confsetConfspaceQuantityNames()
 	}
 	return res;
 }
+
+void ParetoCalculatorW::setStatusCallbacks(PCSetStatus^ s, PCVerbose^ v, int pollingTimeMs)
+{
+	this->sc = new StatusCollector();
+	set polling timer
+	
+}

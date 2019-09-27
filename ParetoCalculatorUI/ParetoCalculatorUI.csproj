@@ -116,6 +116,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -148,6 +152,12 @@
       <Project>{4dac4124-392d-4b5c-907a-9ae4038f4fd4}</Project>
       <Name>ParetoCalculatorWrapper</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\images\betsy.jpg" />
+    <Resource Include="Resources\images\ecsel.png" />
+    <Resource Include="Resources\images\fitoptivis.png" />
+    <Resource Include="Resources\images\ist.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

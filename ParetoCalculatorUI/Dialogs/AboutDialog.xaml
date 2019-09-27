@@ -5,9 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParetoCalculatorUI.Dialogs"
         mc:Ignorable="d"
-        Title="AboutDialog" Height="450" Width="800">
+        Title="AboutDialog" Height="450" Width="800"
+        Style="{DynamicResource PCWindowStyle}">
+    <Window.Resources>
+        <ResourceDictionary Source="/Resources/Styles.xaml" />
+    </Window.Resources>
     <Grid>
-        <Button x:Name="okButton" Content="OK" Height="85.682" Margin="211.368,0,247.65,47.425" VerticalAlignment="Bottom" Click="okButton_Click"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="105*"/>
+            <RowDefinition Height="314*"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="okButton" Content="OK" Height="51.15" Margin="639.655,0,10,10" VerticalAlignment="Bottom" Click="okButton_Click" Grid.Row="1"/>
+        <TextBlock Margin="50,40,50,125" TextWrapping="Wrap" FontSize="20" Grid.RowSpan="2"><Run FontWeight="Bold" Text="The Pareto Calculator"/><LineBreak/><Run FontSize="14" Text="Eindhoven University of Technology"/><LineBreak/><Run FontSize="14" Text="Developed by Marc Geilen (m.c.w.geilen@tue.nl)"/><LineBreak/><Run FontSize="14" Text="The Pareto Calculator is available under the MIT License, please consult: "></Run><Hyperlink FontSize="14" Foreground="White">http://www.es.ele.tue.nl/pareto</Hyperlink><LineBreak/><Run FontSize="14"/><LineBreak/><Run FontSize="14" Text="The work was supported by"/><LineBreak/><Run FontSize="14" Text="- the "/><Run FontWeight="Bold" FontSize="14" Text="EU IST - 004042 FP6 project Betsy"/><Run FontSize="14" Text=" and "/><LineBreak/><Run FontSize="14" Text="- the "/><Run FontWeight="Bold" FontSize="14" Text="ECSEL project  783162 FitOptiVis"/></TextBlock>
+        <Canvas HorizontalAlignment="Left" Margin="50,189,0,10" Grid.Row="1" Width="547.431" Background="White">
+            <Image Source="/ParetoCalculatorUI;component/Resources/images/betsy.jpg" Height="91.39" Canvas.Left="10" Canvas.Top="13.61" Width="107.398"/>
+            <Image Source="/ParetoCalculatorUI;component/Resources/images/ecsel.png" Height="60.021" Canvas.Left="424.663" Canvas.Top="29.969" Width="112.768"/>
+            <Image Source="/ParetoCalculatorUI;component/Resources/images/fitoptivis.png" Height="46.322" Canvas.Left="280.275" Canvas.Top="43.668" Width="124.583" RenderTransformOrigin="-0.14,-5.21"/>
+            <Image Source="/ParetoCalculatorUI;component/Resources/images/ist.png" RenderTransformOrigin="0.642,1.156" Height="64.579" Canvas.Left="122.398" Canvas.Top="29.969" Width="157.877"/>
+        </Canvas>
 
     </Grid>
 </Window>
