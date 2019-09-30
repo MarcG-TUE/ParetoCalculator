@@ -89,8 +89,8 @@
             </Grid>
         </Grid>
         <Grid x:Name="Footer" Grid.Row="2">
-            <TextBlock x:Name="statusLabel" HorizontalAlignment="Left"  Text="Status" TextWrapping="Wrap" Width="71.667" VerticalAlignment="Center" Margin="10,10.02,0,10.02"/>
-            <TextBlock x:Name="statusContent"  Text="Status Content" TextWrapping="Wrap" Margin="86.667,10,10,10" Height="16" VerticalAlignment="Center"/>
+            <TextBlock x:Name="statusLabel" HorizontalAlignment="Left"  Text="Status:" TextWrapping="Wrap" Width="71.667" VerticalAlignment="Center" Margin="10,10.02,0,10.02"/>
+            <TextBlock x:Name="statusContent" Text="" TextWrapping="Wrap" Margin="86.667,10,10,10" VerticalAlignment="Center"/>
         </Grid>
     </Grid>
 </Window>

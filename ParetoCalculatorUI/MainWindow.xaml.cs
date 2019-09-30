@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -13,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Win32;
+//using Microsoft.Win32;
 using ParetoCalculatorUI.Dialogs;
 
 namespace ParetoCalculatorUI
@@ -25,17 +26,23 @@ namespace ParetoCalculatorUI
     {
         public MainWindow()
         {
+            int n;
             InitializeComponent();
             this.paretocalculator = new ParetoCalculatorW();
-            this.paretocalculator.setStatusCallbacks(s => { this.setStatus(s); }, s => { this.verbose(s); }, 100);
+            this.paretocalculator.setStatusCallbacks(s => { this.setStatus_extthread(s); }, s => { this.verbose_extthread(s); }, 100);
 
         }
 
         private void setStatus(string s)
         {
-            this.statusLabel.Text = s;
-            //this.statusLabel.Update();
+            this.statusContent.Text = s;
         }
+
+        private void setStatus_extthread(string s)
+        {
+            this.Dispatcher.Invoke(new MethodInvoker(()=>this.setStatus(s)));
+        }
+
 
         private ParetoCalculatorW paretocalculator;
 
@@ -56,8 +63,8 @@ namespace ParetoCalculatorUI
             openFileDialog.FilterIndex = 2;
             openFileDialog.RestoreDirectory = true;
 
-            bool? result = openFileDialog.ShowDialog();
-            if (result == true)
+            System.Windows.Forms.DialogResult result = openFileDialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
             {
                 try
                 {
@@ -85,6 +92,11 @@ namespace ParetoCalculatorUI
             this.consoleText.Text += s;
             this.consoleText.Text += System.Environment.NewLine;
             this.consoleText.ScrollToEnd();
+        }
+
+        private void verbose_extthread(string s)
+        {
+            this.Dispatcher.Invoke(new MethodInvoker(() => this.verbose(s)));
         }
 
         private void updateStack()

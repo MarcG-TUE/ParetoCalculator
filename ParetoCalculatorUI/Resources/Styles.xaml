@@ -6,10 +6,12 @@
         <Setter Property="Background" Value="#FF374581" />
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontWeight" Value="DemiBold"/>
+        <Setter Property="BorderBrush" Value="White"/>
     </Style>
     <Style x:Key="PCWindowStyle" TargetType="Window" >
         <Setter Property="Background" Value="{DynamicResource PCBackgroundBrush}" />
         <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="16"/>
     </Style>
     <LinearGradientBrush x:Key="PCBackgroundBrush" EndPoint="0.5,1" StartPoint="0.5,0">
         <GradientStop Color="#FF3D4E5F" Offset="0"/>

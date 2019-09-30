@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="ParetoCalculatorExceptionW.cpp" />
     <ClCompile Include="ParetoCalculatorW.cpp" />
+    <ClCompile Include="StatusCollectorW.cpp" />
     <ClCompile Include="utils\utils_vs.cpp" />
   </ItemGroup>
   <ItemGroup>

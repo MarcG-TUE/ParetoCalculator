@@ -30,6 +30,9 @@
     <ClCompile Include="ParetoCalculatorExceptionW.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StatusCollectorW.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ParetoCalculatorW.h">
