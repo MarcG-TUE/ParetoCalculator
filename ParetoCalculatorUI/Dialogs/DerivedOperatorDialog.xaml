@@ -10,15 +10,23 @@
     <Window.Resources>
         <ResourceDictionary Source="/Resources/Styles.xaml" />
     </Window.Resources>
-    
+
     <Grid>
-        <TextBlock x:Name="titleLabel" HorizontalAlignment="Left" Height="25.776" Margin="31.442,38.513,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" Width="370.525"/>
-        <TextBlock x:Name="quantALabel" HorizontalAlignment="Left" Height="23.628" Margin="32.516,121.21,0,0" TextWrapping="Wrap" Text="Quantity A" VerticalAlignment="Top" Width="369.451"/>
-        <TextBlock x:Name="quantBLabel" HorizontalAlignment="Left" Height="25.775" Margin="32.516,221.091,0,0" TextWrapping="Wrap" Text="Quantity B" VerticalAlignment="Top" Width="388.782"/>
-        <ComboBox x:Name="quantACombo" HorizontalAlignment="Left" Height="32.219" Margin="36.811,149.134,0,0" VerticalAlignment="Top" Width="365.156"/>
-        <ComboBox x:Name="quantBCombo" HorizontalAlignment="Left" Height="25.776" Margin="49.699,254.384,0,0" VerticalAlignment="Top" Width="352.268"/>
-        <Button x:Name="okButton" Content="OK" HorizontalAlignment="Left" Height="48.33" Margin="29.294,315.601,0,0" VerticalAlignment="Top" Width="220.167" Click="okButton_Click"/>
-        <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" Height="48.33" Margin="477.146,315.601,0,0" VerticalAlignment="Top" Width="211.575" Click="cancelButton_Click"/>
+        <StackPanel x:Name="VerticalStack" Margin="32">
+            <TextBlock x:Name="titleLabel"><Run Text="Title"/></TextBlock>
+            <StackPanel x:Name="QuantAStack">
+                <TextBlock x:Name="quantALabel" Text="Quantity A"/>
+                <ComboBox x:Name="quantACombo"/>
+            </StackPanel>
+            <StackPanel x:Name="QuantBStack">
+                <TextBlock x:Name="quantBLabel" Text="Quantity B"/>
+                <ComboBox x:Name="quantBCombo"/>
+            </StackPanel>
+            <StackPanel x:Name="HorizontalStack" Orientation="Horizontal">
+                <Button x:Name="okButton" Content="OK" Click="okButton_Click"/>
+                <Button x:Name="cancelButton" Content="Cancel" Click="cancelButton_Click"/>
+            </StackPanel>
+        </StackPanel>
 
     </Grid>
 </Window>

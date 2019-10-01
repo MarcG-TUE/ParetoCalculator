@@ -12,10 +12,14 @@
     </Window.Resources>
 
     <Grid>
-        <TextBlock x:Name="labelText" Height="25.637" Margin="46.076,36.394,351.548,0" TextWrapping="Wrap" Text="Select quantity to abstract:" VerticalAlignment="Top"/>
-        <ComboBox x:Name="abstractCombo" Height="43.853" Margin="46.076,96.439,210.543,0" VerticalAlignment="Top"/>
-        <Button x:Name="okButton" Content="OK" HorizontalAlignment="Left" Height="51.949" Margin="38.654,0,0,77.785" VerticalAlignment="Bottom" Width="306.972" Click="okButton_Click"/>
-        <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Right" Height="51.949" Margin="0,0,105.296,77.785" VerticalAlignment="Bottom" Width="262.444" Click="cancelButton_Click"/>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="labelText" Height="25.637" Margin="32,-10.606,351.548,0" TextWrapping="Wrap" Text="Select quantity to abstract:" VerticalAlignment="Top" Grid.Row="1"/>
+        <ComboBox x:Name="abstractCombo" Height="43.853" Margin="32,49.439,32,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <Button x:Name="okButton" Content="OK" HorizontalAlignment="Left" Margin="32,0,0,77.785" VerticalAlignment="Bottom" Click="okButton_Click" Grid.Row="1"/>
+        <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,105.296,77.785" VerticalAlignment="Bottom" Click="cancelButton_Click" Grid.Row="1"/>
 
     </Grid>
 </Window>
