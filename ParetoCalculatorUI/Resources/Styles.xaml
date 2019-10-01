@@ -7,6 +7,9 @@
     <Thickness x:Key="pcGroupSpacingV">0,24,0,0</Thickness>
     <Thickness x:Key="pcItemSpacingV">0,0,0,4</Thickness>
     <system:Double x:Key="pcButtonSpacingH">24</system:Double>
+    <Color x:Key="pcDarkBlue">#FF374581</Color>
+    <SolidColorBrush x:Key="pcButtonBackgroundBrush" Color="{StaticResource pcDarkBlue}" />
+    <SolidColorBrush x:Key="pcButtonForegroundBrush" Color="White"/>
     <Style x:Key="pcVGroup" TargetType="StackPanel">
         <Setter Property="Margin" Value="{StaticResource pcGroupSpacingV}"/>
     </Style>
@@ -21,12 +24,19 @@
         <Setter Property="Margin" Value="{StaticResource pcOuterMargin}"/>
     </Style>
     <Style TargetType="Button">
-        <Setter Property="Background" Value="#FF374581" />
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource pcButtonBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource pcButtonForegroundBrush}"/>
         <Setter Property="FontWeight" Value="DemiBold"/>
         <Setter Property="BorderBrush" Value="White"/>
         <Setter Property="Height" Value="42 "/>
         <Setter Property="Width" Value="200"/>
+    </Style>
+    <Style x:Key="pcCalculatorButton" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource pcButtonBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource pcButtonForegroundBrush}"/>
+        <Setter Property="Margin" Value="2.5"/>
+        <Setter Property="Width" Value="Stretch"/>
+        <Setter Property="Height" Value="Stretch"/>
     </Style>
     <Style x:Key="PCWindowStyle" TargetType="Window" >
         <Setter Property="Background" Value="{DynamicResource PCBackgroundBrush}" />
