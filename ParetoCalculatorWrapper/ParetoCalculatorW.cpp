@@ -187,6 +187,7 @@ ArrayList^ ParetoCalculatorW::confsetConfspaceQuantityNames()
 
 void ParetoCalculatorW::StatusChecker(System::Object^ o)
 {
+	return;
 	if (this->sc != NULL) {
 		while (! this->sc->stats.empty()) {
 			(this->cbstat)(std_to_system_string(*this->sc->stats.begin()));

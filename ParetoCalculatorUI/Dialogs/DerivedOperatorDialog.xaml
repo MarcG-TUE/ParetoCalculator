@@ -5,26 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParetoCalculatorUI.Dialogs"
         mc:Ignorable="d"
-        Title="DerivedOperatorDialog" Height="450" Width="800"
+        Title="DerivedOperatorDialog" Height="Auto" Width="800" SizeToContent="Height"
         Style="{DynamicResource PCWindowStyle}">
     <Window.Resources>
         <ResourceDictionary Source="/Resources/Styles.xaml" />
     </Window.Resources>
 
-    <Grid>
-        <StackPanel x:Name="VerticalStack" Margin="32">
+    <Grid Style="{StaticResource pcOuterGrid}">
+        <StackPanel x:Name="VerticalStack">
             <TextBlock x:Name="titleLabel"><Run Text="Title"/></TextBlock>
-            <StackPanel x:Name="QuantAStack">
-                <TextBlock x:Name="quantALabel" Text="Quantity A"/>
+            <StackPanel x:Name="QuantAStack" Style="{StaticResource pcVGroup}">
+                <TextBlock x:Name="quantALabel" Text="Quantity A:" Style="{StaticResource pcVerticalLabel}"/>
                 <ComboBox x:Name="quantACombo"/>
             </StackPanel>
-            <StackPanel x:Name="QuantBStack">
-                <TextBlock x:Name="quantBLabel" Text="Quantity B"/>
+            <StackPanel x:Name="QuantBStack" Style="{StaticResource pcVGroup}">
+                <TextBlock x:Name="quantBLabel" Text="Quantity B:" Style="{StaticResource pcVerticalLabel}"/>
                 <ComboBox x:Name="quantBCombo"/>
             </StackPanel>
-            <StackPanel x:Name="HorizontalStack" Orientation="Horizontal">
-                <Button x:Name="okButton" Content="OK" Click="okButton_Click"/>
-                <Button x:Name="cancelButton" Content="Cancel" Click="cancelButton_Click"/>
+            <StackPanel x:Name="ButtonGroup" Style="{StaticResource pcVGroup}">
+                <StackPanel x:Name="HorizontalStack" Orientation="Horizontal">
+                    <Button x:Name="okButton" Content="OK" Click="okButton_Click"/>
+                    <Rectangle Style="{StaticResource pcButtonSeparatorH}"/>
+                    <Button x:Name="cancelButton" Content="Cancel" Click="cancelButton_Click"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
 

@@ -5,16 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParetoCalculatorUI.Dialogs"
         mc:Ignorable="d"
-        Title="SelectionDialog" Height="450" Width="800"
+        Title="SelectionDialog" Height="Auto" Width="800" SizeToContent="Height"
         Style="{DynamicResource PCWindowStyle}">
     <Window.Resources>
         <ResourceDictionary Source="/Resources/Styles.xaml" />
     </Window.Resources>
-    
-    <Grid>
-        <Button x:Name="okButton" Content="OK" HorizontalAlignment="Left" Height="49.404" Margin="240.869,332.785,0,0" VerticalAlignment="Top" Width="310.382" Click="okButton_Click"/>
-        <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" Height="49.404" Margin="578.1,332.785,0,0" VerticalAlignment="Top" Width="161.098" Click="cancelButton_Click"/>
-        <ListBox x:Name="selectionListbox" HorizontalAlignment="Left" Height="254.535" Margin="62.587,35.291,0,0" VerticalAlignment="Top" Width="637.948" MouseDoubleClick="selectionListbox_MouseDoubleClick"/>
+
+    <Grid Style="{StaticResource pcOuterGrid}">
+        <StackPanel x:Name="VerticalStack">
+            <TextBlock x:Name="titleLabel" Style="{StaticResource pcVerticalLabel}"><Run Text="Select quantity:"/></TextBlock>
+            <ListBox x:Name="selectionListbox" Height="300  " MouseDoubleClick="selectionListbox_MouseDoubleClick"/>
+            <StackPanel x:Name="ButtonGroup" Style="{StaticResource pcVGroup}">
+                <StackPanel x:Name="HorizontalStack" Orientation="Horizontal">
+                    <Button x:Name="okButton" Content="OK" Click="okButton_Click"/>
+                    <Rectangle Style="{StaticResource pcButtonSeparatorH}"/>
+                    <Button x:Name="cancelButton" Content="Cancel" Click="cancelButton_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
 
     </Grid>
 </Window>

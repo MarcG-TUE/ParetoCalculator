@@ -5,19 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParetoCalculatorUI.Dialogs"
         mc:Ignorable="d"
-        Title="ProdConsDialog" Height="450" Width="800"
-                Style="{DynamicResource PCWindowStyle}">
+        Title="ProdConsDialog" Height="Auto" Width="800" SizeToContent="Height"
+        Style="{DynamicResource PCWindowStyle}">
     <Window.Resources>
         <ResourceDictionary Source="/Resources/Styles.xaml" />
     </Window.Resources>
 
-    <Grid>
-        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="33.685" Margin="49.551,38.643,0,0" TextWrapping="Wrap" Text="Producer Quantity" VerticalAlignment="Top" Width="248.752"/>
-        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Margin="49.551,194.113,0,198.975" TextWrapping="Wrap" Text="Consumer Quantity" Width="255.662"/>
-        <ComboBox x:Name="prodCombo" HorizontalAlignment="Left" Height="24.185" Margin="49.551,87.875,0,0" VerticalAlignment="Top" Width="248.752"/>
-        <ComboBox x:Name="consCombo"  HorizontalAlignment="Left" Height="19.866" Margin="46.96,0,0,160.971" VerticalAlignment="Bottom" Width="258.253"/>
-        <Button Content="OK" x:Name="okButton" HorizontalAlignment="Left" Height="64.779" Margin="45.232,0,0,49.551" VerticalAlignment="Bottom" Width="295.394" Click="okButton_Click"/>
-        <Button Content="Cancel"  x:Name="cancelButton"  HorizontalAlignment="Right" Height="64.779" Margin="0,0,108.476,49.551" VerticalAlignment="Bottom" Width="272.073" Click="cancelButton_Click"/>
-
+    <Grid Style="{StaticResource pcOuterGrid}">
+        <StackPanel x:Name="VerticalStack">
+            <TextBlock Text="Producer Quantity" Style="{StaticResource pcVerticalLabel}"/>
+            <ComboBox x:Name="prodCombo"/>
+            <StackPanel x:Name="QuantAStack" Style="{StaticResource pcVGroup}">
+                <TextBlock Text="Consumer Quantity" Style="{StaticResource pcVerticalLabel}"/>
+                <ComboBox x:Name="consCombo" />
+            </StackPanel>
+            <StackPanel x:Name="ButtonGroup" Style="{StaticResource pcVGroup}">
+                <StackPanel x:Name="HorizontalStack" Orientation="Horizontal">
+                    <Button x:Name="okButton" Content="OK" Click="okButton_Click"/>
+                    <Rectangle Style="{StaticResource pcButtonSeparatorH}"/>
+                    <Button x:Name="cancelButton" Content="Cancel" Click="cancelButton_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>

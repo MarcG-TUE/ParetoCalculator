@@ -5,17 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParetoCalculatorUI.Dialogs"
         mc:Ignorable="d"
-        Title="JoinDialog" Height="450" Width="800"
+        Title="JoinDialog" Height="Auto" Width="800" SizeToContent="Height"
         Style="{DynamicResource PCWindowStyle}">
     <Window.Resources>
         <ResourceDictionary Source="/Resources/Styles.xaml" />
     </Window.Resources>
 
-    <Grid>
-        <TextBlock x:Name="textLabel" HorizontalAlignment="Left" Height="26.85" Margin="41.107,41.735,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="301.79"><Run Text="S"/><Run Text="elect quantity to join:"/></TextBlock>
-        <ComboBox x:Name="quantCombo" HorizontalAlignment="Left" Height="26.85" Margin="41.107,112.618,0,0" VerticalAlignment="Top" Width="345.824"/>
-        <Button x:Name="okButton" Content="Ok" HorizontalAlignment="Left" Height="52.625" Margin="41.107,309.158,0,0" VerticalAlignment="Top" Width="251.313" Click="okButton_Click"/>
-        <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" Height="52.625" Margin="428.816,309.158,0,0" VerticalAlignment="Top" Width="212.649" Click="cancelButton_Click"/>
-
+    <Grid Style="{StaticResource pcOuterGrid}">
+        <StackPanel x:Name="VerticalStack">
+            <TextBlock x:Name="textLabel" Style="{StaticResource pcVerticalLabel}"><Run Text="Select quantity to join:"/></TextBlock>
+            <ComboBox x:Name="quantCombo"/>
+            <StackPanel x:Name="ButtonGroup" Style="{StaticResource pcVGroup}">
+                <StackPanel x:Name="HorizontalStack" Orientation="Horizontal">
+                    <Button x:Name="okButton" Content="OK" Click="okButton_Click"/>
+                    <Rectangle Style="{StaticResource pcButtonSeparatorH}"/>
+                    <Button x:Name="cancelButton" Content="Cancel" Click="cancelButton_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>

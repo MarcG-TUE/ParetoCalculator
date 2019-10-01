@@ -1,10 +1,24 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:ParetoCalculatorUI">
+                    xmlns:local="clr-namespace:ParetoCalculatorUI"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
 
-    <Thickness x:Key="pcGroupSpacing">0,24,0,0</Thickness>
-    <Style TargetType="StackPanel">
-        <Setter Property="Margin" Value="{StaticResource pcGroupSpacing}"/>
+    <Thickness x:Key="pcOuterMargin">32</Thickness>
+    <Thickness x:Key="pcGroupSpacingV">0,24,0,0</Thickness>
+    <Thickness x:Key="pcItemSpacingV">0,0,0,4</Thickness>
+    <system:Double x:Key="pcButtonSpacingH">24</system:Double>
+    <Style x:Key="pcVGroup" TargetType="StackPanel">
+        <Setter Property="Margin" Value="{StaticResource pcGroupSpacingV}"/>
+    </Style>
+    <Style x:Key="pcButtonSeparatorH" TargetType="Rectangle">
+        <Setter Property="Width" Value="{StaticResource pcButtonSpacingH}"/>
+        <Setter Property="Height" Value="1"/>
+    </Style>
+    <Style x:Key="pcVerticalLabel" TargetType="TextBlock">
+        <Setter Property="Margin" Value="{StaticResource pcItemSpacingV}"/>
+    </Style>
+    <Style x:Key="pcOuterGrid" TargetType="Grid">
+        <Setter Property="Margin" Value="{StaticResource pcOuterMargin}"/>
     </Style>
     <Style TargetType="Button">
         <Setter Property="Background" Value="#FF374581" />
