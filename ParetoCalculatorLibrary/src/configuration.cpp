@@ -171,7 +171,7 @@ namespace Pareto {
 
 
 
-	void const ConfigurationSpace::streamOn(std::ostream& os) {
+	void ConfigurationSpace::streamOn(std::ostream& os) const {
 		os << name << " = ";
 		unsigned int n;
 		for (n = 0; n < this->quantities.size(); n++) {
@@ -405,7 +405,7 @@ namespace Pareto {
 		return confs.find(c) != confs.end();
 	}
 
-	void const ConfigurationSet::streamOn(std::ostream& os) {
+	void ConfigurationSet::streamOn(std::ostream& os) const {
 		os << "{";
 		SetOfConfigurations::iterator i;
 		unsigned int n = 0;

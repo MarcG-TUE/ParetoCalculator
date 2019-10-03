@@ -184,7 +184,6 @@ namespace ParetoCalculatorUI
                 int n = this.stackListView.SelectedIndex;
                 if ((n >= 0) && (n < this.paretocalculator.stackSize()))
                 {
-//                    StorableObject* o = stack[n];
                     this.verbose(this.paretocalculator.peek(paretocalculator.stackSize()-n-1));
                 }
             }

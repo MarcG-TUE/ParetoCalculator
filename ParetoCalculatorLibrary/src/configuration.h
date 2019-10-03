@@ -162,7 +162,7 @@ namespace Pareto {
 		ConfigurationSpace* unhide(const ListOfQuantityNames *lqn) const;
 
 		/// stream a string representation of the configuration space to 'os'
-		const void streamOn(std::ostream& os);
+		virtual void streamOn(std::ostream& os) const;
 
 
 		// Run-time type checking.
@@ -335,7 +335,7 @@ namespace Pareto {
 		bool containsConfiguration(Configuration& c);
 
 		/// stream a string representation of the configuration set to 'os'
-		virtual const void streamOn(std::ostream& os);
+		virtual void streamOn(std::ostream& os) const;
 
 		// Run-time type checking.
 		virtual bool isConfigurationSet(void) const { return true; }

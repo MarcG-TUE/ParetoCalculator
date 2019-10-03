@@ -80,7 +80,7 @@ namespace Pareto {
 	class StorableString : public StorableObject {
 	public:
 		StorableString(std::string n): StorableObject(n){};
-		virtual const void streamOn(std::ostream& os){ os << name ;}
+		virtual void streamOn(std::ostream& os) const { os << name ;}
         std::string& asString(void){return name;}
 		virtual bool isConfigurationSet(void) const {return false;}
 		virtual bool isConfigurationSpace(void) const {return false;}

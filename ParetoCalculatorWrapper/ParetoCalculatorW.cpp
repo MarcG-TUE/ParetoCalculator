@@ -195,17 +195,23 @@ void ParetoCalculatorW::StatusChecker(System::Object^ o)
 		};
 		// get status messages
 		while (! this->sc->stats.empty()) {
-			(this->cbstat)(std_to_system_string(*this->sc->stats.begin()));
-			this->sc->stats.erase(this->sc->stats.begin());
+			String^ msg = std_to_system_string(this->sc->verbs.front());
+			this->sc->stats.pop_front();
+			this->sc->release_lock();
+			(this->cbstat)(msg);
+			this->sc->get_lock();
 		}
 		// get verbose log messages
 		while (!this->sc->verbs.empty()) {
-			(this->cbverb)(std_to_system_string(*this->sc->verbs.begin()));
-			this->sc->verbs.erase(this->sc->verbs.begin());
+			String^ msg = std_to_system_string(this->sc->verbs.front());
+			this->sc->verbs.pop_front();
+			this->sc->release_lock();
+			(this->cbverb)(msg);
+			this->sc->get_lock();
 		}
 		// release lock
 		if (!this->sc->release_lock()) {
-			throw gcnew ParetoCalculatorExceptionW("Lock unexpectedly already taken.");
+			throw gcnew ParetoCalculatorExceptionW("Lock unexpectedly not not taken.");
 		};
 
 	}
@@ -218,6 +224,6 @@ void ParetoCalculatorW::setStatusCallbacks(PCSetStatus^ s, PCVerbose^ v, int pol
 	this->sc = new StatusCollector();
 	this->pc->setStatusCallbackObject(this->sc);
 	TimerCallback^ tcb = gcnew TimerCallback(this, &ParetoCalculatorW::StatusChecker);
-	this->callbackTimer = gcnew Timer(tcb, NULL, 5* pollingTimeMs, pollingTimeMs);
+	this->callbackTimer = gcnew Timer(tcb, nullptr, 5* pollingTimeMs, pollingTimeMs);
 
 }

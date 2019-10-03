@@ -1,7 +1,7 @@
 #pragma once
 
-
 #include "calculator.h"
+#include <deque>
 
 using namespace System;
 using namespace System::Collections;
@@ -18,8 +18,8 @@ namespace Pareto {
 		StatusCollector();
 
 	public:
-		std::vector<std::string> stats;
-		std::vector<std::string> verbs;
+		std::deque<std::string> stats;
+		std::deque<std::string> verbs;
 		volatile bool lock = false;
 	public:
 
