@@ -28,15 +28,17 @@
         <Setter Property="Foreground" Value="{StaticResource pcButtonForegroundBrush}"/>
         <Setter Property="FontWeight" Value="DemiBold"/>
         <Setter Property="BorderBrush" Value="White"/>
-        <Setter Property="Height" Value="42 "/>
-        <Setter Property="Width" Value="200"/>
+        <Setter Property="Height" Value="40 "/>
+        <Setter Property="Width" Value="300"/>
     </Style>
     <Style x:Key="pcCalculatorButton" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource pcButtonBackgroundBrush}" />
         <Setter Property="Foreground" Value="{StaticResource pcButtonForegroundBrush}"/>
+        <Setter Property="FontWeight" Value="DemiBold"/>
+        <Setter Property="BorderBrush" Value="White"/>
         <Setter Property="Margin" Value="2.5"/>
-        <Setter Property="Width" Value="Stretch"/>
-        <Setter Property="Height" Value="Stretch"/>
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="Height" Value="Auto"/>
     </Style>
     <Style x:Key="PCWindowStyle" TargetType="Window" >
         <Setter Property="Background" Value="{DynamicResource PCBackgroundBrush}" />
