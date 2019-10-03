@@ -187,16 +187,27 @@ ArrayList^ ParetoCalculatorW::confsetConfspaceQuantityNames()
 
 void ParetoCalculatorW::StatusChecker(System::Object^ o)
 {
-	return;
 	if (this->sc != NULL) {
+		// acquire lock
+		if (!this->sc->get_lock()) {
+			throw gcnew ParetoCalculatorExceptionW("Could not acquire lock.");
+			return;
+		};
+		// get status messages
 		while (! this->sc->stats.empty()) {
 			(this->cbstat)(std_to_system_string(*this->sc->stats.begin()));
 			this->sc->stats.erase(this->sc->stats.begin());
 		}
+		// get verbose log messages
 		while (!this->sc->verbs.empty()) {
 			(this->cbverb)(std_to_system_string(*this->sc->verbs.begin()));
 			this->sc->verbs.erase(this->sc->verbs.begin());
 		}
+		// release lock
+		if (!this->sc->release_lock()) {
+			throw gcnew ParetoCalculatorExceptionW("Lock unexpectedly already taken.");
+		};
+
 	}
 }
 

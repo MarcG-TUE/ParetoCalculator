@@ -26,7 +26,6 @@ namespace ParetoCalculatorUI
     {
         public MainWindow()
         {
-            int n;
             InitializeComponent();
             this.paretocalculator = new ParetoCalculatorW();
             this.paretocalculator.setStatusCallbacks(s => { this.setStatus_extthread(s); }, s => { this.verbose_extthread(s); }, 100);

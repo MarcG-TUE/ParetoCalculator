@@ -20,11 +20,15 @@ namespace Pareto {
 	public:
 		std::vector<std::string> stats;
 		std::vector<std::string> verbs;
+		volatile bool lock = false;
 	public:
 
 		virtual void setStatus(const std::string& s);
 
 		virtual void verbose(const std::string& s);
+
+		bool get_lock(void);
+		bool release_lock(void);
 	};
 
 }
