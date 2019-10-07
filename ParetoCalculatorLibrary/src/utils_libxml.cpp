@@ -102,6 +102,17 @@ xmlXPathObjectPtr getNodeSetXPathNode(xmlDocPtr doc, xmlNodePtr node, xmlChar* x
 	return result;
 }
 
+xmlNodePtr getNodeXPathNode(xmlDocPtr doc, xmlNodePtr node, xmlChar* xpath, xmlXPathContextPtr xpathCtx)
+{
+	xmlXPathObjectPtr nodeSet = getNodeSetXPathNode(doc, node, xpath, xpathCtx);
+	xmlNodeSetPtr resultset = nodeSet->nodesetval;
+	if (resultset->nodeNr == 0) return NULL;
+	xmlNodePtr result = resultset->nodeTab[0];
+	xmlXPathFreeObject(nodeSet);
+	return result;
+}
+
+
 std::string getNodeAttribute(xmlNodePtr n, xmlChar* attr) {
 
 	// porting, retrieve without namespace awareness for now

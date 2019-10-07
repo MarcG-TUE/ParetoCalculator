@@ -4,7 +4,7 @@
   <name>Case-Study, An Algebra of Pareto Points, Fundamenta Informaticae</name>
   <description>
     Model of a video stream delivered from a server via a wireless connection to a
-    hand-held device. The case-study is described in the paper "An Algebra of Pareto Points", to appear in Fundamenta Informaticae
+    hand-held device. The case-study is described in the paper "An Algebra of Pareto Points", in Fundamenta Informaticae, vol. 78, no. 1, pp. 35-74, 2007
   </description>
   <quantity_definitions>
     <quantity_definition name="MPEGQuality" type="real"></quantity_definition>

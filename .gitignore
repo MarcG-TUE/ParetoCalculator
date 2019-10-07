@@ -3,7 +3,7 @@ Debug
 CLR\ Debug
 CLR\ Release
 Release
-Interop
+ParetoCalculator/Interop
 *.user
 inc/*
 lib/*
