@@ -24,18 +24,17 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0">
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="fileSelectButton" Content="Select File" Click="fileSelectButton_Click" Width="160" />
+            <DockPanel Grid.Column="0" VerticalAlignment="Stretch" Margin="5,0">
+                <StackPanel Orientation="Horizontal" Height="36"  DockPanel.Dock="Top" Margin="2.5,0">
+                    <Button x:Name="fileSelectButton" Content="Select File" Click="fileSelectButton_Click" Width="120" Style="{StaticResource pcCalculatorButton}" />
                     <Rectangle Style="{StaticResource pcButtonSeparatorH}"/>
-                    <Button x:Name="executeButton" Content="Execute" Click="executeButton_Click"  Width="160"/>
+                    <Button x:Name="executeButton" Content="Execute" Click="executeButton_Click"  Width="120" Style="{StaticResource pcCalculatorButton}"/>
                 </StackPanel>
-                <StackPanel Style="{StaticResource pcVGroup}">
-                    <TextBox x:Name="consoleText" Height="300" TextWrapping="Wrap" IsReadOnly="True" VerticalScrollBarVisibility="Auto" Background="#FFECFAFF"/>
-                </StackPanel>
-            </StackPanel>
-            <Grid x:Name="Right_TopDown" Grid.Column="1">
+                <TextBox x:Name="consoleText" Margin="5,0,0,0" TextWrapping="Wrap" IsReadOnly="True" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" BorderBrush="Black" />
+            </DockPanel>
+            <Grid x:Name="Right_TopDown" Grid.Column="1" Margin="2.5,0">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="36"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
@@ -51,9 +50,9 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Resources>
-                <TextBlock x:Name="stackLabel" HorizontalAlignment="Left" Margin="10,10,0,0" Text="Stack" TextWrapping="Wrap" Width="100" Height="27" VerticalAlignment="Top" FontSize="16"/>
-                <ListView x:Name="stackListView" Margin="5,42,5,5"  AlternationCount="2"/>
-                <Grid x:Name="RightButtons" Margin="2.5,0" Grid.Row="1">
+                <TextBlock x:Name="stackLabel" Grid.Row="0" Text="Stack" TextWrapping="Wrap"  VerticalAlignment="Center" Margin="2.5,0" FontSize="16"/>
+                <ListView x:Name="stackListView" Grid.Row="1" AlternationCount="2" Margin="2.5,0,5,5" BorderBrush="Black"/>
+                <Grid x:Name="RightButtons" Margin="0,0,2.5,0" Grid.Row="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>

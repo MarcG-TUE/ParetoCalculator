@@ -49,8 +49,6 @@ bool StatusCollector::get_lock(void)
 	}
 	this->lock = true;
 
-	std::cout << "L" << std::endl;
-
 	return true;
 }
 
@@ -60,6 +58,6 @@ bool StatusCollector::release_lock(void)
 		return false;
 	}
 	this->lock = false;
-	std::cout << "U" << std::endl;
+
 	return true;
 }

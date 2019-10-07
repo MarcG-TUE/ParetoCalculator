@@ -45,12 +45,13 @@ namespace Pareto {
 	class StatusCallback {
 	public:
 		virtual ~StatusCallback(){};
-		/// called by the calculator to indicite the status of its activities
+		/// called by the calculator to indicate the status of its activities
 		virtual void setStatus(const std::string& s) = 0;
 		/// called by the calculator to generate verbose stream description of what it is doing.
 		virtual void verbose(const std::string& s) = 0;
 	};
 
+	/// Type for a list of configuration sets
 	typedef std::list<ConfigurationSet*> ListOfConfSet;
 
 	/// The Pareto Calculator object
