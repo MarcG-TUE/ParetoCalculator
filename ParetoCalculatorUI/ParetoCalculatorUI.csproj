@@ -68,6 +68,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\GraphDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\JoinDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -100,6 +104,9 @@
     </Compile>
     <Compile Include="Dialogs\DerivedOperatorDialog.xaml.cs">
       <DependentUpon>DerivedOperatorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\GraphDialog.xaml.cs">
+      <DependentUpon>GraphDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\JoinDialog.xaml.cs">
       <DependentUpon>JoinDialog.xaml</DependentUpon>
