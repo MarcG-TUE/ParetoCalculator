@@ -266,8 +266,9 @@ void ParetoParser::LoadOperations()
 		for (int i = 0; i < nodeset->nodeNr; i++) {
 			// for each operation pOperationNode ...
 			xmlNodePtr pOperationNode = nodeset->nodeTab[i];
+			std::cout << ((xmlChar*)"test") << std::endl;
 
-			std::string nodeName = getNodeAttribute(pOperationNode, (xmlChar*)"name");
+			std::string nodeName = getNodeType(pOperationNode);
 
 			if (nodeName == "join") {
 				pc->verbose("join on multiple attributes\n");

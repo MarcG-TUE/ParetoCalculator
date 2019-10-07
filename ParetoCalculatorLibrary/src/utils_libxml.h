@@ -43,7 +43,7 @@
 
 std::string wstring_to_string(std::wstring& wstr);
 std::wstring string_to_wstring(std::string& str);
-std::string xml_to_std_string(xmlChar* s);
+std::string xml_to_std_string(const xmlChar* s);
 
 xmlXPathObjectPtr getNodeSetXPath (xmlDocPtr doc, xmlChar *xpath, xmlXPathContextPtr xpathCtx);
 // execute an xpath query on the document
@@ -56,6 +56,8 @@ xmlNodePtr getNodeXPathNode(xmlDocPtr doc, xmlNodePtr node, xmlChar* xpath, xmlX
 
 
 std::string getNodeAttribute(xmlNodePtr n, xmlChar* attr);
+
+std::string getNodeType(xmlNodePtr n);
 
 bool hasNodeAttribute(xmlNodePtr n, xmlChar* attr);
 

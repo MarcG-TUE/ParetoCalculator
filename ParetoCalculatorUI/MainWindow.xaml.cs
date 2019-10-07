@@ -14,7 +14,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-//using Microsoft.Win32;
 using ParetoCalculatorUI.Dialogs;
 
 namespace ParetoCalculatorUI
@@ -89,7 +88,7 @@ namespace ParetoCalculatorUI
         private void verbose(String s)
         {
             this.consoleText.Text += s;
-            this.consoleText.Text += System.Environment.NewLine;
+            //this.consoleText.Text += System.Environment.NewLine;
             this.consoleText.ScrollToEnd();
         }
 

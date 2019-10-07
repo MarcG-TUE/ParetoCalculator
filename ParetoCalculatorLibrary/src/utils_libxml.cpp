@@ -33,6 +33,8 @@
 
 #include "utils_libxml.h"
 
+#include <iostream>
+
 // Strings
 
 std::string wstring_to_string(std::wstring& wstr) {
@@ -60,7 +62,7 @@ std::wstring string_to_wstring(std::string& str) {
 	return wstr;
 }
 
-std::string xml_to_std_string(xmlChar* s) {
+std::string xml_to_std_string(const xmlChar* s) {
 	std::string* ns = new std::string((char*)s);
 	return *ns;
 }
@@ -119,6 +121,14 @@ std::string getNodeAttribute(xmlNodePtr n, xmlChar* attr) {
 	xmlChar* a = xmlGetProp(n, attr);
 	return xml_to_std_string(a);
 }
+
+std::string getNodeType(xmlNodePtr n) {
+
+	// porting, retrieve without namespace awareness for now
+	const xmlChar* a = n->name;
+	return xml_to_std_string(a);
+}
+
 
 bool hasNodeAttribute(xmlNodePtr n, xmlChar* attr) {
 
