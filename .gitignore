@@ -3,7 +3,6 @@ Debug
 CLR\ Debug
 CLR\ Release
 Release
-Interop
 *.user
 inc/*
 lib/*
