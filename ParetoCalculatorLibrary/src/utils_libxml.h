@@ -51,6 +51,10 @@ xmlXPathObjectPtr getNodeSetXPath (xmlDocPtr doc, xmlChar *xpath, xmlXPathContex
 xmlXPathObjectPtr getNodeSetXPathNode (xmlDocPtr doc, xmlNodePtr node, xmlChar *xpath, xmlXPathContextPtr xpathCtx);
 // execute an xpath query within a node
 
+xmlNodePtr getNodeXPathNode(xmlDocPtr doc, xmlNodePtr node, xmlChar* xpath, xmlXPathContextPtr xpathCtx);
+// execute an xpath query to get a single node result
+
+
 std::string getNodeAttribute(xmlNodePtr n, xmlChar* attr);
 
 bool hasNodeAttribute(xmlNodePtr n, xmlChar* attr);
