@@ -11,6 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Diagnostics;
+
+using ParetoCalculatorUI.Utils;
+using System.Collections;
 
 namespace ParetoCalculatorUI.Dialogs
 {
@@ -19,9 +23,35 @@ namespace ParetoCalculatorUI.Dialogs
     /// </summary>
     public partial class GraphDialog : Window
     {
-        public GraphDialog()
+        public GraphDialog(ParetoCalculatorW pc)
         {
             InitializeComponent();
+            ArrayList quants = pc.confsetConfspaceQuantityNames();
+            foreach (String s in quants)
+            {
+                this.HorizontalCombo.Items.Add(s);
+                this.VerticalCombo.Items.Add(s);
+            }
+        }
+
+        private void okButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+            this.Close();
+        }
+
+        private void cancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+            this.Close();
+        }
+
+        private void plotButton_Click(object sender, RoutedEventArgs e)
+        {
+            //compute points
+
+            EdgeLauncher.Launch(@"file:///C:\Users\mgeil\Documents\Software\ParetoCalculator\html\chart.html");
+            //Process.Start(@"microsoft -edge:file:///C:\Users\mgeil\Documents\Software\ParetoCalculator\html\chart.html"); 
         }
     }
 }

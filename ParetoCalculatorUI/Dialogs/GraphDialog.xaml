@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParetoCalculatorUI.Dialogs"
         mc:Ignorable="d"
-                Title="ProdConsDialog" Height="Auto" Width="800" SizeToContent="Height"
+                Title="Chart Dialog" Height="Auto" Width="800" SizeToContent="Height"
         Style="{DynamicResource PCWindowStyle}">
     <Window.Resources>
         <ResourceDictionary Source="/Resources/Styles.xaml" />
@@ -21,12 +21,16 @@
                 <TextBlock Text="Vertical Axis Quantity" Style="{StaticResource pcVerticalLabel}"/>
                 <ComboBox x:Name="VerticalCombo" />
             </StackPanel>
-            
+            <TextBlock x:Name="ChartText" Height="200 ">
+                
+            </TextBlock>
             <StackPanel x:Name="ButtonGroup" Style="{StaticResource pcVGroup}">
                 <StackPanel x:Name="HorizontalStack" Orientation="Horizontal">
-                    <Button x:Name="okButton" Content="OK" Click="okButton_Click"/>
+                    <Button x:Name="plotButton" Content="Plot" Width="180" Click="plotButton_Click"/>
                     <Rectangle Style="{StaticResource pcButtonSeparatorH}"/>
-                    <Button x:Name="cancelButton" Content="Cancel" Click="cancelButton_Click"/>
+                    <Button x:Name="okButton" Content="OK" Width="180" Click="okButton_Click"/>
+                    <Rectangle Style="{StaticResource pcButtonSeparatorH}"/>
+                    <Button x:Name="cancelButton" Content="Cancel" Width="180" Click="cancelButton_Click"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

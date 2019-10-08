@@ -82,7 +82,7 @@
                     <Button x:Name="maxButton" Content="Max" Grid.Column="2" Grid.Row="3" Click="maxButton_Click" Style="{StaticResource pcCalculatorButton}"/>
                     <Button x:Name="minButton" Content="Min" Grid.Column="3" Grid.Row="3" Click="minButton_Click" Style="{StaticResource pcCalculatorButton}"/>
                     <Button x:Name="multiplyButton" Content="Multiply" Grid.Row="4" Click="multiplyButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="plotButton" Content="Plot" Grid.Row="5" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="plotButton" Content="Plot" Grid.Row="5" Style="{StaticResource pcCalculatorButton}" Click="plotButton_Click"/>
                     <Button x:Name="saveButton" Content="Save" Grid.Row="6" Style="{StaticResource pcCalculatorButton}"/>
                     <Button x:Name="testButton" Content="Test" Grid.Column="2" Grid.Row="6"  Style="{StaticResource pcCalculatorButton}"/>
                     <Button x:Name="aboutButton" Content="About" Grid.Column="3" Grid.Row="6" Click="aboutButton_Click"  Style="{StaticResource pcCalculatorButton}"/>

@@ -416,6 +416,24 @@ namespace ParetoCalculatorUI
                 this.updateStack();
             }
         }
+
+        private void plotButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!this.paretocalculator.stackEmpty())
+                {
+                    GraphDialog dialogBox = new GraphDialog(this.paretocalculator);
+                    Nullable<bool> dialogResult = dialogBox.ShowDialog();
+                }
+            }
+            catch (ParetoCalculatorExceptionW exc)
+            {
+                this.ParetoCalculatorExceptionOccurred(exc);
+                this.updateStack();
+            }
+        }
+
     }
 
 }
