@@ -55,6 +55,8 @@ public:
 	void executeMin(String^ qa, String^ qb);
 	void executeMax(String^ qa, String^ qb);
 	void executeMultiply(String^ qa, String^ qb);
+	ArrayList^ getScattterPoints(String^ qh, String^ qv);
+
 
 	ArrayList^ confsetConfspaceQuantityNames();
 	void StatusChecker(System::Object^ o);

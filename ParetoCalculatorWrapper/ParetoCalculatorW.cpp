@@ -3,6 +3,7 @@
 #include "exceptions.h"
 
 #include "utils/utils_vs.h"
+#include <strstream>
 
 using namespace Pareto;
 using namespace System::Collections;
@@ -169,6 +170,43 @@ void ParetoCalculatorW::executeMultiply(String^ qa, String^ qb)
 	POperation_Max& so = *new POperation_Max(system_to_std_string(qa), system_to_std_string(qb));
 	so.executeOn(*this->pc);
 	delete& so;
+}
+
+ArrayList^ ParetoCalculatorW::getScattterPoints(String^ qxs, String^ qys)
+{
+	int qix, qiy;
+	std::string qx = system_to_std_string(qxs);
+	std::string qy = system_to_std_string(qys);
+	const ConfigurationSet* cs = dynamic_cast<const ConfigurationSet*> (this->pc->peek());
+	const ConfigurationSpace* csp = cs->confspace;
+	if (csp->includesQuantityNamed(qx)) {
+		qix = cs->confspace->indexOfQuantity(qx);
+	}
+	else { qix = -1; }
+	if (csp->includesQuantityNamed(qy)) {
+		qiy = cs->confspace->indexOfQuantity(qy);
+	}
+	else { qiy = -1; }
+
+	ArrayList^ result = gcnew ArrayList();
+	SetOfConfigurations::iterator k;
+	unsigned int i = 0;
+	for (k = cs->confs.begin(); k != cs->confs.end(); k++, i++) {
+		const Pareto::Configuration& c = *k;
+		const QuantityValue& vx = c.getQuantity(qix);
+		const QuantityValue& vy = c.getQuantity(qiy);
+
+		std::ostrstream vxString;
+		vx.streamOn(vxString);
+		vxString << std::ends;
+
+		std::ostrstream vyString;
+		vy.streamOn(vyString);
+		vyString << std::ends;
+
+		result->Add(std_to_system_string(std::string(vxString.str())));
+	}
+	return result;
 }
 
 

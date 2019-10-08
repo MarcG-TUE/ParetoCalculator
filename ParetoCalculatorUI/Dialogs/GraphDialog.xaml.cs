@@ -23,10 +23,14 @@ namespace ParetoCalculatorUI.Dialogs
     /// </summary>
     public partial class GraphDialog : Window
     {
+
+        private ParetoCalculatorW my_pc;
+
         public GraphDialog(ParetoCalculatorW pc)
         {
             InitializeComponent();
-            ArrayList quants = pc.confsetConfspaceQuantityNames();
+            this.my_pc = pc;
+            ArrayList quants = this.my_pc.confsetConfspaceQuantityNames();
             foreach (String s in quants)
             {
                 this.HorizontalCombo.Items.Add(s);
@@ -49,6 +53,7 @@ namespace ParetoCalculatorUI.Dialogs
         private void plotButton_Click(object sender, RoutedEventArgs e)
         {
             //compute points
+            ArrayList points = this.my_pc.getScattterPoints(this.HorizontalCombo.Text, this.VerticalCombo.Text);
 
             EdgeLauncher.Launch(@"file:///C:\Users\mgeil\Documents\Software\ParetoCalculator\html\chart.html");
             //Process.Start(@"microsoft -edge:file:///C:\Users\mgeil\Documents\Software\ParetoCalculator\html\chart.html"); 
