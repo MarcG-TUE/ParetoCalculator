@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 namespace ParetoCalculatorUI.Utils
 {
     /// <summary>
-    /// Class Program, which allows for Edge to be runned out of 
+    /// Class EdgeLauncher, adapted from https://github.com/MicrosoftEdge/edge-launcher/
     /// </summary>
     class EdgeLauncher
     {

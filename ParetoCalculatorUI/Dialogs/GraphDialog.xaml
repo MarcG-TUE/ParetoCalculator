@@ -26,11 +26,9 @@
             </TextBlock>
             <StackPanel x:Name="ButtonGroup" Style="{StaticResource pcVGroup}">
                 <StackPanel x:Name="HorizontalStack" Orientation="Horizontal">
-                    <Button x:Name="plotButton" Content="Plot" Width="180" Click="plotButton_Click"/>
+                    <Button x:Name="plotButton" Content="Plot" Click="plotButton_Click"/>
                     <Rectangle Style="{StaticResource pcButtonSeparatorH}"/>
-                    <Button x:Name="okButton" Content="OK" Width="180" Click="okButton_Click"/>
-                    <Rectangle Style="{StaticResource pcButtonSeparatorH}"/>
-                    <Button x:Name="cancelButton" Content="Cancel" Width="180" Click="cancelButton_Click"/>
+                    <Button x:Name="okButton" Content="Close" Click="okButton_Click"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

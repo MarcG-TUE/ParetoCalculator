@@ -16,6 +16,7 @@ using System.Diagnostics;
 using ParetoCalculatorUI.Utils;
 using System.Collections;
 using System.IO;
+using System.Reflection;
 
 namespace ParetoCalculatorUI.Dialogs
 {
@@ -45,12 +46,6 @@ namespace ParetoCalculatorUI.Dialogs
             this.Close();
         }
 
-        private void cancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = false;
-            this.Close();
-        }
-
         private void plotButton_Click(object sender, RoutedEventArgs e)
         {
             //compute points
@@ -59,10 +54,10 @@ namespace ParetoCalculatorUI.Dialogs
             StringWriter strWriter = new StringWriter();
             strWriter.Write("data: [\n");
 
-            ArrayList pointData = new ArrayList();
+            List<string> pointData = new List<string>(); ;
             foreach (ArrayList l in points)
             {
-                pointData.Add(String.Format("{ x: {0}, y: {1} }\n", l[0], l[1]);
+                pointData.Add(String.Format("{{ x: {0}, y: {1} }}\n", l[0], l[1]));
             }
 
             strWriter.Write(String.Join(", ", pointData));
@@ -70,12 +65,11 @@ namespace ParetoCalculatorUI.Dialogs
 
             string chartData = strWriter.ToString();
 
-            string templateDoc = ReadFile("charttemplate.html");
-            string chartDoc = templateDoc.Replace("#chartdata#", chartData);
-            WriteFile("chart.html", chartDoc);
-
-            EdgeLauncher.Launch(@"file:///C:\Users\mgeil\Documents\Software\ParetoCalculator\html\chart.html");
-            //Process.Start(@"microsoft -edge:file:///C:\Users\mgeil\Documents\Software\ParetoCalculator\html\chart.html"); 
+            string templateDoc = File.ReadAllText(@"html\charttemplate.html");
+            string chartDoc = templateDoc.Replace("data: template", chartData);
+            File.WriteAllText(@"html\chart.html", chartDoc);
+            string pwd = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            EdgeLauncher.Launch(String.Format(@"{0}\html\chart.html", pwd));
         }
     }
 }

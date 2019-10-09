@@ -172,6 +172,7 @@ void ParetoCalculatorW::executeMultiply(String^ qa, String^ qb)
 	delete& so;
 }
 
+
 ArrayList^ ParetoCalculatorW::getScattterPoints(String^ qxs, String^ qys)
 {
 	int qix, qiy;
@@ -196,15 +197,18 @@ ArrayList^ ParetoCalculatorW::getScattterPoints(String^ qxs, String^ qys)
 		const QuantityValue& vx = c.getQuantity(qix);
 		const QuantityValue& vy = c.getQuantity(qiy);
 
+		ArrayList^ point = gcnew ArrayList();
 		std::ostrstream vxString;
 		vx.streamOn(vxString);
 		vxString << std::ends;
+		point->Add(std_to_system_string(std::string(vxString.str())));
 
 		std::ostrstream vyString;
 		vy.streamOn(vyString);
 		vyString << std::ends;
+		point->Add(std_to_system_string(std::string(vyString.str())));
 
-		result->Add(std_to_system_string(std::string(vxString.str())));
+		result->Add(point);
 	}
 	return result;
 }
