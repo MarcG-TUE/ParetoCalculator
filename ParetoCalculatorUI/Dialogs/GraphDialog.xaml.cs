@@ -15,6 +15,7 @@ using System.Diagnostics;
 
 using ParetoCalculatorUI.Utils;
 using System.Collections;
+using System.IO;
 
 namespace ParetoCalculatorUI.Dialogs
 {
@@ -54,6 +55,24 @@ namespace ParetoCalculatorUI.Dialogs
         {
             //compute points
             ArrayList points = this.my_pc.getScattterPoints(this.HorizontalCombo.Text, this.VerticalCombo.Text);
+
+            StringWriter strWriter = new StringWriter();
+            strWriter.Write("data: [\n");
+
+            ArrayList pointData = new ArrayList();
+            foreach (ArrayList l in points)
+            {
+                pointData.Add(String.Format("{ x: {0}, y: {1} }\n", l[0], l[1]);
+            }
+
+            strWriter.Write(String.Join(", ", pointData));
+            strWriter.Write("]");
+
+            string chartData = strWriter.ToString();
+
+            string templateDoc = ReadFile("charttemplate.html");
+            string chartDoc = templateDoc.Replace("#chartdata#", chartData);
+            WriteFile("chart.html", chartDoc);
 
             EdgeLauncher.Launch(@"file:///C:\Users\mgeil\Documents\Software\ParetoCalculator\html\chart.html");
             //Process.Start(@"microsoft -edge:file:///C:\Users\mgeil\Documents\Software\ParetoCalculator\html\chart.html"); 
