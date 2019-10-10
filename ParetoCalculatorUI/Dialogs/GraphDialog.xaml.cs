@@ -75,7 +75,12 @@ namespace ParetoCalculatorUI.Dialogs
 
             File.WriteAllText(@"html\chart.html", chartDoc);
             string pwd = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            EdgeLauncher.Launch(String.Format(@"{0}\html\chart.html", pwd));
+            string chartfullpath = String.Format(@"{0}\html\chart.html", pwd);
+//            EdgeLauncher.Launch(chartfullpath);
+
+            string browser = HTMLLauncher.DefaultWebBrowser();
+            string charturi = Uri.EscapeDataString(chartfullpath);
+            System.Diagnostics.Process.Start(browser, chartfullpath);
         }
 
         private void QuantityChanged()
