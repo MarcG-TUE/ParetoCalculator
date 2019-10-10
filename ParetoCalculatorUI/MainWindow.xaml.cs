@@ -33,7 +33,8 @@ namespace ParetoCalculatorUI
 
         private void SetStatus(string s)
         {
-            this.statusContent.Text = s;
+            char[] whiteSpaceChars = { '\n', '\r', ' ' };
+            this.statusContent.Text = s.Trim(whiteSpaceChars);
         }
 
         private void SetStatus_extthread(string s)
