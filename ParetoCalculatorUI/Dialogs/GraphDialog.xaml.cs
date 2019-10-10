@@ -49,7 +49,9 @@ namespace ParetoCalculatorUI.Dialogs
         private void plotButton_Click(object sender, RoutedEventArgs e)
         {
             //compute points
-            ArrayList points = this.my_pc.getScattterPoints(this.HorizontalCombo.Text, this.VerticalCombo.Text);
+            string qa = this.HorizontalCombo.Text;
+            string qb = this.VerticalCombo.Text;
+            ArrayList points = this.my_pc.getScattterPoints(qa, qb);
 
             StringWriter strWriter = new StringWriter();
             strWriter.Write("data: [\n");
@@ -66,10 +68,47 @@ namespace ParetoCalculatorUI.Dialogs
             string chartData = strWriter.ToString();
 
             string templateDoc = File.ReadAllText(@"html\charttemplate.html");
-            string chartDoc = templateDoc.Replace("data: template", chartData);
+            string labelStr = String.Format("label: '{0} vs. {1}'", qa, qb);
+            string chartDoc = templateDoc.Replace("data: template", chartData).Replace("label: label", labelStr);
+
             File.WriteAllText(@"html\chart.html", chartDoc);
             string pwd = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             EdgeLauncher.Launch(String.Format(@"{0}\html\chart.html", pwd));
+        }
+
+        private void quantityChanged()
+        {
+            if (this.HorizontalCombo.SelectedIndex >= 0 && this.VerticalCombo.SelectedIndex >= 0)
+            {
+                string qx = (string)this.HorizontalCombo.SelectedItem;
+                string qy = (string)this.VerticalCombo.SelectedItem;
+                ArrayList points = this.my_pc.getScattterPoints(qx, qy);
+
+                StringWriter strWriter = new StringWriter();
+                strWriter.Write("{");
+
+                List<string> pointData = new List<string>(); ;
+                foreach (ArrayList l in points)
+                {
+                    pointData.Add(String.Format("({0}, {1})", l[0], l[1]));
+                }
+
+                strWriter.Write(String.Join(", ", pointData));
+                strWriter.Write("}");
+
+                this.ChartText.Text = strWriter.ToString();
+
+            }
+        }
+
+        private void HorizontalCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.quantityChanged();
+        }
+
+        private void VerticalCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.quantityChanged();
         }
     }
 }

@@ -5,14 +5,24 @@
 <body>
 <script src="script/Chart.js"></script>
 
-<canvas id="myChart" width="200" height="200"></canvas>
+<canvas id="myChart" height="600"></canvas>
 <script>
 var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'scatter',
     data: {
         datasets: [{
-            label: 'Scatter Dataset',
+            label: label,
+            pointBorderColor: "#80b6f4",
+            pointBackgroundColor: "#80b6f4",
+            pointHoverBackgroundColor: "#80b6f4",
+            pointHoverBorderColor: "#80b6f4",
+            pointBorderWidth: 10,
+            pointHoverRadius: 10,
+            pointHoverBorderWidth: 1,
+            pointRadius: 3,
+            fill: false,
+            borderWidth: 4,
             data: template
         }]
     },
@@ -22,7 +32,9 @@ var myChart = new Chart(ctx, {
                 type: 'linear',
                 position: 'bottom'
             }]
-        }
+        },
+        responsive: true,
+        maintainAspectRatio: false,
     }
 });
 </script>

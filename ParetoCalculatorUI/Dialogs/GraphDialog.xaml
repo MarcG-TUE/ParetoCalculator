@@ -15,15 +15,16 @@
         <StackPanel x:Name="VerticalStack">
             <StackPanel x:Name="HoizontalQuantityStack">
                 <TextBlock Text="Horizontal Axis Quantity" Style="{StaticResource pcVerticalLabel}"/>
-                <ComboBox x:Name="HorizontalCombo"/>
+                <ComboBox x:Name="HorizontalCombo" SelectionChanged="HorizontalCombo_SelectionChanged"/>
             </StackPanel>
             <StackPanel x:Name="VerticalQuantityStack" Style="{StaticResource pcVGroup}">
                 <TextBlock Text="Vertical Axis Quantity" Style="{StaticResource pcVerticalLabel}"/>
-                <ComboBox x:Name="VerticalCombo" />
+                <ComboBox x:Name="VerticalCombo" SelectionChanged="VerticalCombo_SelectionChanged" />
             </StackPanel>
-            <TextBlock x:Name="ChartText" Height="200 ">
-                
-            </TextBlock>
+            <StackPanel x:Name="DataQuantityStack" Style="{StaticResource pcVGroup}">
+                <TextBlock x:Name="ChartText" Height="200 " TextWrapping="Wrap"/>
+            </StackPanel>
+
             <StackPanel x:Name="ButtonGroup" Style="{StaticResource pcVGroup}">
                 <StackPanel x:Name="HorizontalStack" Orientation="Horizontal">
                     <Button x:Name="plotButton" Content="Plot" Click="plotButton_Click"/>
