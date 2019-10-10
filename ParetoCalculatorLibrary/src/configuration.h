@@ -117,6 +117,9 @@ namespace Pareto {
 		/// copy quantities of another configuration space to this configuration space
 		void addQuantitiesOf(const ConfigurationSpace& cs);
 
+		/// create a product configuration space
+		ConfigurationSpace* productWith(const ConfigurationSpace& cs) const;
+
 		/// test if the configuration space includes a quantity by the name 'qn'
 		bool includesQuantityNamed(const QuantityName& qn) const;
 

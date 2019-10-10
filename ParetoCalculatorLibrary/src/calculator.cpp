@@ -67,10 +67,7 @@ ConfigurationSet& ParetoCalculator::productInSpace(const ConfigurationSet& cs1, 
 
 ConfigurationSet& ParetoCalculator::product(const ConfigurationSet& cs1, const ConfigurationSet& cs2) {
 	// Create a configuration space
-	ConfigurationSpace* cspace = new ConfigurationSpace("Product(" + cs1.confspace->name + ";" + cs2.confspace->name + ")");
-	cspace->addQuantitiesOf(*cs1.confspace);
-	cspace->addQuantitiesOf(*cs2.confspace);
-
+	ConfigurationSpace* cspace = cs1.confspace->productWith(*(cs2.confspace));
 	return ParetoCalculator::productInSpace(cs1, cs2, cspace);
 }
 

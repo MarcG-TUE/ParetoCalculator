@@ -63,6 +63,15 @@ namespace Pareto {
 		}
 	}
 
+	/// create a product configuration space
+	ConfigurationSpace* ConfigurationSpace::productWith(const ConfigurationSpace& cs) const
+	{
+		ConfigurationSpace* cspace = new ConfigurationSpace("Product(" + this->name + ";" + cs.name + ")");
+		cspace->addQuantitiesOf(*this);
+		cspace->addQuantitiesOf(cs);
+		return cspace;
+	}
+
 
 
 	const QuantityType& ConfigurationSpace::getQuantity(const QuantityName& qn) const //throw(EParetoCalculatorError)
