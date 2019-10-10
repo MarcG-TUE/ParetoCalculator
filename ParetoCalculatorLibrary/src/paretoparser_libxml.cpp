@@ -128,7 +128,7 @@ void ParetoParser::LoadQuantityTypes() {
 			}
 
 			if (!typeDetermined) {
-				throw* new EParetoCalculatorError(std::string("Quantity of unknown type " + pTypeStr));
+				throw EParetoCalculatorError(std::string("Quantity of unknown type " + pTypeStr));
 			}
 			pc->store(*qn);
 		}
@@ -277,7 +277,7 @@ void ParetoParser::LoadOperations()
 	// Select the configuration set nodes
 	xmlXPathObjectPtr result = getNodeSetXPath(pXMLDoc, (xmlChar*)"//pa:pareto_specification/pa:calculation/pa:*", xpathCtx);
 	if (!result) {
-		throw new EParetoCalculatorError("Could not find a calculation node in the XML document.");
+		throw EParetoCalculatorError("Could not find a calculation node in the XML document.");
 		return;
 	}
 
@@ -345,7 +345,7 @@ void ParetoParser::LoadOperations()
 			xmlNodePtr pNameNode = getNodeXPathNode(pXMLDoc, pOperationNode, (xmlChar*)"pa:name", xpathCtx);
 			if (!pNameNode) {
 				delete lqn;
-				throw new EParetoCalculatorError("Name node missing in aggregate operation");
+				throw EParetoCalculatorError("Name node missing in aggregate operation");
 			}
 			std::string newname = getNodeText(pXMLDoc, pNameNode);
 

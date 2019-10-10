@@ -181,7 +181,7 @@ ConfigurationSet& ParetoCalculator::abstraction(const ConfigurationSet& cs, cons
 ConfigurationSet& ParetoCalculator::abstraction(const ConfigurationSet& cs, const QuantityName& qn) {
 
 	if (!cs.confspace->includesQuantityNamed(qn)) {
-		throw* new EParetoCalculatorError("Quantity " + qn + "does not exist in ParetoCalculator::abstraction");
+		throw EParetoCalculatorError("Quantity " + qn + "does not exist in ParetoCalculator::abstraction");
 	}
 
 	unsigned int n = cs.confspace->quantityNames.at(qn);
@@ -193,13 +193,13 @@ ConfigurationSet& ParetoCalculator::abstraction(const ConfigurationSet& cs, cons
 void ParetoCalculator::abstract(void) {
 	const StorableObject& s = *this->pop();
 	if (!s.isString()) {
-		throw* new EParetoCalculatorError("Abstraction requires quantity name and configuration set on the stack");
+		throw EParetoCalculatorError("Abstraction requires quantity name and configuration set on the stack");
 		return;
 	}
 	const StorableString& ss = dynamic_cast<const StorableString&>(s);
 	const StorableObject& o = *this->pop();
 	if (!o.isConfigurationSet()) {
-		throw* new EParetoCalculatorError("Abstraction requires quantity name and configuration set on the stack");
+		throw EParetoCalculatorError("Abstraction requires quantity name and configuration set on the stack");
 		return;
 	}
 	const ConfigurationSet& cs = dynamic_cast<const ConfigurationSet&>(o);
@@ -210,7 +210,7 @@ void ParetoCalculator::abstract(void) {
 void ParetoCalculator::hide(ListOfQuantityNames* lqn) {
 	const StorableObject& so = *this->pop();
 	if (!so.isConfigurationSet()) {
-		throw* new EParetoCalculatorError("Hiding requires a configuration set on the stack");
+		throw EParetoCalculatorError("Hiding requires a configuration set on the stack");
 		return;
 	}
 	const ConfigurationSet& cs = dynamic_cast<const ConfigurationSet&>(so);
@@ -505,7 +505,7 @@ const ConfigurationSet* ParetoCalculator::efficient_minimize_dcmerge(const Confi
 		// csl should contain only one element which dominates the element of csh
 #ifdef _DEBUG
 		if (csl->confs.size() > 1) { // for debugging, just checking... shouldn't happen
-			throw* new EParetoCalculatorError("Should not be reachable. minimize_dcmerge()\n");
+			throw EParetoCalculatorError("Should not be reachable. minimize_dcmerge()\n");
 		}
 #endif
 		return csl;
@@ -650,7 +650,7 @@ const StorableObject* ParetoCalculator::retrieve(const std::string& oname)
 	StorageMap::iterator p = memory.find(oname);
 	if (p == memory.end()) {
 		//this->listStorage(cout);
-		throw* new EParetoCalculatorError("object not found in ParetoCalculator::retrieve");
+		throw EParetoCalculatorError("object not found in ParetoCalculator::retrieve");
 	}
 	else {
 		return (*p).second;
@@ -674,7 +674,7 @@ void ParetoCalculator::push(const std::string& oname) //throw(EParetoCalculatorE
 		this->push(*o);
 	}
 	else {
-		throw* new EParetoCalculatorError("object not found in ParetoCalculator::push");
+		throw EParetoCalculatorError("object not found in ParetoCalculator::push");
 	}
 }
 
@@ -684,7 +684,7 @@ const StorableObject* ParetoCalculator::pop() //throw(EParetoCalculatorError)
 		return stack.pop();
 	}
 	else {
-		throw* new EParetoCalculatorError("Stack is empty in ParetoCalculator::pop()");
+		throw EParetoCalculatorError("Stack is empty in ParetoCalculator::pop()");
 		return NULL;
 	}
 }
@@ -693,7 +693,7 @@ const ConfigurationSet* ParetoCalculator::popConfigurationSet() //throw(EParetoC
 {
 	const StorableObject* so = this->pop();
 	if (!so->isConfigurationSet()) {
-		throw* new EParetoCalculatorError("Configuration set expected in ParetoCalculator::popConfigurationSet()");
+		throw EParetoCalculatorError("Configuration set expected in ParetoCalculator::popConfigurationSet()");
 		return NULL;
 	}
 	return dynamic_cast<const ConfigurationSet*>(so);
@@ -705,7 +705,7 @@ const StorableObject* ParetoCalculator::peek() //throw(EParetoCalculatorError)
 		return stack.peek();
 	}
 	else {
-		throw* new EParetoCalculatorError("Stack is empty in ParetoCalculator::peek()");
+		throw EParetoCalculatorError("Stack is empty in ParetoCalculator::peek()");
 		return NULL;
 	}
 }
@@ -715,7 +715,7 @@ void ParetoCalculator::duplicate() {
 		stack.duplicate();
 	}
 	else {
-		throw* new EParetoCalculatorError("Stack is empty in ParetoCalculator::duplicate()");
+		throw EParetoCalculatorError("Stack is empty in ParetoCalculator::duplicate()");
 	}
 }
 
@@ -723,7 +723,7 @@ void ParetoCalculator::minimize(void) {
 	// operate on the stack
 	const StorableObject& so = *this->pop();
 	if (!so.isConfigurationSet()) {
-		throw* new EParetoCalculatorError("Minimization requires configuration set on the stack");
+		throw EParetoCalculatorError("Minimization requires configuration set on the stack");
 		return;
 	}
 	const ConfigurationSet& cs = dynamic_cast<const ConfigurationSet&>(so);
@@ -735,7 +735,7 @@ void ParetoCalculator::efficient_minimize(void) {
 	// operate on the stack
 	const StorableObject& so = *this->pop();
 	if (!so.isConfigurationSet()) {
-		throw* new EParetoCalculatorError("Minimization requires configuration set on the stack");
+		throw EParetoCalculatorError("Minimization requires configuration set on the stack");
 		return;
 	}
 	const ConfigurationSet& cs = dynamic_cast<const ConfigurationSet&>(so);
@@ -748,7 +748,7 @@ void ParetoCalculator::product(void) {
 	const StorableObject& o1 = *this->pop();
 	const StorableObject& o2 = *this->pop();
 	if (!(o1.isConfigurationSet() && o2.isConfigurationSet())) {
-		throw* new EParetoCalculatorError("Product requires two configuration sets");
+		throw EParetoCalculatorError("Product requires two configuration sets");
 		return;
 	}
 	const ConfigurationSet& cs1 = dynamic_cast<const ConfigurationSet&>(o1);
@@ -780,7 +780,7 @@ void ParetoCalculator::constraint(bool (*testConstraint)(const Pareto::Configura
 	// operate on the stack
 	const StorableObject& so = *this->pop();
 	if (!so.isConfigurationSet()) {
-		throw* new EParetoCalculatorError("Constraint requires configuration set on the stack");
+		throw EParetoCalculatorError("Constraint requires configuration set on the stack");
 		return;
 	}
 	const ConfigurationSet& cs = dynamic_cast<const ConfigurationSet&>(so);

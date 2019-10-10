@@ -43,17 +43,17 @@ namespace Pareto {
 	}
 
 	bool QuantityType::compare(const QuantityValue& q1, const QuantityValue& q2) const {
-		throw* new EParetoCalculatorError("abstract class QuantityType cannot compare quantities");
+		throw EParetoCalculatorError("abstract class QuantityType cannot compare quantities");
 		return 0;
 	}
 
 	bool QuantityType::equal(const QuantityValue& q1, const QuantityValue& q2) const {
-		throw* new EParetoCalculatorError("abstract class QuantityType cannot compare quantities");
+		throw EParetoCalculatorError("abstract class QuantityType cannot compare quantities");
 		return 0;
 	}
 
 	bool QuantityType::totalOrderSmaller(const QuantityValue& v1, const QuantityValue& v2) const {
-		throw* new EParetoCalculatorError("abstract class QuantityType cannot compare quantities");
+		throw EParetoCalculatorError("abstract class QuantityType cannot compare quantities");
 		return 0;
 	}
 
@@ -62,13 +62,13 @@ namespace Pareto {
 	}
 
 	QuantityValue& QuantityType::defaultValue(void) const {
-		throw* new EParetoCalculatorError("defaultValue in abstract class QuantityType should not be called");
+		throw EParetoCalculatorError("defaultValue in abstract class QuantityType should not be called");
 		QuantityValue& v = *new QuantityValue(*this);
 		return v;
 	}
 
 	QuantityValue& QuantityType::valueFromString(const std::string s) const {
-		throw* new EParetoCalculatorError("valueFromString in abstract class QuantityType should not be called");
+		throw EParetoCalculatorError("valueFromString in abstract class QuantityType should not be called");
 		return this->defaultValue();
 	}
 
@@ -118,7 +118,7 @@ namespace Pareto {
 		{
 			if ((*n_iter) == qn) { return **q_iter; }
 		}
-		throw* new EParetoCalculatorError("Quantity" + qn + " unknown in quantity type " + name + ". default quantity returned in function getQuantity.");
+		throw EParetoCalculatorError("Quantity" + qn + " unknown in quantity type " + name + ". default quantity returned in function getQuantity.");
 		return this->defaultValue();
 	}
 
@@ -129,7 +129,7 @@ namespace Pareto {
 			if (*quantities[i] == q1) return true;
 			if (*quantities[i] == q2) return false;
 		}
-		throw* new EParetoCalculatorError("Error in QuantityType_Enum::compare");
+		throw EParetoCalculatorError("Error in QuantityType_Enum::compare");
 		return false;
 	}
 
@@ -195,7 +195,7 @@ namespace Pareto {
 #ifdef _DEBUG
 		// only in debug mode, takes too much time otherwise
 		if (&q1.qtype != &q2.qtype) {
-			throw* new EParetoCalculatorError("Cannot compare quantities of different types.");
+			throw EParetoCalculatorError("Cannot compare quantities of different types.");
 			return 0;
 		}
 #endif
@@ -204,7 +204,7 @@ namespace Pareto {
 
 	bool operator==(const QuantityValue& q1, const QuantityValue& q2) {
 		if (&q1.qtype != &q2.qtype) {
-			throw* new EParetoCalculatorError("Cannot compare quantities of different types.");
+			throw EParetoCalculatorError("Cannot compare quantities of different types.");
 			return 0;
 		}
 		return q1.qtype.equal(q1, q2);
@@ -380,7 +380,7 @@ namespace Pareto {
 		for (unsigned int i = 0; i < s; i++) {
 			if (dynamic_cast<const QuantityType_Enum&>(qtype).quantities[i] == this) { return i; }
 		}
-		throw* new EParetoCalculatorError("Error: value not found in QuantitityType in QuantityValue_Enum::index");
+		throw EParetoCalculatorError("Error: value not found in QuantitityType in QuantityValue_Enum::index");
 		return 0;
 	}
 

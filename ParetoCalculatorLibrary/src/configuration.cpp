@@ -72,7 +72,7 @@ namespace Pareto {
 		for (i = quantities.begin(); i != quantities.end(); i++) {
 			if ((*i)->name == qn) return *(*i);
 		}
-		throw* new EParetoCalculatorError("quantity " + qn + " not found in ConfigurationSpace::getQuantity");
+		throw EParetoCalculatorError("quantity " + qn + " not found in ConfigurationSpace::getQuantity");
 	}
 
 	unsigned int ConfigurationSpace::nrOfVisibleQuantities(void) const {
@@ -88,7 +88,7 @@ namespace Pareto {
 	unsigned int ConfigurationSpace::indexOfQuantity(const QuantityName& qn) const  //throw(EParetoCalculatorError)
 	{
 		if (quantityNames.find(qn) == quantityNames.end()) {
-			throw* new EParetoCalculatorError("quantity " + qn + " not found in ConfigurationSpace::indexOfQuantity");
+			throw EParetoCalculatorError("quantity " + qn + " not found in ConfigurationSpace::indexOfQuantity");
 		}
 		return quantityNames.at(qn);
 	}
@@ -136,7 +136,7 @@ namespace Pareto {
 		for (i = this->quantityVisibility.begin(), k = 0; i != this->quantityVisibility.end(); i++, k++) {
 			if (*i) return k;
 		}
-		throw* new EParetoCalculatorError("no visible quantity found in ConfigurationSpace::firstVisibleQuantity");
+		throw EParetoCalculatorError("no visible quantity found in ConfigurationSpace::firstVisibleQuantity");
 		return 0;
 	}
 
@@ -243,7 +243,7 @@ namespace Pareto {
 		for (i = this->quantityNames.begin(); i != this->quantityNames.end(); i++) {
 			if ((*i).second == n) { return (*i).first; }
 		}
-		throw* new EParetoCalculatorError("Error: quantity not found in function nameOfQuantitynr.");
+		throw EParetoCalculatorError("Error: quantity not found in function nameOfQuantitynr.");
 	}
 
 
@@ -308,7 +308,7 @@ namespace Pareto {
 	const QuantityValue& Configuration::getQuantity(const unsigned int n) const {
 #ifdef _DEBUG
 		if (n > quantities.size()) {
-			throw* new EParetoCalculatorError("Index out of bounds in Configuration::getQuantity(int).");
+			throw EParetoCalculatorError("Index out of bounds in Configuration::getQuantity(int).");
 			return *quantities[0];
 		}
 #endif
@@ -325,7 +325,7 @@ namespace Pareto {
 #ifdef _DEBUG
 		// convenient for debugging, too slow for real
 		if (c1.confspace != c2.confspace) {
-			throw* new EParetoCalculatorError("Error: cannot compare configurations of different configuration spaces.");
+			throw EParetoCalculatorError("Error: cannot compare configurations of different configuration spaces.");
 			return 0;
 		}
 #endif
@@ -335,7 +335,7 @@ namespace Pareto {
 	bool operator==(const Configuration& c1, const Configuration& c2) {
 #ifdef _DEBUG
 		if (c1.confspace != c2.confspace) {
-			throw* new EParetoCalculatorError("Error: cannot compare configurations of different configuration spaces.");
+			throw EParetoCalculatorError("Error: cannot compare configurations of different configuration spaces.");
 			return 0;
 		}
 #endif
@@ -354,7 +354,7 @@ namespace Pareto {
 	void ConfigurationSet::addConfiguration(const Configuration& c) {
 #ifdef _DEBUG
 		if (c.confspace != this->confspace) {
-			throw* new EParetoCalculatorError("Error: configuration is of wrong type in ConfigurationSet::addConfiguration");
+			throw EParetoCalculatorError("Error: configuration is of wrong type in ConfigurationSet::addConfiguration");
 		}
 #endif
 		confs.insert(c);
@@ -364,7 +364,7 @@ namespace Pareto {
 		// Note: Use this method only if you are sure that the configuration does not already occur in the set!
 #ifdef _DEBUG
 		if (c.confspace != this->confspace) {
-			throw* new EParetoCalculatorError("Error: configuration is of wrong type in ConfigurationSet::addConfiguration");
+			throw EParetoCalculatorError("Error: configuration is of wrong type in ConfigurationSet::addConfiguration");
 		}
 #endif
 		confs.insert(c);
@@ -440,15 +440,15 @@ namespace Pareto {
 	}
 
 	bool ConfigurationIndexReference::operator<(const ConfigurationIndexReference& right) const {
-		throw* new EParetoCalculatorError("Error: < should not be called on abstract ConfigurationIndexReference");
+		throw EParetoCalculatorError("Error: < should not be called on abstract ConfigurationIndexReference");
 	}
 
 	ConfigurationIndexReference* IndexOnConfigurationSet::get(int n) {
-		throw* new EParetoCalculatorError("Error: 'get' should not be called on abstract ConfigurationIndexReference");
+		throw EParetoCalculatorError("Error: 'get' should not be called on abstract ConfigurationIndexReference");
 	}
 
 	ConfigurationSet* IndexOnConfigurationSet::copyFromTo(int f, int t) {
-		throw* new EParetoCalculatorError("Error: 'copyFromTo' should not be called on abstract ConfigurationIndexReference");
+		throw EParetoCalculatorError("Error: 'copyFromTo' should not be called on abstract ConfigurationIndexReference");
 	}
 
 

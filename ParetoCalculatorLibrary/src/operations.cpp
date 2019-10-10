@@ -52,7 +52,7 @@ ParetoCalculatorOperation::ParetoCalculatorOperation(){
 }
 
 void ParetoCalculatorOperation::executeOn(ParetoCalculator& c){
-throw *new EParetoCalculatorError("Cannot execute abstract superclass of operations in ParetoCalculatorOperation::executeOn.");
+throw EParetoCalculatorError("Cannot execute abstract superclass of operations in ParetoCalculatorOperation::executeOn.");
 }
 
 
@@ -352,7 +352,7 @@ void POperation_Join::executeOn(ParetoCalculator& c){
 	const ConfigurationSet* csa = c.popConfigurationSet();
 	const ConfigurationSet* csb = c.popConfigurationSet();
 	if(csa==NULL || csb==NULL){
-		throw *new EParetoCalculatorError("Not enough configuration spaces on stack to perform join.");
+		throw EParetoCalculatorError("Not enough configuration spaces on stack to perform join.");
 	}
 
 	qan.clear();
@@ -467,7 +467,7 @@ void POperation_EfficientProdCons::executeOn(ParetoCalculator& c){
 	const ConfigurationSet* const csp = c.popConfigurationSet();
 
 	if(!(csp->confspace->getQuantity(p_quant).isTotallyOrdered() && csc->confspace->getQuantity(c_quant).isTotallyOrdered())){
-		throw *new EParetoCalculatorError("Dimensions must be totally ordered for efficient producer-consumer");		
+		throw EParetoCalculatorError("Dimensions must be totally ordered for efficient producer-consumer");		
 	}
 
 	// To do: I'm computing products of spaces everywhere, make one method in ConfSpace class.
