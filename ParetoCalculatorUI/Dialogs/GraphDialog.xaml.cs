@@ -26,7 +26,7 @@ namespace ParetoCalculatorUI.Dialogs
     public partial class GraphDialog : Window
     {
 
-        private ParetoCalculatorW my_pc;
+        private readonly ParetoCalculatorW my_pc;
 
         public GraphDialog(ParetoCalculatorW pc)
         {
@@ -40,33 +40,35 @@ namespace ParetoCalculatorUI.Dialogs
             }
         }
 
-        private void okButton_Click(object sender, RoutedEventArgs e)
+        private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
             this.Close();
         }
 
-        private void plotButton_Click(object sender, RoutedEventArgs e)
+        private void PlotButton_Click(object sender, RoutedEventArgs e)
         {
             //compute points
             string qa = this.HorizontalCombo.Text;
             string qb = this.VerticalCombo.Text;
             ArrayList points = this.my_pc.getScattterPoints(qa, qb);
 
-            StringWriter strWriter = new StringWriter();
-            strWriter.Write("data: [\n");
-
-            List<string> pointData = new List<string>(); ;
-            foreach (ArrayList l in points)
+            string chartData;
+            using (StringWriter strWriter = new StringWriter())
             {
-                pointData.Add(String.Format("{{ x: {0}, y: {1} }}\n", l[0], l[1]));
+                strWriter.Write("data: [\n");
+
+                List<string> pointData = new List<string>(); ;
+                foreach (ArrayList l in points)
+                {
+                    pointData.Add(String.Format("{{ x: {0}, y: {1} }}\n", l[0], l[1]));
+                }
+
+                strWriter.Write(String.Join(", ", pointData));
+                strWriter.Write("]");
+
+                chartData = strWriter.ToString();
             }
-
-            strWriter.Write(String.Join(", ", pointData));
-            strWriter.Write("]");
-
-            string chartData = strWriter.ToString();
-
             string templateDoc = File.ReadAllText(@"html\charttemplate.html");
             string labelStr = String.Format("label: '{0} vs. {1}'", qa, qb);
             string chartDoc = templateDoc.Replace("data: template", chartData).Replace("label: label", labelStr);
@@ -76,7 +78,7 @@ namespace ParetoCalculatorUI.Dialogs
             EdgeLauncher.Launch(String.Format(@"{0}\html\chart.html", pwd));
         }
 
-        private void quantityChanged()
+        private void QuantityChanged()
         {
             if (this.HorizontalCombo.SelectedIndex >= 0 && this.VerticalCombo.SelectedIndex >= 0)
             {
@@ -84,31 +86,32 @@ namespace ParetoCalculatorUI.Dialogs
                 string qy = (string)this.VerticalCombo.SelectedItem;
                 ArrayList points = this.my_pc.getScattterPoints(qx, qy);
 
-                StringWriter strWriter = new StringWriter();
-                strWriter.Write("{");
-
-                List<string> pointData = new List<string>(); ;
-                foreach (ArrayList l in points)
+                using (StringWriter strWriter = new StringWriter())
                 {
-                    pointData.Add(String.Format("({0}, {1})", l[0], l[1]));
+                    strWriter.Write("{");
+
+                    List<string> pointData = new List<string>(); ;
+                    foreach (ArrayList l in points)
+                    {
+                        pointData.Add(String.Format("({0}, {1})", l[0], l[1]));
+                    }
+
+                    strWriter.Write(String.Join(", ", pointData));
+                    strWriter.Write("}");
+
+                    this.ChartText.Text = strWriter.ToString();
                 }
-
-                strWriter.Write(String.Join(", ", pointData));
-                strWriter.Write("}");
-
-                this.ChartText.Text = strWriter.ToString();
-
             }
         }
 
         private void HorizontalCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.quantityChanged();
+            this.QuantityChanged();
         }
 
         private void VerticalCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.quantityChanged();
+            this.QuantityChanged();
         }
     }
 }

@@ -27,77 +27,75 @@ namespace ParetoCalculatorUI
         {
             InitializeComponent();
             this.paretocalculator = new ParetoCalculatorW();
-            this.paretocalculator.setStatusCallbacks(s => { this.setStatus_extthread(s); }, s => { this.verbose_extthread(s); }, 100);
+            this.paretocalculator.setStatusCallbacks(s => { this.SetStatus_extthread(s); }, s => { this.Verbose_extthread(s); }, 100);
 
         }
 
-        private void setStatus(string s)
+        private void SetStatus(string s)
         {
             this.statusContent.Text = s;
         }
 
-        private void setStatus_extthread(string s)
+        private void SetStatus_extthread(string s)
         {
-            this.Dispatcher.Invoke(new MethodInvoker(()=>this.setStatus(s)));
+            this.Dispatcher.Invoke(new MethodInvoker(()=>this.SetStatus(s)));
         }
 
+        private readonly ParetoCalculatorW paretocalculator;
 
-        private ParetoCalculatorW paretocalculator;
-
-        private void aboutButton_Click(object sender, RoutedEventArgs e)
+        private void AboutButton_Click(object sender, RoutedEventArgs e)
         {
-            ParetoCalculatorW pc = new ParetoCalculatorW();
-
             AboutDialog dialogBox = new AboutDialog();
-            Nullable<bool> dialogResult = dialogBox.ShowDialog();
+            dialogBox.ShowDialog();
         }
 
-        private void fileSelectButton_Click(object sender, RoutedEventArgs e)
+        private void FileSelectButton_Click(object sender, RoutedEventArgs e)
         {
 
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            openFileDialog.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
-            openFileDialog.FilterIndex = 2;
-            openFileDialog.RestoreDirectory = true;
-
-            System.Windows.Forms.DialogResult result = openFileDialog.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                try
+                openFileDialog.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
+
+                System.Windows.Forms.DialogResult result = openFileDialog.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
                 {
-                    this.paretocalculator.LoadFile(openFileDialog.FileName);
-                    this.paretocalculator.LoadQuantityTypes();
-                    this.paretocalculator.LoadConfigurationSpaces();
-                    this.paretocalculator.LoadConfigurationSets();
-                }
-                catch (ParetoCalculatorExceptionW exc)
-                {
-                    this.ParetoCalculatorExceptionOccurred(exc);
+                    try
+                    {
+                        this.paretocalculator.LoadFile(openFileDialog.FileName);
+                        this.paretocalculator.LoadQuantityTypes();
+                        this.paretocalculator.LoadConfigurationSpaces();
+                        this.paretocalculator.LoadConfigurationSets();
+                    }
+                    catch (ParetoCalculatorExceptionW exc)
+                    {
+                        this.ParetoCalculatorExceptionOccurred(exc);
+                    }
                 }
             }
-            this.updateStack();
+            this.UpdateStack();
         }
 
         private void ParetoCalculatorExceptionOccurred(ParetoCalculatorExceptionW e)
         {
-            this.verbose("An exception occurred: " + e.Message + "\n");
-            this.updateStack();
+            this.Verbose("An exception occurred: " + e.Message + "\n");
+            this.UpdateStack();
         }
 
-        private void verbose(String s)
+        private void Verbose(String s)
         {
             this.consoleText.Text += s;
             //this.consoleText.Text += System.Environment.NewLine;
             this.consoleText.ScrollToEnd();
         }
 
-        private void verbose_extthread(string s)
+        private void Verbose_extthread(string s)
         {
-            this.Dispatcher.Invoke(new MethodInvoker(() => this.verbose(s)));
+            this.Dispatcher.Invoke(new MethodInvoker(() => this.Verbose(s)));
         }
 
-        private void updateStack()
+        private void UpdateStack()
         {
             this.stackListView.Items.Clear();
             ArrayList l = this.paretocalculator.getStackItemStrings();
@@ -107,21 +105,21 @@ namespace ParetoCalculatorUI
             }
         }
 
-        private void executeButton_Click(object sender, RoutedEventArgs e)
+        private void ExecuteButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 this.paretocalculator.LoadOperations();
-                this.updateStack();
+                this.UpdateStack();
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void pushButton_Click(object sender, RoutedEventArgs e)
+        private void PushButton_Click(object sender, RoutedEventArgs e)
         {
             SelectionDialog dialogBox = new SelectionDialog(paretocalculator);
             Nullable<bool> dialogResult = dialogBox.ShowDialog();
@@ -131,28 +129,28 @@ namespace ParetoCalculatorUI
                 string s = (string) dialogBox.selectionListbox.SelectedItem;
                 this.paretocalculator.push(s);
             }
-            this.updateStack();
+            this.UpdateStack();
         }
 
-        private void popButton_Click(object sender, RoutedEventArgs e)
+        private void PopButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (this.paretocalculator.stackSize() > 0)
                 {
                     string s = this.paretocalculator.pop();
-                    this.verbose(s);
-                    this.updateStack();
+                    this.Verbose(s);
+                    this.UpdateStack();
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void storeButton_Click(object sender, RoutedEventArgs e)
+        private void StoreButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -164,18 +162,18 @@ namespace ParetoCalculatorUI
                     if (dialogResult == true)
                     {
                         this.paretocalculator.storePop(dialogBox.NameResult);
-                        this.updateStack();
+                        this.UpdateStack();
                     }
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void printButton_Click(object sender, RoutedEventArgs e)
+        private void PrintButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -183,51 +181,51 @@ namespace ParetoCalculatorUI
                 int n = this.stackListView.SelectedIndex;
                 if ((n >= 0) && (n < this.paretocalculator.stackSize()))
                 {
-                    this.verbose(this.paretocalculator.peek(paretocalculator.stackSize()-n-1));
+                    this.Verbose(this.paretocalculator.peek(paretocalculator.stackSize()-n-1));
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void duplicateButton_Click(object sender, RoutedEventArgs e)
+        private void DuplicateButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (!this.paretocalculator.stackEmpty())
                 {
                     this.paretocalculator.duplicate();
-                    this.updateStack();
+                    this.UpdateStack();
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void productButton_Click(object sender, RoutedEventArgs e)
+        private void ProductButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (this.paretocalculator.stackSize() >= 2)
                 {
                     this.paretocalculator.product();
-                    this.updateStack();
+                    this.UpdateStack();
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void prodconsButton_Click(object sender, RoutedEventArgs e)
+        private void ProdconsButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -241,18 +239,18 @@ namespace ParetoCalculatorUI
                         string pq = (string) dialogBox.prodCombo.SelectedItem;
                         string cq = (string) dialogBox.consCombo.SelectedItem;
                         this.paretocalculator.executeProdCons(pq, cq);
-                        this.updateStack();
+                        this.UpdateStack();
                     }
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void abstractButton_Click(object sender, RoutedEventArgs e)
+        private void AbstractButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -265,18 +263,18 @@ namespace ParetoCalculatorUI
                     {
                         string aq = (string)dialogBox.abstractCombo.SelectedItem;
                         this.paretocalculator.executeAbstract(aq);
-                        this.updateStack();
+                        this.UpdateStack();
                     }
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void joinButton_Click(object sender, RoutedEventArgs e)
+        private void JoinButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -289,35 +287,35 @@ namespace ParetoCalculatorUI
                     {
                         string q = (string)dialogBox.quantCombo.SelectedItem;
                         this.paretocalculator.executeJoin(q);
-                        this.updateStack();
+                        this.UpdateStack();
                     }
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void minimizeButton_Click(object sender, RoutedEventArgs e)
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (!this.paretocalculator.stackEmpty())
                 {
                     this.paretocalculator.minimize();
-                    this.updateStack();
+                    this.UpdateStack();
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void sumButton_Click(object sender, RoutedEventArgs e)
+        private void SumButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -331,18 +329,18 @@ namespace ParetoCalculatorUI
                         string qa = (string)dialogBox.quantACombo.SelectedItem;
                         string qb = (string)dialogBox.quantBCombo.SelectedItem;
                         this.paretocalculator.executeSum(qa, qb);
-                        this.updateStack();
+                        this.UpdateStack();
                     }
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void maxButton_Click(object sender, RoutedEventArgs e)
+        private void MaxButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -356,18 +354,18 @@ namespace ParetoCalculatorUI
                         string qa = (string)dialogBox.quantACombo.SelectedItem;
                         string qb = (string)dialogBox.quantBCombo.SelectedItem;
                         this.paretocalculator.executeMax(qa, qb);
-                        this.updateStack();
+                        this.UpdateStack();
                     }
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void minButton_Click(object sender, RoutedEventArgs e)
+        private void MinButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -381,18 +379,18 @@ namespace ParetoCalculatorUI
                         string qa = (string)dialogBox.quantACombo.SelectedItem;
                         string qb = (string)dialogBox.quantBCombo.SelectedItem;
                         this.paretocalculator.executeMin(qa, qb);
-                        this.updateStack();
+                        this.UpdateStack();
                     }
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void multiplyButton_Click(object sender, RoutedEventArgs e)
+        private void MultiplyButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -406,18 +404,18 @@ namespace ParetoCalculatorUI
                         string qa = (string)dialogBox.quantACombo.SelectedItem;
                         string qb = (string)dialogBox.quantBCombo.SelectedItem;
                         this.paretocalculator.executeMultiply(qa, qb);
-                        this.updateStack();
+                        this.UpdateStack();
                     }
                 }
             }
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 
-        private void plotButton_Click(object sender, RoutedEventArgs e)
+        private void PlotButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -430,7 +428,7 @@ namespace ParetoCalculatorUI
             catch (ParetoCalculatorExceptionW exc)
             {
                 this.ParetoCalculatorExceptionOccurred(exc);
-                this.updateStack();
+                this.UpdateStack();
             }
         }
 

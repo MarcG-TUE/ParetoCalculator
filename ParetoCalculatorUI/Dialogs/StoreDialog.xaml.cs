@@ -27,14 +27,14 @@ namespace ParetoCalculatorUI.Dialogs
 
         public string NameResult;
 
-        private void storeButton_Click(object sender, RoutedEventArgs e)
+        private void StoreButton_Click(object sender, RoutedEventArgs e)
         {
             this.NameResult = this.nameEditBox.Text;
             this.DialogResult = true;
             this.Close();
         }
 
-        private void cancelButton_Click(object sender, RoutedEventArgs e)
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
             this.Close();

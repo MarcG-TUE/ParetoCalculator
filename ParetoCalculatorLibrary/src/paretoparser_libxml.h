@@ -74,6 +74,8 @@ namespace Pareto {
 
 		xmlXPathContextPtr xpathCtx = NULL;
 
+		ListOfQuantityNames* getListOfQuantityNames(xmlNodePtr pOperationNode);
+		JoinMap* getJoinMap(xmlNodePtr pOperationNode);
 	};
 
 }

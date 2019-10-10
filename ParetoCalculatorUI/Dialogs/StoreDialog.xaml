@@ -17,9 +17,9 @@
             <TextBox x:Name="nameEditBox" Text="NewName"/>
             <StackPanel x:Name="ButtonGroup" Style="{StaticResource pcVGroup}">
                 <StackPanel x:Name="HorizontalStack" Orientation="Horizontal">
-                    <Button x:Name="storeButton" Content="Store" Click="storeButton_Click"/>
+                    <Button x:Name="storeButton" Content="Store" Click="StoreButton_Click"/>
                     <Rectangle Style="{StaticResource pcButtonSeparatorH}"/>
-                    <Button x:Name="cancelButton" Content="Cancel" Click="cancelButton_Click"/>
+                    <Button x:Name="cancelButton" Content="Cancel" Click="CancelButton_Click"/>
                 </StackPanel>
             </StackPanel>
 

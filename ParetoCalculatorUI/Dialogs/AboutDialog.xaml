@@ -21,7 +21,7 @@
                     <Image Source="/ParetoCalculatorUI;component/Resources/images/ist.png" RenderTransformOrigin="0.642,1.156" Height="64.579" Canvas.Left="122.398" Canvas.Top="29.969" Width="157.877"/>
                 </Canvas>
                 <Rectangle Style="{StaticResource pcButtonSeparatorH}"/>
-                <Button x:Name="okButton" Content="OK" Click="okButton_Click" Width="120" VerticalAlignment="Bottom"/>
+                <Button x:Name="okButton" Content="OK" Click="OkButton_Click" Width="120" VerticalAlignment="Bottom"/>
             </StackPanel>
         </StackPanel>
     </Grid>

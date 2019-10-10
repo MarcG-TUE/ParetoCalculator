@@ -27,9 +27,9 @@
 
             <StackPanel x:Name="ButtonGroup" Style="{StaticResource pcVGroup}">
                 <StackPanel x:Name="HorizontalStack" Orientation="Horizontal">
-                    <Button x:Name="plotButton" Content="Plot" Click="plotButton_Click"/>
+                    <Button x:Name="plotButton" Content="Plot" Click="PlotButton_Click"/>
                     <Rectangle Style="{StaticResource pcButtonSeparatorH}"/>
-                    <Button x:Name="okButton" Content="Close" Click="okButton_Click"/>
+                    <Button x:Name="okButton" Content="Close" Click="OkButton_Click"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

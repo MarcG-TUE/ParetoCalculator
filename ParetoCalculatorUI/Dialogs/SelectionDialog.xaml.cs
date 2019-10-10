@@ -33,20 +33,20 @@ namespace ParetoCalculatorUI.Dialogs
             }
         }
 
-        private void okButton_Click(object sender, RoutedEventArgs e)
+        private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
             this.Close();
         }
 
-        private void cancelButton_Click(object sender, RoutedEventArgs e)
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
             this.Close();
 
         }
 
-        private void selectionListbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void SelectionListbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             this.DialogResult = true;
             this.Close();

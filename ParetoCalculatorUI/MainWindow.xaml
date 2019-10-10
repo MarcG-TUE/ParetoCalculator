@@ -26,9 +26,9 @@
             </Grid.ColumnDefinitions>
             <DockPanel Grid.Column="0" VerticalAlignment="Stretch" Margin="5,0">
                 <StackPanel Orientation="Horizontal" Height="36"  DockPanel.Dock="Top" Margin="2.5,0">
-                    <Button x:Name="fileSelectButton" Content="Select File" Click="fileSelectButton_Click" Width="120" Style="{StaticResource pcCalculatorButton}" />
+                    <Button x:Name="fileSelectButton" Content="Select File" Click="FileSelectButton_Click" Width="120" Style="{StaticResource pcCalculatorButton}" />
                     <Rectangle Style="{StaticResource pcButtonSeparatorH}"/>
-                    <Button x:Name="executeButton" Content="Execute" Click="executeButton_Click"  Width="120" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="executeButton" Content="Execute" Click="ExecuteButton_Click"  Width="120" Style="{StaticResource pcCalculatorButton}"/>
                 </StackPanel>
                 <TextBox x:Name="consoleText" Margin="5,0,0,0" TextWrapping="Wrap" IsReadOnly="True" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" BorderBrush="Black" />
             </DockPanel>
@@ -68,24 +68,24 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="pushButton" Content="Push" Click="pushButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="popButton" Grid.Column="1" Content="Pop" Click="popButton_Click" Style="{StaticResource pcCalculatorButton}" />
-                    <Button x:Name="storeButton" Grid.Column="2" Content="Store" Click="storeButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="printButton" Grid.Column="3" Content="Print" Click="printButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="duplicateButton" Content="Duplicate" Grid.Row="1" Click="duplicateButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="productButton" Content="Product" Grid.Row="2" Click="productButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="prodconsButton" Content="Prod.Cons." Grid.Column="1" Grid.Row="2" Click="prodconsButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="abstractButton" Content="Abstract" Grid.Column="2" Grid.Row="2" Click="abstractButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="joinButton" Content="Join" Grid.Column="3" Grid.Row="2" Click="joinButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="minimizeButton" Content="Minimize" Grid.Row="3" Click="minimizeButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="sumButton" Content="Sum" Grid.Column="1" Grid.Row="3" Click="sumButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="maxButton" Content="Max" Grid.Column="2" Grid.Row="3" Click="maxButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="minButton" Content="Min" Grid.Column="3" Grid.Row="3" Click="minButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="multiplyButton" Content="Multiply" Grid.Row="4" Click="multiplyButton_Click" Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="plotButton" Content="Plot" Grid.Row="5" Style="{StaticResource pcCalculatorButton}" Click="plotButton_Click"/>
+                    <Button x:Name="pushButton" Content="Push" Click="PushButton_Click" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="popButton" Grid.Column="1" Content="Pop" Click="PopButton_Click" Style="{StaticResource pcCalculatorButton}" />
+                    <Button x:Name="storeButton" Grid.Column="2" Content="Store" Click="StoreButton_Click" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="printButton" Grid.Column="3" Content="Print" Click="PrintButton_Click" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="duplicateButton" Content="Duplicate" Grid.Row="1" Click="DuplicateButton_Click" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="productButton" Content="Product" Grid.Row="2" Click="ProductButton_Click" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="prodconsButton" Content="Prod.Cons." Grid.Column="1" Grid.Row="2" Click="ProdconsButton_Click" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="abstractButton" Content="Abstract" Grid.Column="2" Grid.Row="2" Click="AbstractButton_Click" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="joinButton" Content="Join" Grid.Column="3" Grid.Row="2" Click="JoinButton_Click" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="minimizeButton" Content="Minimize" Grid.Row="3" Click="MinimizeButton_Click" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="sumButton" Content="Sum" Grid.Column="1" Grid.Row="3" Click="SumButton_Click" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="maxButton" Content="Max" Grid.Column="2" Grid.Row="3" Click="MaxButton_Click" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="minButton" Content="Min" Grid.Column="3" Grid.Row="3" Click="MinButton_Click" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="multiplyButton" Content="Multiply" Grid.Row="4" Click="MultiplyButton_Click" Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="plotButton" Content="Plot" Grid.Row="5" Style="{StaticResource pcCalculatorButton}" Click="PlotButton_Click"/>
                     <Button x:Name="saveButton" Content="Save" Grid.Row="6" Style="{StaticResource pcCalculatorButton}"/>
                     <Button x:Name="testButton" Content="Test" Grid.Column="2" Grid.Row="6"  Style="{StaticResource pcCalculatorButton}"/>
-                    <Button x:Name="aboutButton" Content="About" Grid.Column="3" Grid.Row="6" Click="aboutButton_Click"  Style="{StaticResource pcCalculatorButton}"/>
+                    <Button x:Name="aboutButton" Content="About" Grid.Column="3" Grid.Row="6" Click="AboutButton_Click"  Style="{StaticResource pcCalculatorButton}"/>
                 </Grid>
             </Grid>
         </Grid>
