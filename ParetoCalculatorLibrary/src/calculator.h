@@ -208,14 +208,8 @@ namespace Pareto {
 		/// not yet implemented in the current version, sorry
 		void LoadOperations();
 
-#ifdef _MSC_VER
 		void SaveAllFile(const std::wstring& fn);
 		void SaveItemFile(const std::string& itemToSave, const std::wstring& fn);
-#else
-		// porting: to be done
-		// void SaveAllFile(const std::wstring& fn);
-		// void SaveItemFile(const std::string& itemToSave, const std::wstring& fn);
-#endif
 
 	private:
 		static ConfigurationSet* efficient_minimize_unordered(const ConfigurationSet* cs, const QuantityName& qn);
