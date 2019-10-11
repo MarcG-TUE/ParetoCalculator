@@ -8,13 +8,12 @@ the calculator at http://www.es.ele.tue.nl/pareto
 
 How do I use / install it?
 
-(1) Open the solution file in Visual Studio
+- Make sure your systems supports cmake and has the libxml2 library installed
+- enter the directory ParetoCalculatorLibrary/src
+- type: cmake .
+- type: make
+- a static library ParetoCalculatorLibrary.a should have been built.
 
-(2) Build the solution and run the ParetoCalculatorUI project
-
-(3) Use the calculator to run the examples in the test directory.
-
-Note that the project ParetoCalculatorLibrary creates a static library with all functionality for your own Pareto Algebra calculations
 
 ------------------------------------------------------------------
 
