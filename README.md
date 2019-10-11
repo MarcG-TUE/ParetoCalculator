@@ -44,6 +44,7 @@ The software is licensed under the MIT License.
 The development of the Pareto Calculator was supported by
 
 - the **Betsy** project under the European IST FP6 program, proj. nr. 004042
+- the **MNEMEE** project under proj. nr. IST-216224. 
 - the **FitOpTiVis** project under the Horizon 2020 ECSEL program H2020-ECSEL-2017-2-RIA, proj. nr. 783162
 
 [1] M.C.W. Geilen, T. Basten, B.D. Theelen, R.H.J.M. Otten. [An Algebra of Pareto Points.](https://dl.acm.org/citation.cfm?id=1366010)

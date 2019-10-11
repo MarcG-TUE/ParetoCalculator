@@ -181,26 +181,25 @@
     <Content Include="html\charttemplate.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="html\script\Chart.bundle.js">
+    <Content Include="html\dist\chart.js\Chart.bundle.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="html\script\Chart.bundle.min.js">
+    <Content Include="html\dist\chart.js\Chart.bundle.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="html\script\Chart.css">
+    <Content Include="html\dist\chart.js\Chart.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="html\script\Chart.js">
+    <Content Include="html\dist\chart.js\Chart.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="html\script\Chart.min.css">
+    <Content Include="html\dist\chart.js\Chart.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="html\script\Chart.min.js">
+    <Content Include="html\dist\chart.js\Chart.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Chart.js" />
-    <Content Include="Scripts\Chart.min.js" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
