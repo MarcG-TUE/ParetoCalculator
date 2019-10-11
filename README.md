@@ -1,8 +1,10 @@
-What is the Pareto Calculator?
+# Pareto Calculator
+
+## What is the Pareto Calculator?
 
 The Pareto Calculator V.1.0 is a library that implements Pareto
 Algebra [1]. You can find more information about Pareto Algebra and
-the calculator at http://www.es.ele.tue.nl/pareto
+the calculator at <http://www.es.ele.tue.nl/pareto>
 
 ------------------------------------------------------------------
 
@@ -18,11 +20,14 @@ Note that the project ParetoCalculatorLibrary creates a static library with all 
 
 ------------------------------------------------------------------
 
+## Documentation
+ 
 Is there any documentation for the Pareto Calculator?
 
-Documentation for the library can be found at http://www.es.ele.tue.nl/pareto.
+Documentation for the library can be found at <http://www.es.ele.tue.nl/pareto.>
 
 ------------------------------------------------------------------
+## License
 
 What license is used for the Pareto Calculator?
 
@@ -30,9 +35,13 @@ The software is licensed under the MIT License.
 
 ------------------------------------------------------------------
 
-CONTACT INFORMATION:
+## CONTACT INFORMATION
+
    Marc Geilen <m.c.w.geilen@tue.nl>
 
+## Acknowledgements
 
-[1]M.C.W. Geilen, T. Basten, B.D. Theelen, R.H.J.M. Otten. An Algebra of Pareto Points.
-   Fundamenta Informaticae. 78(1):35-74, 2007. (Special issue with best papers of ACSD 2005.) � IOS Press.
+The Pareto Calculator was supported by the IST FP6 project Betsy and the ECSEL project FitOpTiVis
+
+[1] M.C.W. Geilen, T. Basten, B.D. Theelen, R.H.J.M. Otten. An Algebra of Pareto Points.
+   Fundamenta Informaticae. 78(1):35-74, 2007. (Special issue with best papers of ACSD 2005.) IOS Press.

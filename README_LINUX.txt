@@ -31,7 +31,6 @@ The software is licensed under the MIT License.
 
 CONTACT INFORMATION:
    Marc Geilen <m.c.w.geilen@tue.nl>
-   http://www.es.ele.tue.nl/~mgeilen
 
 
 [1]M.C.W. Geilen, T. Basten, B.D. Theelen, R.H.J.M. Otten. An Algebra of Pareto Points.
