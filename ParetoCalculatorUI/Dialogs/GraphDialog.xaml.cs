@@ -48,11 +48,19 @@ namespace ParetoCalculatorUI.Dialogs
 
         private void PlotButton_Click(object sender, RoutedEventArgs e)
         {
-            //compute points
+            // get the selected quantities
             string qa = this.HorizontalCombo.Text;
             string qb = this.VerticalCombo.Text;
+            // compute points
             ArrayList points = this.my_pc.getScattterPoints(qa, qb);
-            Charts.ShowScatterChart(qa, qb, points);
+            // make a chart
+            try
+            {
+                Charts.ShowScatterChart(qa, qb, points);
+            } catch (ParetoCalculatorUIException exc)
+            {
+                MessageDialog.ShowMessage("Failed to show chart: " + exc.Message);
+            }
         }
 
         private void QuantityChanged()
@@ -63,6 +71,7 @@ namespace ParetoCalculatorUI.Dialogs
                 string qy = (string)this.VerticalCombo.SelectedItem;
                 ArrayList points = this.my_pc.getScattterPoints(qx, qy);
 
+                // show the data as text on the dialog
                 using (StringWriter strWriter = new StringWriter())
                 {
                     strWriter.Write("{");
