@@ -44,7 +44,7 @@ std::string wstring_to_string(std::wstring& wstr) {
 	size_t len = wstr.length();
 	size_t outputsz = len + 1;
 	char* psz = new char[outputsz];
-#ifdef MSCVER
+#ifdef _MSC_VER
 	wcstombs_s(&ressz, psz, outputsz, wstr.c_str(), len);
 #else
 	ressz = wcstombs(psz, wstr.c_str(), len);
@@ -60,7 +60,7 @@ std::wstring string_to_wstring(std::string& str) {
 	size_t len = str.length();
 	size_t outputsz = len + 1;
 	wchar_t* psz = new wchar_t[len + 1];
-#ifdef MSCVER
+#ifdef _MSC_VER
 	mbstowcs_s(&ressz, psz, outputsz, str.c_str(), len);
 #else
 	mbstowcs(psz, str.c_str(),len + 1);
