@@ -8,18 +8,18 @@ the calculator at http://www.es.ele.tue.nl/pareto
 
 How do I use / install it?
 
-- Make sure your systems supports cmake and has the libxml2 library installed
-- enter the directory ParetoCalculatorLibrary/src
-- type: cmake .
-- type: make
-- a static library ParetoCalculatorLibrary.a should have been built.
+- Make sure your systems supports `cmake` and has the `libxml2` library installed
+- go to the main directory ParetoCalculator
+- type: `cmake .`
+- type: `make`
+- a static library `ParetoCalculatorLibrary.a` should have been built.
 
 
 ------------------------------------------------------------------
 
 Is there any documentation for the Pareto Calculator?
 
-Documentation for the library can be found at http://www.es.ele.tue.nl/pareto.
+Documentation for the library can be found at <http://www.es.ele.tue.nl/pareto>.
 
 ------------------------------------------------------------------
 

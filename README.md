@@ -10,6 +10,8 @@ the calculator at <http://www.es.ele.tue.nl/pareto>
 
 How do I use / install it?
 
+### On Windows
+
 (1) Open the solution file in Visual Studio
 
 (2) Build the solution and run the ParetoCalculatorUI project
@@ -18,15 +20,26 @@ How do I use / install it?
 
 Note that the project ParetoCalculatorLibrary creates a static library with all functionality for your own Pareto Algebra calculations
 
+See README_WIN.txt
+
+### On Linux
+
+The static library with all Pareto Algebra operations can be compiled with Linux/gcc. There is currently no example application for gcc to illustrate its use.
+
+See README_LINUX.txt
+
 ------------------------------------------------------------------
 
 ## Documentation
- 
+
 Is there any documentation for the Pareto Calculator?
+
+There is currently no documentation for the Pareto Calculator. The Linux build generates doxygen documentation.
 
 Documentation for the library can be found at <http://www.es.ele.tue.nl/pareto.>
 
 ------------------------------------------------------------------
+
 ## License
 
 What license is used for the Pareto Calculator?
