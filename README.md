@@ -20,13 +20,13 @@ How do I use / install it?
 
 Note that the project ParetoCalculatorLibrary creates a static library with all functionality for your own Pareto Algebra calculations
 
-See README_WIN.txt
+See [README_WIN.md](README_WIN.md)
 
 ### On Linux
 
 The static library with all Pareto Algebra operations can be compiled with Linux/gcc. There is currently no example application for gcc to illustrate its use.
 
-See README_LINUX.txt
+See [README_LINUX.md](README_LINUX.md)
 
 ------------------------------------------------------------------
 
