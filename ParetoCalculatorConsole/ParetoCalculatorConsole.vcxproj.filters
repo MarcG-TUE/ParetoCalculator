@@ -18,5 +18,16 @@
     <ClCompile Include="paretocalccons.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pcconsole.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pcconsole.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="paretocalccons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
