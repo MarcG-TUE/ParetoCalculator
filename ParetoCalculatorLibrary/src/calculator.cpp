@@ -154,20 +154,18 @@ ConfigurationSet& ParetoCalculator::alternative(const ConfigurationSet& cs1, con
 
 // compute abstraction of configuration c in configuration space cs by abstracting quantity nr. n
 Pareto::Configuration& conf_abstraction(ConfigurationSpace* cs, const Pareto::Configuration& c, unsigned int n) {
-	Pareto::Configuration* nc = new Pareto::Configuration(cs);
 
-	// TODO: fix
-	// temporary fix for porting
-	Pareto::Configuration* d = const_cast<Pareto::Configuration*>(&c);
+	Pareto::Configuration& nc = *new Pareto::Configuration(cs);
 
-	ListOfQuantityValues::iterator i;
+	// copy all quantities, except n
+	ListOfQuantityValues::const_iterator i;
 	unsigned int k = 0;
-	for (i = d->quantities.begin(); i != d->quantities.end(); i++, k++) {
+	for (i = c.quantities.begin(); i != c.quantities.end(); i++, k++) {
 		if (k != n) {
-			nc->addQuantity(d->getQuantity(k));
+			nc.addQuantity(c.getQuantity(k));
 		}
 	}
-	return *nc;
+	return nc;
 }
 
 ConfigurationSet& ParetoCalculator::abstraction(const ConfigurationSet& cs, unsigned int n) {
