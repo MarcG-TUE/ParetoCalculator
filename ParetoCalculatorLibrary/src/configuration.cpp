@@ -64,11 +64,11 @@ namespace Pareto {
 	}
 
 	/// create a product configuration space
-	ConfigurationSpace* ConfigurationSpace::productWith(const ConfigurationSpace& cs) const
+	ConfigurationSpace& ConfigurationSpace::productWith(const ConfigurationSpace& cs) const
 	{
-		ConfigurationSpace* cspace = new ConfigurationSpace("Product(" + this->name + ";" + cs.name + ")");
-		cspace->addQuantitiesOf(*this);
-		cspace->addQuantitiesOf(cs);
+		ConfigurationSpace& cspace = *new ConfigurationSpace("Product(" + this->name + ";" + cs.name + ")");
+		cspace.addQuantitiesOf(*this);
+		cspace.addQuantitiesOf(cs);
 		return cspace;
 	}
 
@@ -168,7 +168,7 @@ namespace Pareto {
 	bool ConfigurationSpace::LexicographicCompare(const Configuration& c1, const Configuration& c2)
 		// provides strict ordering for sorted storage of configurationset, hence ignores visibility
 	{
-		unsigned int k = c1.confspace->quantities.size();
+		unsigned int k = c1.confspace.quantities.size();
 		for (unsigned int i = 0; i < k; i++) {
 			const QuantityValue* v1 = &(c1.getQuantity(i));
 			const QuantityValue* v2 = &(c2.getQuantity(i));
@@ -206,43 +206,43 @@ namespace Pareto {
 	}
 
 
-	ConfigurationSpace* ConfigurationSpace::hide(const ListOfQuantityNames* lqn) const {
+	ConfigurationSpace& ConfigurationSpace::hide(const ListOfQuantityNames& lqn) const {
 		std::string n = "Hide of " + this->name;
-		ConfigurationSpace* cs = new ConfigurationSpace(n);
+		ConfigurationSpace& cs = *new ConfigurationSpace(n);
 		for (unsigned int i = 0; i < this->quantities.size(); i++) {
 			bool v = this->quantityVisibility[i];
-			if (lqn->includes(this->nameOfQuantityNr(i))) {
+			if (lqn.includes(this->nameOfQuantityNr(i))) {
 				v = false;
 			}
-			cs->addQuantityAsVisibility(*this->quantities[i], this->nameOfQuantityNr(i), v);
+			cs.addQuantityAsVisibility(*this->quantities[i], this->nameOfQuantityNr(i), v);
 		}
 		return cs;
 	}
 
-	ConfigurationSpace* ConfigurationSpace::hide(const QuantityName& qn) {
+	ConfigurationSpace& ConfigurationSpace::hide(const QuantityName& qn) {
 		ListOfQuantityNames l;
 		l.push_back(qn);
-		return this->hide(&l);
+		return this->hide(l);
 	}
 
 
-	ConfigurationSpace* ConfigurationSpace::unhide(const ListOfQuantityNames* lqn) const {
+	ConfigurationSpace& ConfigurationSpace::unhide(const ListOfQuantityNames& lqn) const {
 		std::string n = "Unhide of " + this->name;
-		ConfigurationSpace* cs = new ConfigurationSpace(n);
+		ConfigurationSpace& cs = *new ConfigurationSpace(n);
 		for (unsigned int i = 0; i < this->quantities.size(); i++) {
 			bool v = this->quantityVisibility[i];
-			if (lqn->includes(this->nameOfQuantityNr(i))) {
+			if (lqn.includes(this->nameOfQuantityNr(i))) {
 				v = true;
 			}
-			cs->addQuantityAsVisibility(*this->quantities[i], this->nameOfQuantityNr(i), v);
+			cs.addQuantityAsVisibility(*this->quantities[i], this->nameOfQuantityNr(i), v);
 		}
 		return cs;
 	}
 
-	ConfigurationSpace* ConfigurationSpace::unhide(const QuantityName& qn) const {
+	ConfigurationSpace& ConfigurationSpace::unhide(const QuantityName& qn) const {
 		ListOfQuantityNames l;
 		l.push_back(qn);
-		return this->unhide(&l);
+		return this->unhide(l);
 	}
 
 
@@ -258,7 +258,7 @@ namespace Pareto {
 
 	Configuration* ConfigurationSpace::newConfiguration(void) {
 
-		Configuration* c = new Configuration(this);
+		Configuration* c = new Configuration(*this);
 
 		ListOfQuantityTypes::iterator i;
 		for (i = quantities.begin(); i != quantities.end(); i++) {
@@ -275,19 +275,19 @@ namespace Pareto {
 
 	/////////////////// Configuration //////////////////////
 
-	Configuration::Configuration(const ConfigurationSpace* cs) :confspace(cs) {
+	Configuration::Configuration(const ConfigurationSpace& cs) :confspace(cs) {
 	}
 
 	void Configuration::addQuantity(const QuantityValue& q) {
-		Pareto::QuantityValue* qp = const_cast<Pareto::QuantityValue*>(&q);
+		Pareto::QuantityValue& qp = const_cast<Pareto::QuantityValue&>(q);
 		quantities.push_back(qp);
 	}
 
 	void Configuration::addQuantitiesOf(const Configuration& c) {
-		Configuration* cc = const_cast<Pareto::Configuration*>(&c); // temporary (I hope) workaround
+		Configuration& cc = const_cast<Pareto::Configuration&>(c); // temporary (I hope) workaround
 		ListOfQuantityValues::iterator i;
-		for (i = cc->quantities.begin(); i != cc->quantities.end(); i++) {
-			this->addQuantity(*(*i));
+		for (i = cc.quantities.begin(); i != cc.quantities.end(); i++) {
+			this->addQuantity(*i);
 		}
 	}
 
@@ -297,19 +297,19 @@ namespace Pareto {
 		ListOfQuantityValues::const_iterator i;
 		unsigned int n = 0;
 		for (i = quantities.begin(); i != quantities.end(); i++, n++) {
-			if (this->confspace->quantityVisibility[n]) {
-				QuantityValue* v = (*i);
-				os << *v;
+			if (this->confspace.quantityVisibility[n]) {
+				QuantityValue& v = (*i);
+				os << v;
 			}
 			else {
-				os << "[" << *(*i) << "]";
+				os << "[" << (*i) << "]";
 			}
 			if (n < quantities.size() - 1) os << ", ";
 		}
 		os << ")";
 	}
 
-	void Configuration::setQuantity(int n, QuantityValue* v) {
+	void Configuration::setQuantity(int n, QuantityValue& v) {
 		quantities[n] = v;
 	}
 
@@ -318,37 +318,37 @@ namespace Pareto {
 #ifdef _DEBUG
 		if (n > quantities.size()) {
 			throw EParetoCalculatorError("Index out of bounds in Configuration::getQuantity(int).");
-			return *quantities[0];
+			return quantities[0];
 		}
 #endif
-		return *quantities[n];
+		return quantities[n];
 	}
 
 	const QuantityValue& Configuration::getQuantity(const QuantityName& n) const {
-		unsigned int k = this->confspace->indexOfQuantity(n);
-		return *this->quantities[k];
+		unsigned int k = this->confspace.indexOfQuantity(n);
+		return this->quantities[k];
 	}
 
 
 	bool operator<=(const Configuration& c1, const Configuration& c2) {
 #ifdef _DEBUG
 		// convenient for debugging, too slow for real
-		if (c1.confspace != c2.confspace) {
+		if (&(c1.confspace) != &(c2.confspace)) {
 			throw EParetoCalculatorError("Error: cannot compare configurations of different configuration spaces.");
 			return 0;
 		}
 #endif
-		return c1.confspace->compare(c1, c2);
+		return c1.confspace.compare(c1, c2);
 	}
 
 	bool operator==(const Configuration& c1, const Configuration& c2) {
 #ifdef _DEBUG
-		if (c1.confspace != c2.confspace) {
+		if (&(c1.confspace) != &(c2.confspace)) {
 			throw EParetoCalculatorError("Error: cannot compare configurations of different configuration spaces.");
 			return 0;
 		}
 #endif
-		return c1.confspace->equal(c1, c2);
+		return c1.confspace.equal(c1, c2);
 	}
 
 	bool operator<(const Configuration& c1, const Configuration& c2) { return (c1 <= c2) && !(c1 == c2); };
@@ -356,13 +356,13 @@ namespace Pareto {
 
 	///////////////// ConfigurationSet ///////////
 
-	ConfigurationSet::ConfigurationSet(const ConfigurationSpace* cs, const std::string n) : StorableObject(n), confspace(cs) {
+	ConfigurationSet::ConfigurationSet(const ConfigurationSpace& cs, const std::string n) : StorableObject(n), confspace(cs) {
 	}
 
 
 	void ConfigurationSet::addConfiguration(const Configuration& c) {
 #ifdef _DEBUG
-		if (c.confspace != this->confspace) {
+		if (&(c.confspace) != &(this->confspace)) {
 			throw EParetoCalculatorError("Error: configuration is of wrong type in ConfigurationSet::addConfiguration");
 		}
 #endif
@@ -372,7 +372,7 @@ namespace Pareto {
 	void ConfigurationSet::addUniqueConfiguration(const Configuration& c) {
 		// Note: Use this method only if you are sure that the configuration does not already occur in the set!
 #ifdef _DEBUG
-		if (c.confspace != this->confspace) {
+		if (&(c.confspace) != &(this->confspace)) {
 			throw EParetoCalculatorError("Error: configuration is of wrong type in ConfigurationSet::addConfiguration");
 		}
 #endif
@@ -432,7 +432,7 @@ namespace Pareto {
 	}
 
 	const QuantityValue& ConfigurationIndexReference::value(void) const {
-		return (this->conf)->getQuantity(index->quantity);
+		return (this->conf).getQuantity(index.quantity);
 	}
 
 
@@ -452,11 +452,11 @@ namespace Pareto {
 		throw EParetoCalculatorError("Error: < should not be called on abstract ConfigurationIndexReference");
 	}
 
-	ConfigurationIndexReference* IndexOnConfigurationSet::get(int n) {
+	ConfigurationIndexReference& IndexOnConfigurationSet::get(int n) {
 		throw EParetoCalculatorError("Error: 'get' should not be called on abstract ConfigurationIndexReference");
 	}
 
-	ConfigurationSet* IndexOnConfigurationSet::copyFromTo(int f, int t) {
+	ConfigurationSet& IndexOnConfigurationSet::copyFromTo(int f, int t) {
 		throw EParetoCalculatorError("Error: 'copyFromTo' should not be called on abstract ConfigurationIndexReference");
 	}
 
@@ -469,13 +469,13 @@ namespace Pareto {
 	}
 
 
-	IndexOnConfigurationSet::IndexOnConfigurationSet(const QuantityName& qn, const ConfigurationSet* cs) : quantity(qn), confset(cs) {
+	IndexOnConfigurationSet::IndexOnConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs) : quantity(qn), confset(cs) {
 	}
 
 
-	IndexOnTotalOrderConfigurationSet::IndexOnTotalOrderConfigurationSet(const QuantityName& qn, const ConfigurationSet* cs) : IndexOnConfigurationSet(qn, cs) {
+	IndexOnTotalOrderConfigurationSet::IndexOnTotalOrderConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs) : IndexOnConfigurationSet(qn, cs) {
 		SetOfConfigurations::iterator i;
-		for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
+		for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
 			ConfigurationIndexOnTotalOrderReference* r = new ConfigurationIndexOnTotalOrderReference(&(*i), this);
 			this->push_back(*r);
 			delete r;
@@ -487,10 +487,10 @@ namespace Pareto {
 	int IndexOnConfigurationSet::lower(const ConfigurationIndexReference& v) {
 		int a, b, m;
 		a = -1; // S[a,Q]<v
-		b = this->confset->confs.size(); // S[b,Q]>=v;
+		b = this->confset.confs.size(); // S[b,Q]>=v;
 		while (b - a > 1) {
 			m = (a + b) / 2;
-			if (*(this->get(m)) < v) {
+			if ((this->get(m)) < v) {
 				a = m;
 			}
 			else {
@@ -505,10 +505,10 @@ namespace Pareto {
 	int IndexOnConfigurationSet::upper(const ConfigurationIndexReference& v) {
 		int a, b, m;
 		a = -1; // S[a,Q]<=v
-		b = this->confset->confs.size(); // S[b,Q]>v;
+		b = this->confset.confs.size(); // S[b,Q]>v;
 		while (b - a > 1) {
 			m = (a + b) / 2;
-			if ((*this->get(m)) > v) {
+			if ((this->get(m)) > v) {
 				b = m;
 			}
 			else {
@@ -519,23 +519,23 @@ namespace Pareto {
 	}
 
 
-	ConfigurationSet* IndexOnTotalOrderConfigurationSet::copyFromTo(int f, int t) {
-		ConfigurationSet* res = new ConfigurationSet(this->confset->confspace, this->confset->name + " range");
+	ConfigurationSet& IndexOnTotalOrderConfigurationSet::copyFromTo(int f, int t) {
+		ConfigurationSet& res = *new ConfigurationSet(this->confset.confspace, this->confset.name + " range");
 		IndexOnTotalOrderConfigurationSet::iterator i = this->begin();
 		for (int j = 0; j < f; j++, i++);
 		for (int j = f; j <= t; j++, i++) {
-			res->addConfiguration(*(*i).conf);
+			res.addConfiguration((*i).conf);
 		}
 		return res;
 	}
 
 
-	ConfigurationSet* IndexOnUnorderedConfigurationSet::copyFromTo(int f, int t) {
-		ConfigurationSet* res = new ConfigurationSet(this->confset->confspace, this->confset->name + " range");
+	ConfigurationSet& IndexOnUnorderedConfigurationSet::copyFromTo(int f, int t) {
+		ConfigurationSet& res = *new ConfigurationSet(this->confset.confspace, this->confset.name + " range");
 		IndexOnUnorderedConfigurationSet::iterator i = this->begin();
 		for (int j = 0; j < f; j++, i++);
 		for (int j = f; j <= t; j++, i++) {
-			res->addConfiguration(*(*i).conf);
+			res.addConfiguration((*i).conf);
 		}
 		return res;
 	}
@@ -557,9 +557,9 @@ namespace Pareto {
 	}
 
 
-	IndexOnUnorderedConfigurationSet::IndexOnUnorderedConfigurationSet(const QuantityName& qn, const ConfigurationSet* cs) : IndexOnConfigurationSet(qn, cs) {
+	IndexOnUnorderedConfigurationSet::IndexOnUnorderedConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs) : IndexOnConfigurationSet(qn, cs) {
 		SetOfConfigurations::iterator i;
-		for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
+		for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
 			ConfigurationIndexOnUnorderedReference* r = new ConfigurationIndexOnUnorderedReference(&(*i), this);
 			this->push_back(*r);
 			delete r;

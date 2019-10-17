@@ -97,8 +97,8 @@ namespace Pareto {
 	/// The hiding operator
 	class POperation_Hide: public ParetoCalculatorOperation {
 	public:
-		ListOfQuantityNames* lqn;
-		POperation_Hide(ListOfQuantityNames* qnames);
+		ListOfQuantityNames& lqn;
+		POperation_Hide(ListOfQuantityNames& qnames);
 		virtual void executeOn(ParetoCalculator& c);
 	};
 

@@ -34,6 +34,7 @@
 #ifndef PARETO_CALCULATOR_H
 #define PARETO_CALCULATOR_H
 
+#include <functional>
 #include "operations.h"
 
 namespace Pareto {
@@ -52,7 +53,7 @@ namespace Pareto {
 	};
 
 	/// Type for a list of configuration sets
-	typedef std::list<ConfigurationSet*> ListOfConfSet;
+	typedef std::list<std::reference_wrapper<ConfigurationSet>> ListOfConfSet;
 
 	/// The Pareto Calculator object
 	///
@@ -84,10 +85,10 @@ namespace Pareto {
 		void store(const std::string& key);
 
 		/// retrieve an object from the memory 
-		const StorableObject* retrieve(const std::string& oname); 
+		const StorableObject& retrieve(const std::string& oname); 
 
 		/// retrieve a quantity type from the memory 
-		const QuantityType* retrieveQuantityType(const std::string& oname); 
+		const QuantityType& retrieveQuantityType(const std::string& oname); 
 
 		/// push an object 'o' onto the calculator stack
 		void push(const StorableObject& o);
@@ -96,14 +97,18 @@ namespace Pareto {
 		void push(const std::string& oname); 
 
 		/// return an object popped from the stack
-		const StorableObject* pop(); 
+		const StorableObject& pop(); 
 
-		/// pop a configuration set from the set.
+		/// pop a configuration set from the stack.
 		/// Throws an exception if the object is not a configuration set
-		const ConfigurationSet* popConfigurationSet(); 
+		const ConfigurationSet& popConfigurationSet(); 
+
+		/// pop a storable string from the stack.
+		/// Throws an exception if the object is not a storable string
+		const StorableString& popStorableString();
 
 		/// return a pointer to the object on top of the stack without removing it.
-		const StorableObject* peek(); 
+		const StorableObject& peek(); 
 
 		/// duplicate the object on top of the stack
 		void duplicate();
@@ -127,7 +132,7 @@ namespace Pareto {
 		StatusCallback* statusObject = nullptr;
 
 		/// Register a StatusCallBack object.
-		void setStatusCallbackObject(StatusCallback* o);
+		void setStatusCallbackObject(StatusCallback& o);
 
 		// called by the calculator when its status changes
 		void setStatus(const std::string& newStatus);
@@ -143,7 +148,7 @@ namespace Pareto {
 		static ConfigurationSet& product(const ConfigurationSet& cs1, const ConfigurationSet& cs2);
 
 		// compute the product of the two configuration sets in an already defined predefined configuration space
-		static ConfigurationSet& productInSpace(const ConfigurationSet& cs1, const ConfigurationSet& cs2, ConfigurationSpace* cspace);
+		static ConfigurationSet& productInSpace(const ConfigurationSet& cs1, const ConfigurationSet& cs2, const ConfigurationSpace& cspace);
 
 		// abstract the n-th dimension from the configuration set
 		static ConfigurationSet& abstraction(const ConfigurationSet& cs, unsigned int n);
@@ -155,7 +160,7 @@ namespace Pareto {
 		static ConfigurationSet& abstraction(const ConfigurationSet& cs, const QuantityName& qn);
 
 		// hide a collection of quantities, specified by the list of names lqn
-		static ConfigurationSet& hiding(const ConfigurationSet& cs, const ListOfQuantityNames *lqn);
+		static ConfigurationSet& hiding(const ConfigurationSet& cs, const ListOfQuantityNames& lqn);
 
 		// hide a single quantity named qn
 		static ConfigurationSet& hiding(const ConfigurationSet& cs, const QuantityName& qn);
@@ -179,7 +184,7 @@ namespace Pareto {
 		/// compute abstraction
 		void abstract(void);
 		/// hide quantities
-		void hide(ListOfQuantityNames *lqn);
+		void hide(ListOfQuantityNames &lqn);
 
 		/// apply a constraint.
 		///
@@ -212,18 +217,18 @@ namespace Pareto {
 		void SaveItemFile(const std::string& itemToSave, const std::string& fn);
 
 	private:
-		static ConfigurationSet* efficient_minimize_unordered(const ConfigurationSet* cs, const QuantityName& qn);
-		static ListOfConfSet* splitClasses(const ConfigurationSet* cs, const QuantityName& qn);
-		static const ConfigurationSet* efficient_minimize_totally_ordered(const ConfigurationSet* cs, const QuantityName& qn);
-		static const ConfigurationSet* efficient_minimize_totally_ordered_recursive(ConfigurationSet* cs, const QuantityName& qn);
-		static ListOfConfSet* splitLowHigh(const ConfigurationSet* cs, const QuantityName& qn, const QuantityValue **v);
-		static const ConfigurationSet* efficient_minimize_dcmerge(const ConfigurationSet* csl, const ConfigurationSet* csh, const QuantityName& qn, const QuantityValue& v);
-		static const ConfigurationSet* efficient_minimize_filter1(const ConfigurationSet* csl, const ConfigurationSet* csh, const QuantityName* qn);
-		static const ConfigurationSet* efficient_minimize_filter2(const ConfigurationSet* csa, const ConfigurationSet* csb);
-		static const ConfigurationSet* efficient_minimize_filter3(const ConfigurationSet* csa, const ConfigurationSet* csb);
-		static const ConfigurationSet* efficient_minimize_filter4(const ConfigurationSet* csa, const ConfigurationSet* csb);
-		static const QuantityValue& efficient_minimize_getPivot(const ConfigurationSet* cs, const QuantityName* qn);
-		static void efficient_minimize_filter_split(const ConfigurationSet* cs, const QuantityName* qn, const QuantityValue& pivot, ConfigurationSet* *csl, ConfigurationSet* *csh);
+		static ConfigurationSet& efficient_minimize_unordered(const ConfigurationSet& cs, const QuantityName& qn);
+		static ListOfConfSet& splitClasses(const ConfigurationSet& cs, const QuantityName& qn);
+		static const ConfigurationSet& efficient_minimize_totally_ordered(const ConfigurationSet& cs, const QuantityName& qn);
+		static const ConfigurationSet& efficient_minimize_totally_ordered_recursive(ConfigurationSet& cs, const QuantityName& qn);
+		static ListOfConfSet& splitLowHigh(const ConfigurationSet& cs, const QuantityName& qn, const QuantityValue **v);
+		static const ConfigurationSet& efficient_minimize_dcmerge(const ConfigurationSet& csl, const ConfigurationSet& csh, const QuantityName& qn, const QuantityValue& v);
+		static const ConfigurationSet& efficient_minimize_filter1(const ConfigurationSet& csl, const ConfigurationSet& csh, const QuantityName& qn);
+		static const ConfigurationSet& efficient_minimize_filter2(const ConfigurationSet& csa, const ConfigurationSet& csb);
+		static const ConfigurationSet& efficient_minimize_filter3(const ConfigurationSet& csa, const ConfigurationSet& csb);
+		static const ConfigurationSet& efficient_minimize_filter4(const ConfigurationSet& csa, const ConfigurationSet& csb);
+		static const QuantityValue& efficient_minimize_getPivot(const ConfigurationSet& cs, const QuantityName& qn);
+		static void efficient_minimize_filter_split(const ConfigurationSet& cs, const QuantityName& qn, const QuantityValue& pivot, ConfigurationSet* *csl, ConfigurationSet* *csh);
 
 
 	};

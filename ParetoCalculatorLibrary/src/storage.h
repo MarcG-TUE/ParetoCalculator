@@ -95,9 +95,9 @@ namespace Pareto {
 	/// A stack of StorableObjects
 	class StackOfStorageObjects: public std::vector<const StorableObject*>{
 	public:
-		const StorableObject* pop(void);
-		void push(const StorableObject* o);
-		const StorableObject* peek(void);
+		const StorableObject& pop(void);
+		void push(const StorableObject& o);
+		const StorableObject& peek(void);
 		void duplicate(void);
 	};
 }

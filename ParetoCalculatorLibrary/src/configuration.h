@@ -38,6 +38,7 @@
 
 
 #include <vector>
+#include <functional>
 #include <list>
 #include <set>
 #include <string>
@@ -118,7 +119,7 @@ namespace Pareto {
 		void addQuantitiesOf(const ConfigurationSpace& cs);
 
 		/// create a product configuration space
-		ConfigurationSpace* productWith(const ConfigurationSpace& cs) const;
+		ConfigurationSpace& productWith(const ConfigurationSpace& cs) const;
 
 		/// test if the configuration space includes a quantity by the name 'qn'
 		bool includesQuantityNamed(const QuantityName& qn) const;
@@ -153,16 +154,16 @@ namespace Pareto {
 		const unsigned int firstVisibleQuantity() const;
 
 		/// generates a NEW configuration space in which quantity 'qn' is hidden
-		ConfigurationSpace* hide(const QuantityName& qn);
+		ConfigurationSpace& hide(const QuantityName& qn);
 
 		/// generates a NEW configuration space in which quantities 'lqn' are hidden
-		ConfigurationSpace* hide(const ListOfQuantityNames *lqn) const;
+		ConfigurationSpace& hide(const ListOfQuantityNames& lqn) const;
 
 		/// generates a NEW configuration space in which quantity 'qn' is unhidden
-		ConfigurationSpace* unhide(const QuantityName& qn) const;
+		ConfigurationSpace& unhide(const QuantityName& qn) const;
 
 		/// generates a NEW configuration space in which quantities 'lqn' are unhidden
-		ConfigurationSpace* unhide(const ListOfQuantityNames *lqn) const;
+		ConfigurationSpace& unhide(const ListOfQuantityNames &lqn) const;
 
 		/// stream a string representation of the configuration space to 'os'
 		virtual void streamOn(std::ostream& os) const;
@@ -183,7 +184,7 @@ namespace Pareto {
 	bool operator!=(ConfigurationSpace& cs1, ConfigurationSpace& cs2);
 
 	// An STL vector of QuantityValues
-	class ListOfQuantityValues : public std::vector<QuantityValue*> {
+	class ListOfQuantityValues : public std::vector<std::reference_wrapper<QuantityValue>> {
 	};
 
 	/// A configuration of Pareto Algebra.
@@ -193,12 +194,12 @@ namespace Pareto {
 	class Configuration{
 	public:
 		/// The member 'confspace' refers to this space
-		const ConfigurationSpace* confspace;
+		const ConfigurationSpace& confspace;
 		/// 'quantities' is a list of quantity values that defines the configuration.
 		ListOfQuantityValues quantities;
 
 		/// Use ConfigurationSpace::newConfiguration() to create configurations!
-		Configuration(const ConfigurationSpace* cs);
+		Configuration(const ConfigurationSpace& cs);
 
 		virtual ~Configuration(){};
 
@@ -215,7 +216,7 @@ namespace Pareto {
 		virtual const QuantityValue& getQuantity(const QuantityName& n) const;
 
 		/// set quantity value of quantity with index number 'n'
-		virtual void setQuantity(int n, QuantityValue* v);
+		virtual void setQuantity(int n, QuantityValue& v);
 
 		/// stream a string representation of the configuration to 'os'
 		virtual void streamOn(std::ostream& os) const;
@@ -240,9 +241,9 @@ namespace Pareto {
 
 	class ConfigurationIndexReference {
 	public:
-		const Configuration* conf;
-		IndexOnConfigurationSet* index;
-		ConfigurationIndexReference(const Configuration* c, IndexOnConfigurationSet* i): conf(c), index(i){}
+		const Configuration& conf;
+		IndexOnConfigurationSet& index;
+		ConfigurationIndexReference(const Configuration& c, IndexOnConfigurationSet& i): conf(c), index(i){}
 		virtual ~ConfigurationIndexReference(){}
 		const QuantityValue& value(void) const;
 		bool operator==(const ConfigurationIndexReference& right) const;
@@ -252,7 +253,7 @@ namespace Pareto {
 
 	class ConfigurationIndexOnTotalOrderReference : public ConfigurationIndexReference {
 	public:
-		ConfigurationIndexOnTotalOrderReference(const Configuration* c, IndexOnConfigurationSet* i): ConfigurationIndexReference(c, i){}
+		ConfigurationIndexOnTotalOrderReference(const Configuration& c, IndexOnConfigurationSet& i): ConfigurationIndexReference(c, i){}
 		virtual bool operator<(const ConfigurationIndexReference& right) const ;
 
 		const ConfigurationIndexOnTotalOrderReference& operator= (const ConfigurationIndexOnTotalOrderReference& right);
@@ -260,7 +261,7 @@ namespace Pareto {
 
 	class ConfigurationIndexOnUnorderedReference : public ConfigurationIndexReference {
 	public:
-		ConfigurationIndexOnUnorderedReference(const Configuration* c, IndexOnConfigurationSet* i): ConfigurationIndexReference(c, i){}
+		ConfigurationIndexOnUnorderedReference(const Configuration& c, IndexOnConfigurationSet& i): ConfigurationIndexReference(c, i){}
 		virtual bool operator<(const ConfigurationIndexReference& right) const ;
 
 		const ConfigurationIndexOnUnorderedReference& operator= (const ConfigurationIndexOnUnorderedReference& right);
@@ -269,31 +270,31 @@ namespace Pareto {
 	class IndexOnConfigurationSet {
 	public:
 		const QuantityName& quantity;
-		const ConfigurationSet* confset;
-		IndexOnConfigurationSet(const QuantityName& qn, const ConfigurationSet* cs);
+		const ConfigurationSet& confset;
+		IndexOnConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs);
 		virtual ~IndexOnConfigurationSet(){}
-		virtual ConfigurationSet* copyFromTo(int f, int t);
+		virtual ConfigurationSet& copyFromTo(int f, int t);
 		int lower(const ConfigurationIndexReference& v);
 		int upper(const ConfigurationIndexReference& v);
-		virtual ConfigurationIndexReference* get(int n);
+		virtual ConfigurationIndexReference& get(int n);
 	};
 
 	// implements an index on the configurations of a configurationset
 	// used for sorting the configurations w.r.t. different quantities.
 	class IndexOnTotalOrderConfigurationSet: public std::vector<ConfigurationIndexOnTotalOrderReference>, public IndexOnConfigurationSet {
 	public:
-		IndexOnTotalOrderConfigurationSet(const QuantityName& qn, const ConfigurationSet* cs);
-		virtual ConfigurationIndexReference* get(int n) {return &(this->at(n));}
-		virtual ConfigurationSet* copyFromTo(int f, int t);
+		IndexOnTotalOrderConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs);
+		virtual ConfigurationIndexReference& get(int n) {return (this->at(n));}
+		virtual ConfigurationSet& copyFromTo(int f, int t);
 	};
 
 	// Make an index on an unordered quantity, based on a total order derived from the string
 	// representation of the quantity values
 	class IndexOnUnorderedConfigurationSet: public std::vector<ConfigurationIndexOnUnorderedReference>, public IndexOnConfigurationSet {
 	public:
-		IndexOnUnorderedConfigurationSet(const QuantityName& qn, const ConfigurationSet* cs);
-		virtual ConfigurationIndexReference* get(int n) {return &(this->at(n));}
-		virtual ConfigurationSet* copyFromTo(int f, int t);
+		IndexOnUnorderedConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs);
+		virtual ConfigurationIndexReference& get(int n) {return (this->at(n));}
+		virtual ConfigurationSet& copyFromTo(int f, int t);
 	};
 
 
@@ -316,7 +317,7 @@ namespace Pareto {
 	class ConfigurationSet : public StorableObject {
 	public:
 		/// constructor of a set of configurations on configuration space 'cs' and with name 'n'
-		ConfigurationSet(const ConfigurationSpace* cs, const std::string n);
+		ConfigurationSet(const ConfigurationSpace& cs, const std::string n);
 
 		/// add a configuration to the set
 		void addConfiguration(const Configuration& c);
@@ -354,7 +355,7 @@ namespace Pareto {
 		SetOfConfigurations confs;
 		
 		/// reference to the configuration space of the configurations in this set.
-		const ConfigurationSpace* confspace;
+		const ConfigurationSpace& confspace;
 	};
 }
 

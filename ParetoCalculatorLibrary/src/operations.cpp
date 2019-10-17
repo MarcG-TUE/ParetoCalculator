@@ -90,8 +90,8 @@ POperation_Store::POperation_Store(const std::string& oname) : ParetoCalculatorO
 }
 
 void POperation_Store::executeOn(ParetoCalculator& c) {
-	const StorableObject* ob = c.pop();
-	StorableObject& nob = ob->copy();
+	const StorableObject& ob = c.pop();
+	StorableObject& nob = ob.copy();
 	nob.name = o;
 	c.store(nob);
 }
@@ -126,7 +126,7 @@ POperation_ProdCons::POperation_ProdCons(const std::string& pqname, const std::s
 void POperation_ProdCons::executeOn(ParetoCalculator& c) {
 	p_test = &p_quant;
 	c_test = &c_quant;
-	const ConfigurationSet& cs = *c.popConfigurationSet();
+	const ConfigurationSet& cs = c.popConfigurationSet();
 	ConfigurationSet& ncs = c.constraint(cs, &POperation_ProdCons::testConstraint);
 	c.push(ncs);
 }
@@ -149,7 +149,7 @@ POperation_Derived::POperation_Derived(const std::string& aqname, const std::str
 
 void POperation_Derived::executeOn(ParetoCalculator& c) {
 
-	const ConfigurationSet* cs = (c.popConfigurationSet());
+	const ConfigurationSet& cs = (c.popConfigurationSet());
 
 	// define new sum quantity type
 	std::ostringstream sqn;
@@ -158,19 +158,19 @@ void POperation_Derived::executeOn(ParetoCalculator& c) {
 
 	// build new configuration space
 	std::ostringstream sqsn;
-	sqsn << this->description() << " (" << cs->confspace->name << ")";
-	ConfigurationSpace* scs = new ConfigurationSpace(sqsn.str());
-	scs->addQuantitiesOf(*cs->confspace);
-	scs->addQuantity(*sqt);
+	sqsn << this->description() << " (" << cs.confspace.name << ")";
+	ConfigurationSpace& scs = *new ConfigurationSpace(sqsn.str());
+	scs.addQuantitiesOf(cs.confspace);
+	scs.addQuantity(*sqt);
 
 	// build new set of configurations
 	std::ostringstream sconfsn;
-	sconfsn << this->description() << " (" << cs->name << ", " << a_quant << ", " << b_quant << ")";
+	sconfsn << this->description() << " (" << cs.name << ", " << a_quant << ", " << b_quant << ")";
 
 	ConfigurationSet* sconfs = new ConfigurationSet(scs, sconfsn.str());
 
 	SetOfConfigurations::iterator i;
-	for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
+	for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
 		const Configuration& c = *i;
 		Configuration* scf = new Configuration(scs);
 		scf->addQuantitiesOf(c);
@@ -198,17 +198,17 @@ POperation_Aggregate::POperation_Aggregate(ListOfQuantityNames* ag_quants, std::
 void POperation_Aggregate::executeOn(ParetoCalculator& c)
 {
 	// get the configuratoin set to aggregate on
-	const ConfigurationSet* cs = (c.popConfigurationSet());
+	const ConfigurationSet& cs = (c.popConfigurationSet());
 
 	// define new aggregate quantity type
 	QuantityType_Real* sqt = new QuantityType_Real(this->newName);
 
 	// build new configuration space
 	std::ostringstream sqsn;
-	sqsn << "Aggregation" << " (" << cs->confspace->name << ")";
-	ConfigurationSpace* scs = new ConfigurationSpace(sqsn.str());
-	scs->addQuantitiesOf(*cs->confspace);
-	scs->addQuantity(*sqt);
+	sqsn << "Aggregation" << " (" << cs.confspace.name << ")";
+	ConfigurationSpace& scs = *new ConfigurationSpace(sqsn.str());
+	scs.addQuantitiesOf(cs.confspace);
+	scs.addQuantity(*sqt);
 
 	// build new set of configurations
 	std::ostringstream sconfsn;
@@ -219,11 +219,11 @@ void POperation_Aggregate::executeOn(ParetoCalculator& c)
 	std::vector<unsigned int> idx;
 	for (ListOfQuantityNames::iterator i = this->aggregate_quants->begin(); i != this->aggregate_quants->end(); i++) {
 		std::string& qn = *i;
-		idx.push_back(cs->confspace->indexOfQuantity(qn));
+		idx.push_back(cs.confspace.indexOfQuantity(qn));
 	}
 
 	SetOfConfigurations::iterator i;
-	for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
+	for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
 		const Configuration& cf = *i;
 		Configuration* scf = new Configuration(scs);
 		scf->addQuantitiesOf(cf);
@@ -303,9 +303,9 @@ POperation_Abstract::POperation_Abstract(ListOfQuantityNames* qnames) {
 }
 
 void POperation_Abstract::executeOn(ParetoCalculator& c) {
-	const ConfigurationSet* cs = (c.popConfigurationSet());
+	const ConfigurationSet& cs = (c.popConfigurationSet());
 	// Surely, this can be done a lot more efficiently...
-	c.push(*cs);
+	c.push(cs);
 	ListOfQuantityNames::iterator i;
 	for (i = this->lqn->begin(); i != this->lqn->end(); i++) {
 		c.push(*new StorableString(*i));
@@ -314,14 +314,13 @@ void POperation_Abstract::executeOn(ParetoCalculator& c) {
 }
 
 
-POperation_Hide::POperation_Hide(ListOfQuantityNames* qnames) {
-	this->lqn = qnames;
+POperation_Hide::POperation_Hide(ListOfQuantityNames& qnames): lqn(qnames) {
 }
 
 void POperation_Hide::executeOn(ParetoCalculator& c) {
-	const ConfigurationSet* cs = (c.popConfigurationSet());
+	const ConfigurationSet& cs = (c.popConfigurationSet());
 
-	c.push(*cs);
+	c.push(cs);
 	c.hide(lqn);
 }
 
@@ -351,11 +350,11 @@ bool POperation_Join::testConstraint(const Pareto::Configuration& c) {
 }
 
 void POperation_Join::executeOn(ParetoCalculator& c) {
-	const ConfigurationSet* csa = c.popConfigurationSet();
-	const ConfigurationSet* csb = c.popConfigurationSet();
-	if (csa == nullptr || csb == nullptr) {
+	if (c.stack.size() < 2) {
 		throw EParetoCalculatorError("Not enough configuration spaces on stack to perform join.");
 	}
+	const ConfigurationSet& csa = c.popConfigurationSet();
+	const ConfigurationSet& csb = c.popConfigurationSet();
 
 	qan.clear();
 	qbn.clear();
@@ -363,16 +362,16 @@ void POperation_Join::executeOn(ParetoCalculator& c) {
 	JoinMap::iterator i;
 
 	for (i = j_quants->begin(); i != j_quants->end(); i++) {
-		qan.push_back(csa->confspace->indexOfQuantity(i->first));
-		qbn.push_back(csb->confspace->indexOfQuantity(i->second) + (int)csa->confspace->quantities.size());
+		qan.push_back(csa.confspace.indexOfQuantity(i->first));
+		qbn.push_back(csb.confspace.indexOfQuantity(i->second) + (int)csa.confspace.quantities.size());
 	}
 
-	c.push(*csb);
-	c.push(*csa);
+	c.push(csb);
+	c.push(csa);
 	c.product();
 
-	const ConfigurationSet* cs = c.popConfigurationSet();
-	ConfigurationSet& ncs = c.constraint(*cs, &POperation_Join::testConstraint);
+	const ConfigurationSet& cs = c.popConfigurationSet();
+	ConfigurationSet& ncs = c.constraint(cs, &POperation_Join::testConstraint);
 	c.push(ncs);
 };
 
@@ -381,13 +380,13 @@ POperation_EfficientJoin::POperation_EfficientJoin(JoinMap* jqnamemap) {
 	this->j_quants = jqnamemap;
 }
 
-ConfigurationSet* recursiveEfficientJoin(ParetoCalculator& c, JoinMap* jqnamemap, const ConfigurationSet* A, const ConfigurationSet* B, ConfigurationSpace* productspace) {
-	if (jqnamemap->size() == 0) {
+ConfigurationSet& recursiveEfficientJoin(ParetoCalculator& c, JoinMap& jqnamemap, const ConfigurationSet& A, const ConfigurationSet& B, ConfigurationSpace& productspace) {
+	if (jqnamemap.size() == 0) {
 		// return the product of A and B
-		return &ParetoCalculator::productInSpace(*A, *B, productspace);
+		return ParetoCalculator::productInSpace(A, B, productspace);
 	}
-	else if (A->confs.size() == 0 || B->confs.size() == 0) {
-		ConfigurationSet* result = new ConfigurationSet(productspace, "result");
+	else if (A.confs.size() == 0 || B.confs.size() == 0) {
+		ConfigurationSet& result = *new ConfigurationSet(productspace, "result");
 		return result;
 	}
 	else {
@@ -439,11 +438,11 @@ ConfigurationSet* recursiveEfficientJoin(ParetoCalculator& c, JoinMap* jqnamemap
 }
 
 void POperation_EfficientJoin::executeOn(ParetoCalculator& c) {
-	const ConfigurationSet* const csa = c.popConfigurationSet();
-	const ConfigurationSet* const csb = c.popConfigurationSet();
+	const ConfigurationSet& csa = c.popConfigurationSet();
+	const ConfigurationSet& csb = c.popConfigurationSet();
 
-	ConfigurationSpace* productspace = csa->confspace->productWith(*(csb->confspace));
-	ConfigurationSet* result = recursiveEfficientJoin(c, this->j_quants, csa, csb, productspace);
+	ConfigurationSpace* productspace = csa.confspace->productWith(*(csb.confspace));
+	ConfigurationSet* result = recursiveEfficientJoin(c, this->j_quants, &csa, &csb, productspace);
 	c.push(*result);
 };
 
@@ -464,20 +463,20 @@ bool POperation_EfficientProdCons::default_match(const QuantityValue& vp, const 
 }
 
 void POperation_EfficientProdCons::executeOn(ParetoCalculator& c) {
-	const ConfigurationSet* const csc = c.popConfigurationSet();
-	const ConfigurationSet* const csp = c.popConfigurationSet();
+	const ConfigurationSet& csc = c.popConfigurationSet();
+	const ConfigurationSet& csp = c.popConfigurationSet();
 
-	if (!(csp->confspace->getQuantity(p_quant).isTotallyOrdered() && csc->confspace->getQuantity(c_quant).isTotallyOrdered())) {
+	if (!(csp.confspace->getQuantity(p_quant).isTotallyOrdered() && csc.confspace->getQuantity(c_quant).isTotallyOrdered())) {
 		throw EParetoCalculatorError("Dimensions must be totally ordered for efficient producer-consumer");
 	}
 
 	// To do: I'm computing products of spaces everywhere, make one method in ConfSpace class.
-	ConfigurationSpace* nspace = csp->confspace->productWith(*(csc->confspace));	
-	std::string name = "Producer-Consumer ( " + csp->name + ", " + csc->name + ", " + p_quant + ", " + c_quant + ")";
+	ConfigurationSpace* nspace = csp.confspace->productWith(*(csc.confspace));	
+	std::string name = "Producer-Consumer ( " + csp.name + ", " + csc.name + ", " + p_quant + ", " + c_quant + ")";
 	ConfigurationSet* ns = new ConfigurationSet(nspace, name);
 
-	IndexOnTotalOrderConfigurationSet ip(p_quant, csp);
-	IndexOnTotalOrderConfigurationSet ic(c_quant, csc);
+	IndexOnTotalOrderConfigurationSet ip(p_quant, &csp);
+	IndexOnTotalOrderConfigurationSet ic(c_quant, &csc);
 
 
 	unsigned int i = 0;
