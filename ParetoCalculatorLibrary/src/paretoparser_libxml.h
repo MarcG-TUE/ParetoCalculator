@@ -24,7 +24,7 @@
 
 //
 // Author: Marc Geilen, e-mail: m.c.w.geilen@tue.nl
-// Electronic Systems Group (ES), Faculty of Electrical Engineering,
+// Electronic Systems Group (ES), Department of Electrical Engineering,
 // Eindhoven University of Technology
 //
 // Description:
@@ -72,7 +72,7 @@ namespace Pareto {
 
 		ParetoCalculator* pc;
 
-		xmlXPathContextPtr xpathCtx = NULL;
+		xmlXPathContextPtr xpathCtx = nullptr;
 
 		ListOfQuantityNames* getListOfQuantityNames(xmlNodePtr pOperationNode);
 		JoinMap* getJoinMap(xmlNodePtr pOperationNode);

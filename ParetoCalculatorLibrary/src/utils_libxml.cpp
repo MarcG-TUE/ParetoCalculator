@@ -24,7 +24,7 @@
 
 //
 // Author: Marc Geilen, e-mail: m.c.w.geilen@tue.nl
-// Electronic Systems Group (ES), Faculty of Electrical Engineering,
+// Electronic Systems Group (ES), Department of Electrical Engineering,
 // Eindhoven University of Technology
 //
 // Description:
@@ -80,14 +80,14 @@ xmlXPathObjectPtr getNodeSetXPath(xmlDocPtr doc, xmlChar* xpath, xmlXPathContext
 	xmlXPathObjectPtr result;
 
 	result = xmlXPathEvalExpression(xpath, xpathCtx);
-	if (result == NULL) {
+	if (result == nullptr) {
 		printf("Error in xmlXPathEvalExpression\n");
-		return NULL;
+		return nullptr;
 	}
 	if (xmlXPathNodeSetIsEmpty(result->nodesetval)) {
 		xmlXPathFreeObject(result);
 		printf("No result\n");
-		return NULL;
+		return nullptr;
 	}
 	return result;
 }
@@ -100,14 +100,14 @@ xmlXPathObjectPtr getNodeSetXPathNode(xmlDocPtr doc, xmlNodePtr node, xmlChar* x
 
 	result = xmlXPathEvalExpression(xpath, xpathCtx);
 
-	if (result == NULL) {
+	if (result == nullptr) {
 		printf("Error in xmlXPathEvalExpression\n");
-		return NULL;
+		return nullptr;
 	}
 	if (xmlXPathNodeSetIsEmpty(result->nodesetval)) {
 		xmlXPathFreeObject(result);
 		printf("No result\n");
-		return NULL;
+		return nullptr;
 	}
 	return result;
 }
@@ -116,7 +116,7 @@ xmlNodePtr getNodeXPathNode(xmlDocPtr doc, xmlNodePtr node, xmlChar* xpath, xmlX
 {
 	xmlXPathObjectPtr nodeSet = getNodeSetXPathNode(doc, node, xpath, xpathCtx);
 	xmlNodeSetPtr resultset = nodeSet->nodesetval;
-	if (resultset->nodeNr == 0) return NULL;
+	if (resultset->nodeNr == 0) return nullptr;
 	xmlNodePtr result = resultset->nodeTab[0];
 	xmlXPathFreeObject(nodeSet);
 	return result;
@@ -141,7 +141,7 @@ std::string getNodeType(xmlNodePtr n) {
 bool hasNodeAttribute(xmlNodePtr n, xmlChar* attr) {
 
 	// porting, retrieve without namespace awareness for now
-	bool b = (xmlHasProp(n, attr) != NULL);
+	bool b = (xmlHasProp(n, attr) != nullptr);
 	return b;
 }
 

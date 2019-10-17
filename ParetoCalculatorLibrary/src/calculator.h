@@ -24,7 +24,7 @@
 
 //
 // Author: Marc Geilen, e-mail: m.c.w.geilen@tue.nl
-// Electronic Systems Group (ES), Faculty of Electrical Engineering,
+// Electronic Systems Group (ES), Department of Electrical Engineering,
 // Eindhoven University of Technology
 //
 // Description:
@@ -124,7 +124,7 @@ namespace Pareto {
 
 		/// reference to a StatusCallBack object. Use setStatusCallbackObject to register 
 		/// the object.
-		StatusCallback* statusObject;
+		StatusCallback* statusObject = nullptr;
 
 		/// Register a StatusCallBack object.
 		void setStatusCallbackObject(StatusCallback* o);
@@ -188,7 +188,7 @@ namespace Pareto {
 		void constraint(bool (*testConstraint)(const Configuration&));
 
 		// parsing
-		ParetoParser *parser;
+		ParetoParser *parser = nullptr;
 		
 		/// call this function before using the parser function below.
 		void initParser();

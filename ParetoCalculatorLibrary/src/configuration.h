@@ -24,7 +24,7 @@
 
 //
 // Author: Marc Geilen, e-mail: m.c.w.geilen@tue.nl
-// Electronic Systems Group (ES), Faculty of Electrical Engineering,
+// Electronic Systems Group (ES), Department of Electrical Engineering,
 // Eindhoven University of Technology
 //
 // Description:
@@ -137,12 +137,12 @@ namespace Pareto {
 
 		/// returns an arbitrary unordered quantity from the configuration space if one exists.
 		///
-		/// returns NULL otherwise
+		/// returns nullptr otherwise
 		const QuantityName* getUnorderedQuantity() const;
 
 		/// returns an arbitrary totally ordered quantity from the configuration space if one exists.
 		///
-		/// returns NULL otherwise
+		/// returns nullptr otherwise
 		const QuantityName* getTotallyOrderedQuantity() const;
 
 		/// retrieve the name of quantity number 'n'

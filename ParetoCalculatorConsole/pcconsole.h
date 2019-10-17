@@ -24,7 +24,7 @@
 
 //
 // Author: Marc Geilen, e-mail: m.c.w.geilen@tue.nl
-// Electronic Systems Group (ES), Faculty of Electrical Engineering,
+// Electronic Systems Group (ES), Department of Electrical Engineering,
 // Eindhoven University of Technology
 //
 // Description:
@@ -41,12 +41,15 @@
 namespace Pareto {
 
 
-
+	/// Provides interface to the Pareto Calculator for all functions used in the console app
+	/// Inherits from StatusCallback to deal with the information returned by the calculator
 	class PCConsole: StatusCallback
 	{
 	public:
+		// constructor, takes a stream to direct output to
 		PCConsole(std::ostream& outstr);
 
+		// Interface methods used by the application for processing xml input
 		void LoadFile(std::string filename);
 		void LoadQuantityTypes();
 		void LoadConfigurationSpaces();
@@ -54,15 +57,21 @@ namespace Pareto {
 		void LoadOperations();
 
 	private:
+
+		// stream to direct calculator output to
 		std::ostream& _outstr;
+
+		// the calculator that will do the work
 		ParetoCalculator _pc;
 
 	private:
+
 		/// called by the calculator to indicate the status of its activities
 		virtual void setStatus(const std::string& s);
+
 		/// called by the calculator to generate verbose stream description of what it is doing.
 		virtual void verbose(const std::string& s);
-	};
 
+	};
 
 }

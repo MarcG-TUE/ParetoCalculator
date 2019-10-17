@@ -24,7 +24,7 @@
 
 //
 // Author: Marc Geilen, e-mail: m.c.w.geilen@tue.nl
-// Electronic Systems Group (ES), Faculty of Electrical Engineering,
+// Electronic Systems Group (ES), Department of Electrical Engineering,
 // Eindhoven University of Technology
 //
 // Description:
@@ -41,8 +41,8 @@ using namespace Pareto;
 
 
 // Some C++ thing, making me initialise the static members in POperation_ProdCons here...
-std::string* POperation_ProdCons::p_test = NULL;
-std::string* POperation_ProdCons::c_test = NULL;
+std::string* POperation_ProdCons::p_test = nullptr;
+std::string* POperation_ProdCons::c_test = nullptr;
 std::vector<int> POperation_Join::qan;
 std::vector<int> POperation_Join::qbn;
 
@@ -353,7 +353,7 @@ bool POperation_Join::testConstraint(const Pareto::Configuration& c) {
 void POperation_Join::executeOn(ParetoCalculator& c) {
 	const ConfigurationSet* csa = c.popConfigurationSet();
 	const ConfigurationSet* csb = c.popConfigurationSet();
-	if (csa == NULL || csb == NULL) {
+	if (csa == nullptr || csb == nullptr) {
 		throw EParetoCalculatorError("Not enough configuration spaces on stack to perform join.");
 	}
 

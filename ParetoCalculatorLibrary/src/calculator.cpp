@@ -24,7 +24,7 @@
 
 //
 // Author: Marc Geilen, e-mail: m.c.w.geilen@tue.nl
-// Electronic Systems Group (ES), Faculty of Electrical Engineering,
+// Electronic Systems Group (ES), Department of Electrical Engineering,
 // Eindhoven University of Technology
 //
 // Description:
@@ -43,51 +43,61 @@ using namespace Pareto;
 
 
 ParetoCalculator::ParetoCalculator() {
-	statusObject = NULL;
-	parser = NULL;
 }
 
+// compute product of two configuration sets with the given (product-) consiguration space
 ConfigurationSet& ParetoCalculator::productInSpace(const ConfigurationSet& cs1, const ConfigurationSet& cs2, ConfigurationSpace* cspace) {
 
+	// create the result configuration set
 	ConfigurationSet* prod = new ConfigurationSet(cspace, "Product(" + cs1.name + ", " + cs2.name + ")");
-	SetOfConfigurations::iterator i;
+
+	// iterate over all configurations from both sets
+	SetOfConfigurations::const_iterator i;
 	for (i = cs1.confs.begin(); i != cs1.confs.end(); i++) {
 		const Configuration* c1 = &(*i);
-		SetOfConfigurations::iterator j;
+		SetOfConfigurations::const_iterator j;
 		for (j = cs2.confs.begin(); j != cs2.confs.end(); j++) {
 			const Configuration* c2 = &(*j);
+			
+			// create the new configuration
 			Configuration* c = new Configuration(cspace);
 			c->addQuantitiesOf(*c1);
 			c->addQuantitiesOf(*c2);
 			prod->addUniqueConfiguration(*c);
 		}
 	}
+	// return the result
 	return *prod;
 }
 
+// compute the product of two configuraiton sets
 ConfigurationSet& ParetoCalculator::product(const ConfigurationSet& cs1, const ConfigurationSet& cs2) {
 	// Create a configuration space
 	ConfigurationSpace* cspace = cs1.confspace->productWith(*(cs2.confspace));
+	// compute the configurations
 	return ParetoCalculator::productInSpace(cs1, cs2, cspace);
 }
 
-
+// apply constraint to a configuration set, i.e., compute the intersection of the sets
 ConfigurationSet& ParetoCalculator::constraint(const ConfigurationSet& cs1, const ConfigurationSet& cs2) {
-	// not yet tested!!!
-	// assumptions: 
-	// - ConfigurationSet is a sorted collection according to the order defined
-	//   as ConfigurationSpace::LexicographicCompare
+	// TODO: this is not yet tested!!!
+	// the following assumptions are made: 
+	// - ConfigurationSet is a sorted collection according to the order defined as ConfigurationSpace::LexicographicCompare
 	// - iterating over SetOfConfigurations provides the configurations in sorted order.
 
 	// Make a new set to hold the result
 	ConfigurationSet* res = new ConfigurationSet(cs1.confspace, "Constraint");
 
-	SetOfConfigurations::iterator i1 = cs1.confs.begin();
-	SetOfConfigurations::iterator i2 = cs2.confs.begin();
+	// make iterators for both sets
+	SetOfConfigurations::const_iterator i1 = cs1.confs.begin();
+	SetOfConfigurations::const_iterator i2 = cs2.confs.begin();
 
+	// while we have not traversed both sets to the end
 	while ((i1 != cs1.confs.end()) && (i2 != cs2.confs.end())) {
+		// get the current configurations
 		const Configuration& c1 = *i1;
 		const Configuration& c2 = *i2;
+
 		if (ConfigurationSpace::LexicographicCompare(c1, c2)) {
 			// forget c1
 			i1++;
@@ -105,37 +115,48 @@ ConfigurationSet& ParetoCalculator::constraint(const ConfigurationSet& cs1, cons
 	return *res;
 }
 
-
+// apply constraint given as a characteristing function of the configuration set of the constraint
 ConfigurationSet& ParetoCalculator::constraint(const ConfigurationSet& cs, bool (*testConstraint)(const Pareto::Configuration&)) {
+
+	// construct result configuration set
 	ConfigurationSet* res = new ConfigurationSet(cs.confspace, "Constraint");
-	SetOfConfigurations::iterator i;
+	SetOfConfigurations::const_iterator i;
 	for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
 		const Configuration& c = *i;
+		// add those configurations that pass the test
 		if ((*testConstraint)(c)) { res->addUniqueConfiguration(c); }
 	}
+	// return the result
 	return *res;
 }
 
+// compute the alternative (set union) of two configuration sets
 ConfigurationSet& ParetoCalculator::alternative(const ConfigurationSet& cs1, const ConfigurationSet& cs2) {
+	
+	// create the resulting set
 	ConfigurationSet* res = new ConfigurationSet(cs1.confspace, "Alternative");
 
-	SetOfConfigurations::iterator i;
+	// add all configurations of cs1
+	SetOfConfigurations::const_iterator i;
 	for (i = cs1.confs.begin(); i != cs1.confs.end(); i++) {
 		const Configuration& c = *i;
 		res->addUniqueConfiguration(c);
 	}
+	// add all configurations of cs2
 	for (i = cs2.confs.begin(); i != cs2.confs.end(); i++) {
 		Configuration* nc = new Configuration(res->confspace);
 		nc->addQuantitiesOf(*i);
 		res->addConfiguration(*nc);
 	}
+	// return the result
 	return *res;
 }
 
-
+// compute abstraction of configuration c in configuration space cs by abstracting quantity nr. n
 Pareto::Configuration& conf_abstraction(ConfigurationSpace* cs, const Pareto::Configuration& c, unsigned int n) {
 	Pareto::Configuration* nc = new Pareto::Configuration(cs);
 
+	// TODO: fix
 	// temporary fix for porting
 	Pareto::Configuration* d = const_cast<Pareto::Configuration*>(&c);
 
@@ -475,7 +496,7 @@ const ConfigurationSet* ParetoCalculator::efficient_minimize_filter4(const Confi
 	if (csa->confs.size() == 0) { return csb; }
 	if (csb->confs.size() == 0) { return csb; }
 
-	const QuantityValue* v = NULL, * w;
+	const QuantityValue* v = nullptr, * w;
 	if (csa->confs.size() == 0) return csb;
 	unsigned int n = csa->confspace->firstVisibleQuantity();
 	SetOfConfigurations::iterator i;
@@ -682,7 +703,7 @@ const StorableObject* ParetoCalculator::pop() //throw(EParetoCalculatorError)
 	}
 	else {
 		throw EParetoCalculatorError("Stack is empty in ParetoCalculator::pop()");
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -691,7 +712,7 @@ const ConfigurationSet* ParetoCalculator::popConfigurationSet() //throw(EParetoC
 	const StorableObject* so = this->pop();
 	if (!so->isConfigurationSet()) {
 		throw EParetoCalculatorError("Configuration set expected in ParetoCalculator::popConfigurationSet()");
-		return NULL;
+		return nullptr;
 	}
 	return dynamic_cast<const ConfigurationSet*>(so);
 }
@@ -703,7 +724,7 @@ const StorableObject* ParetoCalculator::peek() //throw(EParetoCalculatorError)
 	}
 	else {
 		throw EParetoCalculatorError("Stack is empty in ParetoCalculator::peek()");
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -805,7 +826,7 @@ void ParetoCalculator::setStatusCallbackObject(StatusCallback* o) {
 }
 
 void ParetoCalculator::initParser() {
-	if (parser == NULL) {
+	if (parser == nullptr) {
 		this->setStatus("Creating XML Parser");
 		this->verbose("Creating XML Parser\n");
 		parser = new ParetoParser(this);

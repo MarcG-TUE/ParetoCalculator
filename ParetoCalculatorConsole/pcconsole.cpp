@@ -24,7 +24,7 @@
 
 //
 // Author: Marc Geilen, e-mail: m.c.w.geilen@tue.nl
-// Electronic Systems Group (ES), Faculty of Electrical Engineering,
+// Electronic Systems Group (ES), Department of Electrical Engineering,
 // Eindhoven University of Technology
 //
 // Description:
@@ -38,6 +38,7 @@ namespace Pareto {
 
 	PCConsole::PCConsole(std::ostream& outstr): _outstr(outstr)
 	{
+		// tell the calculator to send it output to me
 		this->_pc.setStatusCallbackObject(this);
 	}
 
@@ -69,11 +70,11 @@ namespace Pareto {
 	// called by the calculator to indicate the status of its activities
 	void PCConsole::setStatus(const std::string& s)
 	{
-		std::cout << "[Status] " << s << std::endl;
+		this->_outstr << "[Status] " << s << std::endl;
 	}
 	// called by the calculator to generate verbose stream description of what it is doing.
 	void PCConsole::verbose(const std::string& s)
 	{
-		std::cout << s << std::endl;
+		this->_outstr << s << std::endl;
 	}
 }

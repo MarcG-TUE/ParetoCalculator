@@ -24,7 +24,7 @@
 
 //
 // Author: Marc Geilen, e-mail: m.c.w.geilen@tue.nl
-// Electronic Systems Group (ES), Faculty of Electrical Engineering,
+// Electronic Systems Group (ES), Department of Electrical Engineering,
 // Eindhoven University of Technology
 //
 // Description:
@@ -113,7 +113,7 @@ namespace Pareto {
 				return qn;
 			}
 		}
-		return NULL;
+		return nullptr;
 	}
 
 	const QuantityName* ConfigurationSpace::getTotallyOrderedQuantity() const {
@@ -127,7 +127,7 @@ namespace Pareto {
 				return qn;
 			}
 		}
-		return NULL;
+		return nullptr;
 	}
 
 

@@ -18,14 +18,6 @@ The ParetoCalculator needs the `libxml2` library to access XML files. This libra
 
 ### On Windows
 
-(1) Open the solution file in Visual Studio
-
-(2) Build the solution and run the `ParetoCalculatorUI` project
-
-(3) Use the calculator to run the examples in the `test` directory.
-
-Note that the project `ParetoCalculatorLibrary` creates a static library with all functionality for your own Pareto Algebra calculations
-
 See [README_WIN.md](README_WIN.md)
 
 ### On Linux

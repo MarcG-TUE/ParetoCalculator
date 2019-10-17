@@ -24,7 +24,7 @@
 
 //
 // Author: Marc Geilen, e-mail: m.c.w.geilen@tue.nl
-// Electronic Systems Group (ES), Faculty of Electrical Engineering,
+// Electronic Systems Group (ES), Department of Electrical Engineering,
 // Eindhoven University of Technology
 //
 // Description:
@@ -311,7 +311,7 @@ namespace Pareto {
 	}
 
 	QuantityValue& QuantityType_Real::valueFromString(const std::string s) const {
-		return *new QuantityValue_Real(*this, strtod(s.c_str(), NULL));
+		return *new QuantityValue_Real(*this, strtod(s.c_str(), nullptr));
 	}
 
 	bool QuantityType_Real::compare(const QuantityValue& q1, const QuantityValue& q2) const {

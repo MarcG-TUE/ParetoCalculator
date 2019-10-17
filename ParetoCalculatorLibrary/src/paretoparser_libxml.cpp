@@ -24,7 +24,7 @@
 
 //
 // Author: Marc Geilen, e-mail: m.c.w.geilen@tue.nl
-// Electronic Systems Group (ES), Faculty of Electrical Engineering,
+// Electronic Systems Group (ES), Department of Electrical Engineering,
 // Eindhoven University of Technology
 //
 // Description:
@@ -58,7 +58,7 @@ ParetoParser::ParetoParser(Pareto::ParetoCalculator* forPC)
 // load an xml file
 void ParetoParser::LoadFile(std::string f) {
 	pXMLDoc = xmlParseFile(f.c_str());
-	if (pXMLDoc == NULL) {
+	if (pXMLDoc == nullptr) {
 		pc->verbose("Document not parsed successfully. \n");
 	}
 	xpathCtx = xmlXPathNewContext(pXMLDoc);
@@ -82,7 +82,7 @@ void ParetoParser::LoadQuantityTypes() {
 			// for each quantity_definition node pQuantNode ...
 			xmlNodePtr pQuantNode = nodeset->nodeTab[i];
 
-			QuantityType* qn = NULL;
+			QuantityType* qn = nullptr;
 			std::string pTypeStr;
 			bool typeDetermined = false;
 
@@ -269,7 +269,7 @@ void ParetoParser::LoadOperations()
 	// Load the operations from XML document
 
 	// check if a document is loaded
-	if (pXMLDoc == NULL) {
+	if (pXMLDoc == nullptr) {
 		throw EParetoCalculatorError("No XML document loaded.");
 		return;
 	}
