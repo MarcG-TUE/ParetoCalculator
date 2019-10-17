@@ -38,7 +38,7 @@ namespace Pareto {
 
 	PCConsole::PCConsole(std::ostream& outstr): _outstr(outstr)
 	{
-		
+		this->_pc.setStatusCallbackObject(this);
 	}
 
 	void PCConsole::LoadFile(std::wstring filename)

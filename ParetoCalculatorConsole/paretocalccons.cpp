@@ -36,6 +36,7 @@
 #include "paretocalccons.h"
 
 #include <codecvt>
+#include <locale>
 
 using namespace Pareto;
 
@@ -52,20 +53,27 @@ int main(int argc, char* argv[])
 	typedef std::codecvt_utf8<wchar_t> convert_type;
 	std::wstring_convert<convert_type, wchar_t> converter;
 	std::wstring xmlfile = converter.from_bytes(argv[1]);
-	
-	// create Pareto Calculator
-	PCConsole PCC(std::cout);
 
-	// Read XML file
-	PCC.LoadFile(xmlfile);
+	std::wcout << L"Loading file: "<< xmlfile << std::endl;
 
-	// Process XML file
-	PCC.LoadQuantityTypes();
-	PCC.LoadConfigurationSpaces();
-	PCC.LoadConfigurationSets();
+	try {
+		// create Pareto Calculator
+		PCConsole PCC(std::cout);
 
-	// Execute operations
-	PCC.LoadOperations();
+		// Read XML file
+		PCC.LoadFile(xmlfile);
+
+		// Process XML file
+		PCC.LoadQuantityTypes();
+		PCC.LoadConfigurationSpaces();
+		PCC.LoadConfigurationSets();
+
+		// Execute operations
+		PCC.LoadOperations();
+	} 
+	catch (EParetoCalculatorError& e) {
+		std::cout << "An exception occured: " << e.errorMsg << std::endl;
+	}
 
 	return 0;
 }
