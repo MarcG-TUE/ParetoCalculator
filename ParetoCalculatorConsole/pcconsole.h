@@ -47,7 +47,7 @@ namespace Pareto {
 	public:
 		PCConsole(std::ostream& outstr);
 
-		void LoadFile(std::wstring filename);
+		void LoadFile(std::string filename);
 		void LoadQuantityTypes();
 		void LoadConfigurationSpaces();
 		void LoadConfigurationSets();

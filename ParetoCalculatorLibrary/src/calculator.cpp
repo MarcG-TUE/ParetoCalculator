@@ -812,7 +812,7 @@ void ParetoCalculator::initParser() {
 	}
 }
 
-void ParetoCalculator::LoadFile(const std::wstring& fn) {
+void ParetoCalculator::LoadFile(const std::string& fn) {
 	this->initParser();
 	this->setStatus("Loading XML input");
 	this->verbose("Loading XML input...");
@@ -854,7 +854,7 @@ void ParetoCalculator::LoadOperations() {
 }
 
 //#ifdef _MSC_VER
-void ParetoCalculator::SaveAllFile(const std::wstring& fn) {
+void ParetoCalculator::SaveAllFile(const std::string& fn) {
 	this->setStatus("Saving XML file");
 	this->verbose("Saving XML file...");
 	parser->SaveAll(fn);
@@ -862,7 +862,7 @@ void ParetoCalculator::SaveAllFile(const std::wstring& fn) {
 	this->verbose("saved\n");
 }
 
-void ParetoCalculator::SaveItemFile(const std::string& itemToSave, const std::wstring& fn) {
+void ParetoCalculator::SaveItemFile(const std::string& itemToSave, const std::string& fn) {
 	this->setStatus("Saving XML item ");
 	this->verbose("Saving XML item...");
 	parser->Save(itemToSave, fn);

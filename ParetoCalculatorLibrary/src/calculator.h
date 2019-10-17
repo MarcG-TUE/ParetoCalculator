@@ -194,7 +194,7 @@ namespace Pareto {
 		void initParser();
 
 		/// load an XML file 'fn' into memory
-		void LoadFile(const std::wstring& fn);
+		void LoadFile(const std::string& fn);
 
 		/// load the quantity types specified in the loaded XML file into memory
 		void LoadQuantityTypes();
@@ -205,11 +205,11 @@ namespace Pareto {
 		/// load the configuration sets specified in the loaded XML file into memory
 		void LoadConfigurationSets();
 
-		/// not yet implemented in the current version, sorry
+		/// load and execute operations
 		void LoadOperations();
 
-		void SaveAllFile(const std::wstring& fn);
-		void SaveItemFile(const std::string& itemToSave, const std::wstring& fn);
+		void SaveAllFile(const std::string& fn);
+		void SaveItemFile(const std::string& itemToSave, const std::string& fn);
 
 	private:
 		static ConfigurationSet* efficient_minimize_unordered(const ConfigurationSet* cs, const QuantityName& qn);

@@ -56,8 +56,8 @@ ParetoParser::ParetoParser(Pareto::ParetoCalculator* forPC)
 
 
 // load an xml file
-void ParetoParser::LoadFile(std::wstring f) {
-	pXMLDoc = xmlParseFile(wstring_to_string(f).c_str());
+void ParetoParser::LoadFile(std::string f) {
+	pXMLDoc = xmlParseFile(f.c_str());
 	if (pXMLDoc == NULL) {
 		pc->verbose("Document not parsed successfully. \n");
 	}
@@ -455,13 +455,13 @@ std::vector<QuantityType*>& ParetoParser::getQuantityTypes() {
 }
 
 
-void ParetoParser::SaveAll(std::wstring f)
+void ParetoParser::SaveAll(std::string f)
 {
 	throw EParetoCalculatorError("ParetoParser::SaveAll is not implemented yet!");
 }
 
 
-void ParetoParser::Save(std::string itemToSave, std::wstring f)
+void ParetoParser::Save(std::string itemToSave, std::string f)
 {
 	throw EParetoCalculatorError("ParetoParser::Save is not implemented yet!");
 }

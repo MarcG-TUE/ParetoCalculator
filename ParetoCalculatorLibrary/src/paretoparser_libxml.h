@@ -53,9 +53,9 @@ namespace Pareto {
 	public:
 		ParetoParser(ParetoCalculator* forPC);
 
-		void LoadFile(std::wstring f);
-		void SaveAll(std::wstring f);						// forget abourt saving for now
-		void Save(std::string itemToSave, std::wstring f);
+		void LoadFile(std::string f);
+		void SaveAll(std::string f);						// forget about saving for now
+		void Save(std::string itemToSave, std::string f);
 		void LoadQuantityTypes();
 		//void SaveQuantityTypes();
 		void LoadConfigurationSpaces();

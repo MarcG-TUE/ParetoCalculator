@@ -49,12 +49,9 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	// convert filename to wstring
-	typedef std::codecvt_utf8<wchar_t> convert_type;
-	std::wstring_convert<convert_type, wchar_t> converter;
-	std::wstring xmlfile = converter.from_bytes(argv[1]);
+	std::string xmlfile = argv[1];
 
-	std::wcout << L"Loading file: "<< xmlfile << std::endl;
+	std::cout << "Loading file: "<< xmlfile << std::endl;
 
 	try {
 		// create Pareto Calculator

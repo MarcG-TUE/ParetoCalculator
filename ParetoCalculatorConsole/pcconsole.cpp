@@ -41,7 +41,7 @@ namespace Pareto {
 		this->_pc.setStatusCallbackObject(this);
 	}
 
-	void PCConsole::LoadFile(std::wstring filename)
+	void PCConsole::LoadFile(std::string filename)
 	{
 		this->_pc.LoadFile(filename);
 	}
@@ -74,6 +74,6 @@ namespace Pareto {
 	// called by the calculator to generate verbose stream description of what it is doing.
 	void PCConsole::verbose(const std::string& s)
 	{
-		std::cout << "[Verb] " << s << std::endl;
+		std::cout << s << std::endl;
 	}
 }
