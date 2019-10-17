@@ -1,37 +1,18 @@
-What is the Pareto Calculator?
+# Pareto Calculator on Linux
 
-The Pareto Calculator V.1.0 is a library that implements Pareto
-Algebra [1]. You can find more information about Pareto Algebra and
-the calculator at http://www.es.ele.tue.nl/pareto
+_What is the Pareto Calculator?_
+
+See [README.md](README.md) for a description.
 
 ------------------------------------------------------------------
 
-How do I use / install it?
+## How do I use / install it on Linux with gcc?
 
 - Make sure your systems supports `cmake` and has the `libxml2` library installed
-- go to the main directory ParetoCalculator
+- go to the main directory `ParetoCalculator`
 - type: `cmake .`
 - type: `make`
-- a static library `ParetoCalculatorLibrary.a` should have been built.
+- a static library `ParetoCalculatorLibrary.a` should have been built in the `ParetoCalculatorLibrary` directory.
+- A small example application is built in the `ParetoCalculatorConsole` directory
+- Doxygen documentation is generated in the `doc` directory
 
-
-------------------------------------------------------------------
-
-Is there any documentation for the Pareto Calculator?
-
-Documentation for the library can be found at <http://www.es.ele.tue.nl/pareto>.
-
-------------------------------------------------------------------
-
-What license is used for the Pareto Calculator?
-
-The software is licensed under the MIT License.
-
-------------------------------------------------------------------
-
-CONTACT INFORMATION:
-   Marc Geilen <m.c.w.geilen@tue.nl>
-
-
-[1]M.C.W. Geilen, T. Basten, B.D. Theelen, R.H.J.M. Otten. An Algebra of Pareto Points.
-   Fundamenta Informaticae. 78(1):35-74, 2007. (Special issue with best papers of ACSD 2005.) � IOS Press.

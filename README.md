@@ -8,23 +8,29 @@ the calculator at <http://www.es.ele.tue.nl/pareto>
 
 ------------------------------------------------------------------
 
-How do I use / install it?
+## How do I use / install it?
+
+### Dependencies
+
+_Which software dependencies does SDF3 have?_
+
+The ParetoCalculator needs the `libxml2` library to access XML files. This library is available in most Linux distributions and Windows and Linux versions can be downloaded from [www.libxml2.org](www.libxml2.org).
 
 ### On Windows
 
 (1) Open the solution file in Visual Studio
 
-(2) Build the solution and run the ParetoCalculatorUI project
+(2) Build the solution and run the `ParetoCalculatorUI` project
 
-(3) Use the calculator to run the examples in the test directory.
+(3) Use the calculator to run the examples in the `test` directory.
 
-Note that the project ParetoCalculatorLibrary creates a static library with all functionality for your own Pareto Algebra calculations
+Note that the project `ParetoCalculatorLibrary` creates a static library with all functionality for your own Pareto Algebra calculations
 
 See [README_WIN.md](README_WIN.md)
 
 ### On Linux
 
-The static library with all Pareto Algebra operations can be compiled with Linux/gcc. There is currently no example application for gcc to illustrate its use.
+The static library with all Pareto Algebra operations can be compiled with Linux/gcc. The `ParetoCalculatorConsole` directory contains a small example application that uses the library.
 
 See [README_LINUX.md](README_LINUX.md)
 
