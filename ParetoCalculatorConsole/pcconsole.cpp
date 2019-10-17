@@ -66,4 +66,14 @@ namespace Pareto {
 		this->_pc.LoadOperations();
 	}
 
+	// called by the calculator to indicate the status of its activities
+	void PCConsole::setStatus(const std::string& s)
+	{
+		std::cout << "[Status] " << s << std::endl;
+	}
+	// called by the calculator to generate verbose stream description of what it is doing.
+	void PCConsole::verbose(const std::string& s)
+	{
+		std::cout << "[Verb] " << s << std::endl;
+	}
 }

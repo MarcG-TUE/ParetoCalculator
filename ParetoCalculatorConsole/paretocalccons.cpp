@@ -35,22 +35,37 @@
 #include "pcconsole.h"
 #include "paretocalccons.h"
 
+#include <codecvt>
+
 using namespace Pareto;
 
 int main(int argc, char* argv[])
 {
 
-	// get xml file from command line
-	std::wstring xmlfile = L"../test/betsy.xml";
+	if (argc != 2) {
+		std::cout << "Please provide an xml file to process." << std::endl;
+		std::cout << "Usage: ParetoCalculator <input_file>" << std::endl;
+		return -1;
+	}
 
+	// convert filename to wstring
+	typedef std::codecvt_utf8<wchar_t> convert_type;
+	std::wstring_convert<convert_type, wchar_t> converter;
+	std::wstring xmlfile = converter.from_bytes(argv[1]);
+	
+	// create Pareto Calculator
 	PCConsole PCC(std::cout);
 
+	// Read XML file
 	PCC.LoadFile(xmlfile);
+
+	// Process XML file
 	PCC.LoadQuantityTypes();
 	PCC.LoadConfigurationSpaces();
 	PCC.LoadConfigurationSets();
-	PCC.LoadOperations();
 
+	// Execute operations
+	PCC.LoadOperations();
 
 	return 0;
 }

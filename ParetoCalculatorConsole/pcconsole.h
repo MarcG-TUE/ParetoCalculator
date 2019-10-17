@@ -40,7 +40,9 @@
 
 namespace Pareto {
 
-	class PCConsole
+
+
+	class PCConsole: StatusCallback
 	{
 	public:
 		PCConsole(std::ostream& outstr);
@@ -54,6 +56,12 @@ namespace Pareto {
 	private:
 		std::ostream& _outstr;
 		ParetoCalculator _pc;
+
+	private:
+		/// called by the calculator to indicate the status of its activities
+		virtual void setStatus(const std::string& s);
+		/// called by the calculator to generate verbose stream description of what it is doing.
+		virtual void verbose(const std::string& s);
 	};
 
 
