@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<xs:schema targetNamespace="uri:pareto" xmlns="uri:pareto" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:simpleType name="quantitytype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="real" />
+      <xs:enumeration value="integer" />
+      <xs:enumeration value="enumeration" />
+      <xs:enumeration value="unordered" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="pareto_specification">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name" type="xs:string" maxOccurs="1" minOccurs="0">
+        </xs:element>
+        <xs:element name="description" type="xs:string" maxOccurs="1" minOccurs="0">
+        </xs:element>
+        <xs:element name="quantity_definitions" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="quantity_definition" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence minOccurs="0">
+                    <xs:element name="values">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="value" maxOccurs="unbounded" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="name" type="xs:string" use="required" />
+                  <xs:attribute name="type" type="quantitytype" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="configuration_spaces" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="space" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="quantity" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="referBy" type="xs:string" use="optional" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="name" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="configuration_sets" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="configuration_set" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="configurations">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="configuration" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="value" maxOccurs="unbounded" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="name" type="xs:string" use="required" />
+                  <xs:attribute name="space_id" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="calculation" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="join">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="between" maxOccurs="unbounded">
+                        <xs:complexType>
+                          <xs:attribute name="quanta" type="xs:string" />
+                          <xs:attribute name="quantb" type="xs:string" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="join_eff">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="between" maxOccurs="unbounded">
+                        <xs:complexType>
+                          <xs:attribute name="quanta" type="xs:string" />
+                          <xs:attribute name="quantb" type="xs:string" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="push">
+                  <xs:complexType>
+                    <xs:attribute name="name" type="xs:string" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="minimize" />
+                <xs:element name="minimize_eff" />
+                <xs:element name="pop" />
+                <xs:element name="duplicate" />
+                <xs:element name="print" />
+                <xs:element name="store">
+                  <xs:complexType>
+                    <xs:attribute name="name" type="xs:string" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="abstract">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="quant" maxOccurs="unbounded" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="hide">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="quant" maxOccurs="unbounded" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="aggregate">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="quant" maxOccurs="unbounded" />
+                      <xs:element name="name" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="product" />
+                <xs:element name="prodcons">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="producer_quant" />
+                      <xs:element name="consumer_quant" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="prodcons_eff">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="producer_quant" />
+                      <xs:element name="consumer_quant" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="rename_quant">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="from" />
+                      <xs:element name="to" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+              </xs:choice>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
