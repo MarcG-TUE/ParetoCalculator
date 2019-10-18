@@ -360,9 +360,9 @@ namespace Pareto {
 	}
 
 
-	void ConfigurationSet::addConfiguration(const Configuration& c) {
+	void ConfigurationSet::addConfiguration(ConfigurationPtr c) {
 #ifdef _DEBUG
-		if (&(c.confspace) != &(this->confspace)) {
+		if (c->confspace != this->confspace) {
 			throw EParetoCalculatorError("Error: configuration is of wrong type in ConfigurationSet::addConfiguration");
 		}
 #endif
@@ -476,9 +476,8 @@ namespace Pareto {
 	IndexOnTotalOrderConfigurationSet::IndexOnTotalOrderConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs) : IndexOnConfigurationSet(qn, cs) {
 		SetOfConfigurations::iterator i;
 		for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
-			ConfigurationIndexOnTotalOrderReference* r = new ConfigurationIndexOnTotalOrderReference(&(*i), this);
-			this->push_back(*r);
-			delete r;
+			ConfigurationIndexOnTotalOrderReference& r = *new ConfigurationIndexOnTotalOrderReference(*i, *this);
+			this->push_back(r);
 		}
 		std::sort(this->begin(), this->end());
 	}
@@ -560,9 +559,8 @@ namespace Pareto {
 	IndexOnUnorderedConfigurationSet::IndexOnUnorderedConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs) : IndexOnConfigurationSet(qn, cs) {
 		SetOfConfigurations::iterator i;
 		for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
-			ConfigurationIndexOnUnorderedReference* r = new ConfigurationIndexOnUnorderedReference(&(*i), this);
-			this->push_back(*r);
-			delete r;
+			ConfigurationIndexOnUnorderedReference& r = *new ConfigurationIndexOnUnorderedReference(*i, *this);
+			this->push_back(r);
 		}
 		std::sort(this->begin(), this->end());
 	}

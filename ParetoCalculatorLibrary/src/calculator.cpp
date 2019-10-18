@@ -32,6 +32,8 @@
 //
 
 #include "calculator.h"
+
+#include <memory>
 #include <sstream>
 #include <math.h>
 
@@ -46,63 +48,63 @@ ParetoCalculator::ParetoCalculator() {
 }
 
 // compute product of two configuration sets with the given (product-) consiguration space
-ConfigurationSet& ParetoCalculator::productInSpace(const ConfigurationSet& cs1, const ConfigurationSet& cs2, const ConfigurationSpace& cspace) {
+ConfigurationSetPtr ParetoCalculator::productInSpace(ConfigurationSetPtr cs1, const ConfigurationSetPtr cs2, ConfigurationSpacePtr cspace) {
 
 	// create the result configuration set
-	ConfigurationSet* prod = new ConfigurationSet(cspace, "Product(" + cs1.name + ", " + cs2.name + ")");
+	ConfigurationSetPtr prod = std::make_shared<ConfigurationSet>(cspace, "Product(" + cs1->name + ", " + cs2->name + ")");
 
 	// iterate over all configurations from both sets
 	SetOfConfigurations::const_iterator i;
-	for (i = cs1.confs.begin(); i != cs1.confs.end(); i++) {
-		const Configuration& c1 = (*i);
+	for (i = cs1->confs.begin(); i != cs1->confs.end(); i++) {
+		ConfigurationPtr c1 = *i;
 		SetOfConfigurations::const_iterator j;
-		for (j = cs2.confs.begin(); j != cs2.confs.end(); j++) {
-			const Configuration& c2 = (*j);
+		for (j = cs2->confs.begin(); j != cs2->confs.end(); j++) {
+			ConfigurationPtr c2 = *j;
 			
 			// create the new configuration
-			Configuration& c = *new Configuration(cspace);
-			c.addQuantitiesOf(c1);
-			c.addQuantitiesOf(c2);
+			ConfigurationPtr c = std::make_shared<Configuration>(cspace);
+			c->addQuantitiesOf(c1);
+			c->addQuantitiesOf(c2);
 			prod->addUniqueConfiguration(c);
 		}
 	}
 	// return the result
-	return *prod;
+	return prod;
 }
 
 // compute the product of two configuraiton sets
-ConfigurationSet& ParetoCalculator::product(const ConfigurationSet& cs1, const ConfigurationSet& cs2) {
+ConfigurationSetPtr ParetoCalculator::product(ConfigurationSetPtr cs1, ConfigurationSetPtr cs2) {
 	// Create a configuration space
-	ConfigurationSpace& cspace = cs1.confspace.productWith(cs2.confspace);
+	ConfigurationSpacePtr cspace = cs1->confspace->productWith(cs2->confspace);
 	// compute the configurations
 	return ParetoCalculator::productInSpace(cs1, cs2, cspace);
 }
 
 // apply constraint to a configuration set, i.e., compute the intersection of the sets
-ConfigurationSet& ParetoCalculator::constraint(const ConfigurationSet& cs1, const ConfigurationSet& cs2) {
+ConfigurationSetPtr ParetoCalculator::constraint(ConfigurationSetPtr cs1, ConfigurationSetPtr cs2) {
 	// TODO: this is not yet tested!!!
 	// the following assumptions are made: 
 	// - ConfigurationSet is a sorted collection according to the order defined as ConfigurationSpace::LexicographicCompare
 	// - iterating over SetOfConfigurations provides the configurations in sorted order.
 
 	// Make a new set to hold the result
-	ConfigurationSet* res = new ConfigurationSet(cs1.confspace, "Constraint");
+	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(cs1->confspace, "Constraint");
 
 	// make iterators for both sets
-	SetOfConfigurations::const_iterator i1 = cs1.confs.begin();
-	SetOfConfigurations::const_iterator i2 = cs2.confs.begin();
+	SetOfConfigurations::const_iterator i1 = cs1->confs.begin();
+	SetOfConfigurations::const_iterator i2 = cs2->confs.begin();
 
 	// while we have not traversed both sets to the end
-	while ((i1 != cs1.confs.end()) && (i2 != cs2.confs.end())) {
+	while ((i1 != cs1->confs.end()) && (i2 != cs2->confs.end())) {
 		// get the current configurations
-		const Configuration& c1 = *i1;
-		const Configuration& c2 = *i2;
+		ConfigurationPtr c1 = *i1;
+		ConfigurationPtr c2 = *i2;
 
-		if (ConfigurationSpace::LexicographicCompare(c1, c2)) {
+		if (ConfigurationSpace::LexicographicCompare(*c1, *c2)) {
 			// forget c1
 			i1++;
 		}
-		else if (ConfigurationSpace::LexicographicCompare(c2, c1)) {
+		else if (ConfigurationSpace::LexicographicCompare(*c2, *c1)) {
 			// forget c2
 			i2++;
 		}
@@ -112,101 +114,101 @@ ConfigurationSet& ParetoCalculator::constraint(const ConfigurationSet& cs1, cons
 			i1++; i2++;
 		}
 	}
-	return *res;
+	return res;
 }
 
 // apply constraint given as a characteristing function of the configuration set of the constraint
-ConfigurationSet& ParetoCalculator::constraint(const ConfigurationSet& cs, bool (*testConstraint)(const Pareto::Configuration&)) {
+ConfigurationSetPtr ParetoCalculator::constraint(ConfigurationSetPtr cs, bool (*testConstraint)(const Pareto::Configuration&)) {
 
 	// construct result configuration set
-	ConfigurationSet* res = new ConfigurationSet(cs.confspace, "Constraint");
+	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(cs->confspace, "Constraint");
 	SetOfConfigurations::const_iterator i;
-	for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
-		const Configuration& c = *i;
+	for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
+		ConfigurationPtr c = *i;
 		// add those configurations that pass the test
-		if ((*testConstraint)(c)) { res->addUniqueConfiguration(c); }
+		if ((*testConstraint)(*c)) { res->addUniqueConfiguration(c); }
 	}
 	// return the result
-	return *res;
+	return res;
 }
 
 // compute the alternative (set union) of two configuration sets
-ConfigurationSet& ParetoCalculator::alternative(const ConfigurationSet& cs1, const ConfigurationSet& cs2) {
+ConfigurationSetPtr ParetoCalculator::alternative(ConfigurationSetPtr cs1, ConfigurationSetPtr cs2) {
 	
 	// create the resulting set
-	ConfigurationSet* res = new ConfigurationSet(cs1.confspace, "Alternative");
+	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(cs1->confspace, "Alternative");
 
 	// add all configurations of cs1
 	SetOfConfigurations::const_iterator i;
-	for (i = cs1.confs.begin(); i != cs1.confs.end(); i++) {
-		const Configuration& c = *i;
+	for (i = cs1->confs.begin(); i != cs1->confs.end(); i++) {
+		ConfigurationPtr c = *i;
 		res->addUniqueConfiguration(c);
 	}
 	// add all configurations of cs2
-	for (i = cs2.confs.begin(); i != cs2.confs.end(); i++) {
-		Configuration* nc = new Configuration(res->confspace);
+	for (i = cs2->confs.begin(); i != cs2->confs.end(); i++) {
+		ConfigurationPtr nc = std::make_shared<Configuration>(res->confspace);
 		nc->addQuantitiesOf(*i);
-		res->addConfiguration(*nc);
+		res->addConfiguration(nc);
 	}
 	// return the result
-	return *res;
+	return res;
 }
 
 // compute abstraction of configuration c in configuration space cs by abstracting quantity nr. n
-Configuration& conf_abstraction(const ConfigurationSpace& cs, const Pareto::Configuration& c, unsigned int n) {
+ConfigurationPtr conf_abstraction(ConfigurationSpacePtr cs, ConfigurationPtr c, unsigned int n) {
 
-	Pareto::Configuration& nc = *new Pareto::Configuration(cs);
+	ConfigurationPtr nc = std::make_shared<Configuration>(cs);
 
 	// copy all quantities, except n
 	ListOfQuantityValues::const_iterator i;
 	unsigned int k = 0;
-	for (i = c.quantities.begin(); i != c.quantities.end(); i++, k++) {
+	for (i = c->quantities.begin(); i != c->quantities.end(); i++, k++) {
 		if (k != n) {
-			nc.addQuantity(c.getQuantity(k));
+			nc->addQuantity(c->getQuantity(k));
 		}
 	}
 	return nc;
 }
 
 // compute abstraction of a configuration set by removing quantity number n
-ConfigurationSet& ParetoCalculator::abstraction(const ConfigurationSet& cs, unsigned int n) {
+ConfigurationSetPtr ParetoCalculator::abstraction(ConfigurationSetPtr cs, unsigned int n) {
 
 	// Create a configuration space
-	ConfigurationSpace& cspace = *new ConfigurationSpace("Abstract(" + cs.confspace.name + "," + cs.confspace.nameOfQuantityNr(n) + ")");
+	ConfigurationSpacePtr cspace = std::make_shared<ConfigurationSpace>("Abstract(" + cs->confspace->name + "," + cs->confspace->nameOfQuantityNr(n) + ")");
 
 	// create the new configurarion space
 	unsigned int k = 0;
-	for (ListOfQuantityTypes::const_iterator i = cs.confspace.quantities.begin(); i != cs.confspace.quantities.end(); i++, k++) {
+	for (ListOfQuantityTypes::const_iterator i = cs->confspace->quantities.begin(); i != cs->confspace->quantities.end(); i++, k++) {
 		if (k != n) {
-			cspace.addQuantityAsVisibility(*(*i), cs.confspace.nameOfQuantityNr(k), cs.confspace.quantityVisibility[k]);
+			cspace->addQuantityAsVisibility(*(*i), cs->confspace->nameOfQuantityNr(k), cs->confspace->quantityVisibility[k]);
 		}
 	}
 
 	// create the new configureation set
-	ConfigurationSet& res = *new ConfigurationSet(cspace, ("Abstraction(" + cs.name + ", ").append(n, 'a') + ")");
+	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(cspace, ("Abstraction(" + cs->name + ", ").append(n, 'a') + ")");
 
 	// add the configurations
 	SetOfConfigurations::const_iterator i;
-	for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
-		const Configuration& nc = conf_abstraction(cspace, (*i), n);
-		res.addConfiguration(nc);
+	for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
+		ConfigurationPtr nc = conf_abstraction(cspace, (*i), n);
+		res->addConfiguration(nc);
 	}
 	return res;
 }
 
 // abstract configuration set cs from quantity named s, s being a StorableString
-ConfigurationSet& ParetoCalculator::abstraction(const ConfigurationSet& cs, const StorableString& s) {
+ConfigurationSetPtr ParetoCalculator::abstraction(ConfigurationSetPtr cs, const StorableString& s) {
 	return ParetoCalculator::abstraction(cs, s.name);
 }
 
 // abstract configuration set cs from quantity named qn, qn being a QuantityName
-ConfigurationSet& ParetoCalculator::abstraction(const ConfigurationSet& cs, const QuantityName& qn) {
+ConfigurationSetPtr ParetoCalculator::abstraction(ConfigurationSetPtr cs, const QuantityName& qn) {
 	// check if there is a quantity named qn
-	if (!cs.confspace.includesQuantityNamed(qn)) {
+	if (!cs->confspace->includesQuantityNamed(qn)) {
 		throw EParetoCalculatorError("Quantity " + qn + "does not exist in ParetoCalculator::abstraction");
 	}
 	// find the index of quantity qn
-	unsigned int n = cs.confspace.quantityNames.at(qn);
+	unsigned int n = cs->confspace->quantityNames.at(qn);
 	// abstract the index
 	return ParetoCalculator::abstraction(cs, n);
 }
@@ -215,10 +217,10 @@ ConfigurationSet& ParetoCalculator::abstraction(const ConfigurationSet& cs, cons
 void ParetoCalculator::abstract(void) {
 	// pop the quantity name from the stack
 	try {
-		const StorableString& ss = this->popStorableString();
+		StorableStringPtr ss = this->popStorableString();
 		// pop the configuration set to abstrat
-		const ConfigurationSet& cs = this->popConfigurationSet();
-		this->push(this->abstraction(cs, ss));
+		ConfigurationSetPtr cs = this->popConfigurationSet();
+		this->push(this->abstraction(cs, *ss));
 	}
 	catch (EParetoCalculatorError &) {
 		throw EParetoCalculatorError("Abstraction requires quantity name and configuration set on the stack");
@@ -227,30 +229,30 @@ void ParetoCalculator::abstract(void) {
 
 // hide all quantities from list lqn 
 void ParetoCalculator::hide(ListOfQuantityNames& lqn) {
-	const StorableObject& so = this->pop();
-	if (!so.isConfigurationSet()) {
+	StorableObjectPtr so = this->pop();
+	if (!so->isConfigurationSet()) {
 		throw EParetoCalculatorError("Hiding requires a configuration set on the stack");
 		return;
 	}
-	const ConfigurationSet& cs = dynamic_cast<const ConfigurationSet&>(so);
-	ConfigurationSet& ncs = ParetoCalculator::hiding(cs, lqn);
+	ConfigurationSetPtr cs = std::dynamic_pointer_cast<ConfigurationSet>(so);
+	ConfigurationSetPtr ncs = ParetoCalculator::hiding(cs, lqn);
 	this->push(ncs);
 }
 
-ConfigurationSet& ParetoCalculator::hiding(const ConfigurationSet& cs, const ListOfQuantityNames& lqn) {
-	const ConfigurationSpace& csp = cs.confspace.hide(lqn);
-	std::string nm = "Hide of " + cs.name;
-	ConfigurationSet& ncs = *new ConfigurationSet(csp, nm);
+ConfigurationSetPtr ParetoCalculator::hiding(ConfigurationSetPtr cs, const ListOfQuantityNames& lqn) {
+	ConfigurationSpacePtr csp = cs->confspace->hide(lqn);
+	std::string nm = "Hide of " + cs->name;
+	ConfigurationSetPtr ncs = std::make_shared<ConfigurationSet>(csp, nm);
 	SetOfConfigurations::iterator i;
-	for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
-		Configuration& cf = *new Configuration(csp);
-		cf.addQuantitiesOf(*i);
-		ncs.addConfiguration(cf);
+	for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
+		ConfigurationPtr cf = std::make_shared<Configuration>(csp);
+		cf->addQuantitiesOf(*i);
+		ncs->addConfiguration(cf);
 	}
 	return ncs;
 }
 
-ConfigurationSet& ParetoCalculator::hiding(const ConfigurationSet& cs, const QuantityName& qn) {
+ConfigurationSetPtr ParetoCalculator::hiding(ConfigurationSetPtr cs, const QuantityName& qn) {
 	ListOfQuantityNames lqn;
 	lqn.push_back(qn);
 	return ParetoCalculator::hiding(cs, lqn);
@@ -258,21 +260,21 @@ ConfigurationSet& ParetoCalculator::hiding(const ConfigurationSet& cs, const Qua
 
 
 
-ConfigurationSet& ParetoCalculator::minimize(const ConfigurationSet& cs) {
+ConfigurationSetPtr ParetoCalculator::minimize(ConfigurationSetPtr cs) {
 	// The naive way
 
-	ConfigurationSet* res = new ConfigurationSet(cs.confspace, "min(" + cs.name + ")");
+	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(cs->confspace, "min(" + cs->name + ")");
 
 	// Note that the following gives a copy of the set of configurations
-	SetOfConfigurations confs = cs.confs;
+	SetOfConfigurations confs = cs->confs;
 
 	// invariants of the loop: 
 	// - the union of confs and res is Pareto equivalent to the original set cs.confs
 	// - res in Pareto minimal
 	while (!confs.empty()) {
 		// remove arbitrary element from the set
-		SetOfConfigurations::iterator cfp = confs.begin();
-		Configuration c = *cfp;
+		SetOfConfigurations::const_iterator cfp = confs.begin();
+		ConfigurationPtr c = std::make_shared<Configuration>(*cfp);
 		confs.erase(cfp);
 
 		// walk throught the other configurations
@@ -281,8 +283,8 @@ ConfigurationSet& ParetoCalculator::minimize(const ConfigurationSet& cs) {
 		// set that c dominates.
 		SetOfConfigurations::iterator i = confs.begin();
 		while (i != confs.end()) {
-			const Configuration& cc = *i;
-			if (c <= cc) { // remove cc as it is dominated and continue
+			ConfigurationPtr cc = *i;
+			if (*c <= *cc) { // remove cc as it is dominated and continue
 				// for port to linux, which does not support (apparently) the erase returning a new iterator
 				// some people on the internet claim the following code is safe.
 				SetOfConfigurations::iterator j;
@@ -292,10 +294,12 @@ ConfigurationSet& ParetoCalculator::minimize(const ConfigurationSet& cs) {
 				i = j;
 			}
 			else {
-				if (cc <= c) {
+				if (*cc <= *c) {
 					// forget about c, it is dominated by cc. Continue with cc, but 
 					// start from the beginning to make sure all points it dominates will be removed.
-					c = cc;
+					ConfigurationPtr nc = std::make_shared<Configuration>(cc);
+					//delete c;
+					c = nc;
 					confs.erase(i);
 					i = confs.begin();
 				}
@@ -304,62 +308,62 @@ ConfigurationSet& ParetoCalculator::minimize(const ConfigurationSet& cs) {
 		}
 		res->addUniqueConfiguration(c);
 	}
-	return *res;
+	return res;
 }
 
-ConfigurationSet& ParetoCalculator::minimize_SC(ConfigurationSet& cs) {
+ConfigurationSetPtr ParetoCalculator::minimize_SC(ConfigurationSetPtr cs) {
 	// Simple Cull
 
-	ConfigurationSet* res = new ConfigurationSet(cs.confspace, "min(" + cs.name + ")");
+	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(cs->confspace, "min(" + cs->name + ")");
 
 	SetOfConfigurations::iterator i;
-	for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
-		const Configuration& c = *i;
+	for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
+		ConfigurationPtr c = *i;
 		res->addConfigurationAndFilter(c);
 	}
-	return *res;
+	return res;
 }
 
-ConfigurationSet& ParetoCalculator::efficient_minimize_unordered(const ConfigurationSet& cs, const QuantityName& qn) {
-	ConfigurationSet& res = *new ConfigurationSet(cs.confspace, "min(" + cs.name + ")");
+ConfigurationSetPtr ParetoCalculator::efficient_minimize_unordered(ConfigurationSetPtr cs, const QuantityName& qn) {
+	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(cs->confspace, "min(" + cs->name + ")");
 
 	// split confset into classes with same value for qn
-	ListOfConfSet& cls = splitClasses(cs, qn);
+	ListOfConfSetPtr cls = splitClasses(cs, qn);
 
 	// minimize each class separately and add to result
 	ListOfConfSet::iterator i;
-	for (i = cls.begin(); i != cls.end(); i++) {
-		ConfigurationSet& cx = *i;
+	for (i = cls->begin(); i != cls->end(); i++) {
+		ConfigurationSetPtr cx = *i;
 
 		// abstract from quantity qn
-		ConfigurationSet& cxa = ParetoCalculator::abstraction(cx, qn);
+		ConfigurationSetPtr cxa = ParetoCalculator::abstraction(cx, qn);
 
 		//minimize *i after abstraction of qn
-		const ConfigurationSet& mcxa = ParetoCalculator::efficient_minimize(cxa);
+		ConfigurationSetPtr mcxa = ParetoCalculator::efficient_minimize(cxa);
 
 		//add configurations of the result after adding qn again
 
 		// add all configurations of mcxa
-		unsigned int p = cs.confspace.indexOfQuantity(qn);
+		unsigned int p = cs->confspace->indexOfQuantity(qn);
 		SetOfConfigurations::iterator j;
-		for (j = mcxa.confs.begin(); j != mcxa.confs.end(); j++) {
-			Configuration& c = *new Configuration(cs.confspace);
-			const Configuration& c_mcxa = *j;
-			const QuantityValue& x = (*cx.confs.begin()).getQuantity(p);
+		for (j = mcxa->confs.begin(); j != mcxa->confs.end(); j++) {
+			ConfigurationPtr c = std::make_shared<Configuration>(cs->confspace);
+			ConfigurationPtr c_mcxa = *j;
+			const QuantityValue& x = (*cx->confs.begin())->getQuantity(p);
 			//c-> add quantities with x at the right place ....
-			for (unsigned int k = 0; k < mcxa.confspace.quantities.size(); k++) {
-				if (k == p) c.addQuantity(x);
-				c.addQuantity(c_mcxa.getQuantity(k));
+			for (unsigned int k = 0; k < mcxa->confspace->quantities.size(); k++) {
+				if (k == p) c->addQuantity(x);
+				c->addQuantity(c_mcxa->getQuantity(k));
 			}
-			res.addConfiguration(c);
+			res->addConfiguration(c);
 		}
 	}
 	return res;
 }
 
 
-ListOfConfSet& ParetoCalculator::splitClasses(const ConfigurationSet& cs, const QuantityName& qn) {
-	ListOfConfSet& lcs = *new ListOfConfSet();
+ListOfConfSetPtr ParetoCalculator::splitClasses(ConfigurationSetPtr cs, const QuantityName& qn) {
+	ListOfConfSetPtr lcs = std::make_shared<ListOfConfSet>();
 
 	//	create unordered index on cs,qn
 	IndexOnUnorderedConfigurationSet i(qn, cs);
@@ -370,46 +374,46 @@ ListOfConfSet& ParetoCalculator::splitClasses(const ConfigurationSet& cs, const 
 		ConfigurationIndexReference& r = i.at(k);
 		l = i.lower(r);
 		u = i.upper(r);
-		ConfigurationSet& ncs = *new ConfigurationSet(cs.confspace, "class " + r.value().asString());
+		ConfigurationSetPtr ncs = std::make_shared<ConfigurationSet>(cs->confspace, "class " + r.value().asString());
 		for (unsigned int n = l; n <= u; n++) {
-			ncs.addConfiguration(i.at(n).conf);
+			ncs->addConfiguration(i.at(n).conf);
 		}
-		lcs.push_back(ncs);
+		lcs->push_back(ncs);
 		k = u + 1;
 	}
 	return lcs;
 }
 
 
-const ConfigurationSet& ParetoCalculator::efficient_minimize_filter1(const ConfigurationSet& csl, const ConfigurationSet& csh, const QuantityName& qn) {
+ConfigurationSetPtr ParetoCalculator::efficient_minimize_filter1(ConfigurationSetPtr csl, ConfigurationSetPtr csh, const QuantityName& qn) {
 	// assume: csl is minimal set of configurations and csh is minimal set of configurations. Return 
 	// set of configurations with configurations from csh removed that are strictly dominated by configurations
 	// of csl.
 		// note: there cannot be any unordered quantities
 
-	if (csl.confs.size() == 0) { return csh; }
-	if (csh.confs.size() == 0) { return csh; }
+	if (csl->confs.size() == 0) { return csh; }
+	if (csh->confs.size() == 0) { return csh; }
 
-	ConfigurationSet& csla = ParetoCalculator::hiding(csl, qn);
-	ConfigurationSet& csha = ParetoCalculator::hiding(csh, qn);
-	const ConfigurationSet& filtered = ParetoCalculator::efficient_minimize_filter2(csla, csha);
-	ConfigurationSet& res = *new ConfigurationSet(csl.confspace, "temp");
+	ConfigurationSetPtr csla = ParetoCalculator::hiding(csl, qn);
+	ConfigurationSetPtr csha = ParetoCalculator::hiding(csh, qn);
+	ConfigurationSetPtr filtered = ParetoCalculator::efficient_minimize_filter2(csla, csha);
+	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(csl->confspace, "temp");
 	SetOfConfigurations::iterator i;
-	for (i = filtered.confs.begin(); i != filtered.confs.end(); i++) {
-		Configuration& c = *new Configuration(res.confspace);
-		c.addQuantitiesOf(*i);
-		res.addConfiguration(c);
+	for (i = filtered->confs.begin(); i != filtered->confs.end(); i++) {
+		ConfigurationPtr c = std::make_shared<Configuration>(res->confspace);
+		c->addQuantitiesOf(*i);
+		res->addConfiguration(c);
 	}
 
 	return res;
 }
 
-const QuantityValue& ParetoCalculator::efficient_minimize_getPivot(const ConfigurationSet& cs, const QuantityName& qn) {
+const QuantityValue& ParetoCalculator::efficient_minimize_getPivot(ConfigurationSetPtr cs, const QuantityName& qn) {
 	IndexOnTotalOrderConfigurationSet i = IndexOnTotalOrderConfigurationSet(qn, cs);
-	return i.at(i.size() / 2).conf.getQuantity(qn);
+	return i.at(i.size() / 2).conf->getQuantity(qn);
 }
 
-void ParetoCalculator::efficient_minimize_filter_split(const ConfigurationSet& cs, const QuantityName& qn, const QuantityValue& pivot, ConfigurationSet** csl, ConfigurationSet** csh) {
+void ParetoCalculator::efficient_minimize_filter_split(ConfigurationSetPtr cs, const QuantityName& qn, const QuantityValue& pivot, ConfigurationSet** csl, ConfigurationSet** csh) {
 	IndexOnTotalOrderConfigurationSet i = IndexOnTotalOrderConfigurationSet(qn, cs);
 	*csl = new ConfigurationSet(cs.confspace, "temp");
 	*csh = new ConfigurationSet(cs.confspace, "temp");
@@ -657,7 +661,7 @@ const QuantityType& ParetoCalculator::retrieveQuantityType(const std::string& on
 }
 
 
-void ParetoCalculator::push(const StorableObject& o) {
+void ParetoCalculator::push(const StorableObjectPtr o) {
 	stack.push(o);
 }
 

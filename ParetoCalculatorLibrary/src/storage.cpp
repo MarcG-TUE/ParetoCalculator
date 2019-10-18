@@ -38,8 +38,9 @@
 
 namespace Pareto {
 
-	StorableObject::StorableObject(std::string n){
-		name=n;
+	StorableObject::StorableObject(std::string n) : 
+		name(n)
+	{
 	}
 
 

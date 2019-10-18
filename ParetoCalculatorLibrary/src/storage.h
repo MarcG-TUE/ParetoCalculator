@@ -32,6 +32,10 @@
 // (dictionary).
 //
 
+// - objects are shared by reference using shared_ptr 
+// - objects should therefore be immutable
+
+
 #ifndef PARETO_STORAGE_H
 #define PARETO_STORAGE_H
 
@@ -50,9 +54,6 @@ namespace Pareto {
 	public:
 		StorableObject(std::string n);
 		virtual ~StorableObject(){};
-		
-		/// name of the object
-        std::string name;
 
 		virtual void streamOn(std::ostream& os) const;
         std::string& asString(void) const;
@@ -73,18 +74,26 @@ namespace Pareto {
 
 		/// copy the object
 		virtual StorableObject& copy(void) const = 0;
+
+		// public member variables
+
+		/// name of the object
+		const std::string name;
+
 	};
 
+	// define a shared pointer to a storable object
 	typedef std::shared_ptr<const StorableObject> StorableObjectPtr;
 
-	class StorageMap : public std::map<const std::string,const StorableObject*>{};
+	/// Storage Map is a mapping between names (strings) and (pointers to) storable objects
+	class StorageMap : public std::map<const std::string,const StorableObjectPtr>{};
 
 	/// A string that can be stored in calculator storage
 	class StorableString : public StorableObject {
 	public:
 		StorableString(std::string n): StorableObject(n){};
 		virtual void streamOn(std::ostream& os) const { os << name ;}
-        std::string& asString(void){return name;}
+        const std::string& asString(void){return name;}
 		virtual bool isConfigurationSet(void) const {return false;}
 		virtual bool isConfigurationSpace(void) const {return false;}
 		virtual bool isQuantityType(void) const {return false;}
@@ -92,11 +101,13 @@ namespace Pareto {
 		virtual StorableObject& copy(void) const;
 	};
 
+	typedef std::shared_ptr<const StorableString> StorableStringPtr;
 
+	// stream an object
     std::ostream& operator<<(std::ostream& os, const StorableObject& o);
 
 	/// A stack of StorableObjects
-	class StackOfStorageObjects: public std::vector<std::shared_ptr<const StorableObject>>{
+	class StackOfStorageObjects: public std::vector<StorableObjectPtr>{
 	public:
 		StorableObjectPtr pop(void);
 		void push(StorableObjectPtr o);

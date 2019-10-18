@@ -119,7 +119,7 @@ namespace Pareto {
 		void addQuantitiesOf(const ConfigurationSpace& cs);
 
 		/// create a product configuration space
-		ConfigurationSpace& productWith(const ConfigurationSpace& cs) const;
+		ConfigurationSpacePtr productWith(ConfigurationSpacePtr cs) const;
 
 		/// test if the configuration space includes a quantity by the name 'qn'
 		bool includesQuantityNamed(const QuantityName& qn) const;
@@ -154,16 +154,16 @@ namespace Pareto {
 		const unsigned int firstVisibleQuantity() const;
 
 		/// generates a NEW configuration space in which quantity 'qn' is hidden
-		ConfigurationSpace& hide(const QuantityName& qn);
+		ConfigurationSpacePtr hide(const QuantityName& qn);
 
 		/// generates a NEW configuration space in which quantities 'lqn' are hidden
-		ConfigurationSpace& hide(const ListOfQuantityNames& lqn) const;
+		ConfigurationSpacePtr hide(const ListOfQuantityNames& lqn) const;
 
 		/// generates a NEW configuration space in which quantity 'qn' is unhidden
-		ConfigurationSpace& unhide(const QuantityName& qn) const;
+		ConfigurationSpacePtr unhide(const QuantityName& qn) const;
 
 		/// generates a NEW configuration space in which quantities 'lqn' are unhidden
-		ConfigurationSpace& unhide(const ListOfQuantityNames &lqn) const;
+		ConfigurationSpacePtr unhide(const ListOfQuantityNames &lqn) const;
 
 		/// stream a string representation of the configuration space to 'os'
 		virtual void streamOn(std::ostream& os) const;
@@ -181,6 +181,9 @@ namespace Pareto {
 
 	};
 
+	/// Pointer to ConfigurationSpace
+	typedef std::shared_ptr<ConfigurationSpace> ConfigurationSpacePtr;
+
 	bool operator!=(ConfigurationSpace& cs1, ConfigurationSpace& cs2);
 
 	// An STL vector of QuantityValues
@@ -192,12 +195,15 @@ namespace Pareto {
 	/// A configuration is an element of a configuration space.
 	/// The member 'confspace' refers to this space
 	class Configuration{
+
+	// public member variables
 	public:
 		/// The member 'confspace' refers to this space
-		const ConfigurationSpace& confspace;
+		ConfigurationSpacePtr confspace;
 		/// 'quantities' is a list of quantity values that defines the configuration.
 		ListOfQuantityValues quantities;
 
+	public:
 		/// Use ConfigurationSpace::newConfiguration() to create configurations!
 		Configuration(const ConfigurationSpace& cs);
 
@@ -207,7 +213,7 @@ namespace Pareto {
 		virtual void addQuantity(const QuantityValue& q);
 
 		// Copy quantity values of another configurwtion to this configuration
-		virtual void addQuantitiesOf(const Configuration& c);
+		virtual void addQuantitiesOf(ConfigurationPtr c);
 
 		/// retrieve quantity value of quantity with index number 'n'
 		virtual const QuantityValue& getQuantity(const unsigned int n) const;
@@ -225,6 +231,8 @@ namespace Pareto {
         std::string& asString();
 	};
 
+	typedef std::shared_ptr<Configuration> ConfigurationPtr;
+
     std::ostream& operator<<(std::ostream& os, const Configuration* c);
 
 	bool operator<=(const Configuration& c1, const Configuration& c2);
@@ -241,9 +249,9 @@ namespace Pareto {
 
 	class ConfigurationIndexReference {
 	public:
-		const Configuration& conf;
+		ConfigurationPtr conf;
 		IndexOnConfigurationSet& index;
-		ConfigurationIndexReference(const Configuration& c, IndexOnConfigurationSet& i): conf(c), index(i){}
+		ConfigurationIndexReference(ConfigurationPtr c, IndexOnConfigurationSet& i): conf(c), index(i){}
 		virtual ~ConfigurationIndexReference(){}
 		const QuantityValue& value(void) const;
 		bool operator==(const ConfigurationIndexReference& right) const;
@@ -270,10 +278,10 @@ namespace Pareto {
 	class IndexOnConfigurationSet {
 	public:
 		const QuantityName& quantity;
-		const ConfigurationSet& confset;
-		IndexOnConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs);
+		ConfigurationSetPtr confset;
+		IndexOnConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs);
 		virtual ~IndexOnConfigurationSet(){}
-		virtual ConfigurationSet& copyFromTo(int f, int t);
+		virtual ConfigurationSetPtr copyFromTo(int f, int t);
 		int lower(const ConfigurationIndexReference& v);
 		int upper(const ConfigurationIndexReference& v);
 		virtual ConfigurationIndexReference& get(int n);
@@ -283,18 +291,18 @@ namespace Pareto {
 	// used for sorting the configurations w.r.t. different quantities.
 	class IndexOnTotalOrderConfigurationSet: public std::vector<ConfigurationIndexOnTotalOrderReference>, public IndexOnConfigurationSet {
 	public:
-		IndexOnTotalOrderConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs);
+		IndexOnTotalOrderConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs);
 		virtual ConfigurationIndexReference& get(int n) {return (this->at(n));}
-		virtual ConfigurationSet& copyFromTo(int f, int t);
+		virtual ConfigurationSetPtr copyFromTo(int f, int t);
 	};
 
 	// Make an index on an unordered quantity, based on a total order derived from the string
 	// representation of the quantity values
 	class IndexOnUnorderedConfigurationSet: public std::vector<ConfigurationIndexOnUnorderedReference>, public IndexOnConfigurationSet {
 	public:
-		IndexOnUnorderedConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs);
+		IndexOnUnorderedConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs);
 		virtual ConfigurationIndexReference& get(int n) {return (this->at(n));}
-		virtual ConfigurationSet& copyFromTo(int f, int t);
+		virtual ConfigurationSetPtr copyFromTo(int f, int t);
 	};
 
 
@@ -303,14 +311,14 @@ namespace Pareto {
 
 	struct CompareConfiguration
 	{
-	  bool operator()(const Configuration& c1, const Configuration& c2) const
+	  bool operator()(ConfigurationPtr& c1, ConfigurationPtr& c2) const
 	  {
-		  return ConfigurationSpace::LexicographicCompare(c1, c2);
+		  return ConfigurationSpace::LexicographicCompare(*c1, *c2);
 	  }
 	};
 
 
-	class SetOfConfigurations: public std::set<Configuration, CompareConfiguration> {};
+	class SetOfConfigurations: public std::set<ConfigurationPtr, CompareConfiguration> {};
 
 
 	/// Represents a set of configurations
@@ -320,16 +328,16 @@ namespace Pareto {
 		ConfigurationSet(const ConfigurationSpace& cs, const std::string n);
 
 		/// add a configuration to the set
-		void addConfiguration(const Configuration& c);
+		void addConfiguration(ConfigurationPtr c);
 
 		/// add a configuration to the set.
 		/// Assumes that 'c' does not yet occur in the set.
-		void addUniqueConfiguration(const Configuration& c);
+		void addUniqueConfiguration(ConfigurationPtr c);
 
 		/// add a configuration to a minimal set and keep minimal
 		/// Assumes the set is minimal 
 		/// Post: set is the minimal equivalent to the original set plus the new conf
-		void addConfigurationAndFilter(const Configuration& c);
+		void addConfigurationAndFilter(ConfigurationPtr c);
 
 		// add all configurations of cs to this configuration set
 		// Assumes that the new configurations are not already included 
@@ -355,8 +363,12 @@ namespace Pareto {
 		SetOfConfigurations confs;
 		
 		/// reference to the configuration space of the configurations in this set.
-		const ConfigurationSpace& confspace;
+		ConfigurationSpacePtr confspace;
 	};
+
+	/// Shared pointer to ConfigurationSet
+	typedef std::shared_ptr<ConfigurationSet> ConfigurationSetPtr;
+
 }
 
 #endif
