@@ -64,11 +64,11 @@ namespace Pareto {
 	}
 
 	/// create a product configuration space
-	ConfigurationSpace& ConfigurationSpace::productWith(const ConfigurationSpace& cs) const
+	ConfigurationSpacePtr ConfigurationSpace::productWith(ConfigurationSpacePtr cs) const
 	{
-		ConfigurationSpace& cspace = *new ConfigurationSpace("Product(" + this->name + ";" + cs.name + ")");
-		cspace.addQuantitiesOf(*this);
-		cspace.addQuantitiesOf(cs);
+		ConfigurationSpacePtr cspace = std::make_shared<ConfigurationSpace>("Product(" + this->name + ";" + cs->name + ")");
+		cspace->addQuantitiesOf(*this);
+		cspace->addQuantitiesOf(*cs);
 		return cspace;
 	}
 
@@ -102,28 +102,26 @@ namespace Pareto {
 		return quantityNames.at(qn);
 	}
 
-	const QuantityName* ConfigurationSpace::getUnorderedQuantity() const {
+	QuantityNamePtr ConfigurationSpace::getUnorderedQuantity() const {
 		QuantityIntMap::const_iterator i;
 		unsigned int k;
 		for (k = 0, i = this->quantityNames.begin(); i != this->quantityNames.end(); i++, k++) {
 			const QuantityType* t = this->quantities[(*i).second];
 			if ((this->quantityVisibility[k]) && (t->isUnordered())) {
-				std::string* qn = new std::string;
-				*qn = (*i).first;
+				QuantityNamePtr qn = std::make_shared<QuantityName>((*i).first);
 				return qn;
 			}
 		}
 		return nullptr;
 	}
 
-	const QuantityName* ConfigurationSpace::getTotallyOrderedQuantity() const {
+	QuantityNamePtr ConfigurationSpace::getTotallyOrderedQuantity() const {
 		QuantityIntMap::const_iterator i;
 		unsigned int k;
 		for (k = 0, i = this->quantityNames.begin(); i != this->quantityNames.end(); i++, k++) {
 			const QuantityType* t = this->quantities[(*i).second];
 			if ((this->quantityVisibility[k]) && (t->isTotallyOrdered())) {
-				std::string* qn = new std::string;
-				*qn = (*i).first;
+				QuantityNamePtr qn = std::make_shared<QuantityName>((*i).first);
 				return qn;
 			}
 		}
@@ -194,52 +192,52 @@ namespace Pareto {
 		}
 	}
 
-	StorableObject& ConfigurationSpace::copy(void) const
+	StorableObjectPtr ConfigurationSpace::copy(void) const
 	{
-		return *new ConfigurationSpace(*this);
+		return std::make_shared<ConfigurationSpace>(*this);
 	}
 
-	std::string& Configuration::asString(void) {
+	std::unique_ptr<std::string> Configuration::asString(void) {
 		std::ostringstream myString;
 		this->streamOn(myString);
-		return *new std::string(myString.str());
+		return std::make_unique<std::string>(myString.str());
 	}
 
 
-	ConfigurationSpace& ConfigurationSpace::hide(const ListOfQuantityNames& lqn) const {
+	ConfigurationSpacePtr ConfigurationSpace::hide(const ListOfQuantityNames& lqn) const {
 		std::string n = "Hide of " + this->name;
-		ConfigurationSpace& cs = *new ConfigurationSpace(n);
+		ConfigurationSpacePtr cs = std::make_shared<ConfigurationSpace>(n);
 		for (unsigned int i = 0; i < this->quantities.size(); i++) {
 			bool v = this->quantityVisibility[i];
 			if (lqn.includes(this->nameOfQuantityNr(i))) {
 				v = false;
 			}
-			cs.addQuantityAsVisibility(*this->quantities[i], this->nameOfQuantityNr(i), v);
+			cs->addQuantityAsVisibility(*this->quantities[i], this->nameOfQuantityNr(i), v);
 		}
 		return cs;
 	}
 
-	ConfigurationSpace& ConfigurationSpace::hide(const QuantityName& qn) {
+	ConfigurationSpacePtr ConfigurationSpace::hide(const QuantityName& qn) {
 		ListOfQuantityNames l;
 		l.push_back(qn);
 		return this->hide(l);
 	}
 
 
-	ConfigurationSpace& ConfigurationSpace::unhide(const ListOfQuantityNames& lqn) const {
+	ConfigurationSpacePtr ConfigurationSpace::unhide(const ListOfQuantityNames& lqn) const {
 		std::string n = "Unhide of " + this->name;
-		ConfigurationSpace& cs = *new ConfigurationSpace(n);
+		ConfigurationSpacePtr cs = std::make_shared<ConfigurationSpace>(n);
 		for (unsigned int i = 0; i < this->quantities.size(); i++) {
 			bool v = this->quantityVisibility[i];
 			if (lqn.includes(this->nameOfQuantityNr(i))) {
 				v = true;
 			}
-			cs.addQuantityAsVisibility(*this->quantities[i], this->nameOfQuantityNr(i), v);
+			cs->addQuantityAsVisibility(*this->quantities[i], this->nameOfQuantityNr(i), v);
 		}
 		return cs;
 	}
 
-	ConfigurationSpace& ConfigurationSpace::unhide(const QuantityName& qn) const {
+	ConfigurationSpacePtr ConfigurationSpace::unhide(const QuantityName& qn) const {
 		ListOfQuantityNames l;
 		l.push_back(qn);
 		return this->unhide(l);
@@ -256,9 +254,9 @@ namespace Pareto {
 	}
 
 
-	Configuration* ConfigurationSpace::newConfiguration(void) {
+	ConfigurationPtr ConfigurationSpace::newConfiguration(void) {
 
-		Configuration* c = new Configuration(*this);
+		ConfigurationPtr c = std::make_shared<Configuration>(*this);
 
 		ListOfQuantityTypes::iterator i;
 		for (i = quantities.begin(); i != quantities.end(); i++) {
@@ -268,6 +266,7 @@ namespace Pareto {
 		return c;
 	}
 
+	// check configuration spaces on identity, not content
 	bool operator!=(ConfigurationSpace& cs1, ConfigurationSpace& cs2) {
 		// maybe needs to be made more advanced later (a real comparison)
 		return &cs1 != &cs2;
@@ -278,15 +277,24 @@ namespace Pareto {
 	Configuration::Configuration(const ConfigurationSpace& cs) :confspace(cs) {
 	}
 
+	// 'copy constructor' from pointer
+	Configuration::Configuration(ConfigurationPtr c) :
+		confspace(c->confspace)
+	{
+		ListOfQuantityValues::iterator i;
+		for (i = c->quantities.begin(); i != c->quantities.end(); i++) {
+			this->quantities.push_back(*i);
+		}
+	}
+
 	void Configuration::addQuantity(const QuantityValue& q) {
 		Pareto::QuantityValue& qp = const_cast<Pareto::QuantityValue&>(q);
 		quantities.push_back(qp);
 	}
 
-	void Configuration::addQuantitiesOf(const Configuration& c) {
-		Configuration& cc = const_cast<Pareto::Configuration&>(c); // temporary (I hope) workaround
+	void Configuration::addQuantitiesOf(ConfigurationPtr c) {
 		ListOfQuantityValues::iterator i;
-		for (i = cc.quantities.begin(); i != cc.quantities.end(); i++) {
+		for (i = c->quantities.begin(); i != c->quantities.end(); i++) {
 			this->addQuantity(*i);
 		}
 	}
@@ -356,40 +364,54 @@ namespace Pareto {
 
 	///////////////// ConfigurationSet ///////////
 
-	ConfigurationSet::ConfigurationSet(const ConfigurationSpace& cs, const std::string n) : StorableObject(n), confspace(cs) {
+	ConfigurationSet::ConfigurationSet(ConfigurationSpacePtr cs, const std::string n) : StorableObject(n), confspace(cs) {
 	}
+
+	ConfigurationSet::ConfigurationSet(ConfigurationSetPtr cs) :
+		StorableObject(cs->name),
+		confspace(cs->confspace)
+	{
+		SetOfConfigurations::const_iterator i;
+		for (i = cs->confs.begin(); i != cs->confs.end(); i++)
+		{
+			ConfigurationPtr c = std::make_shared<Configuration>(*i);
+			this->confs.insert(c);
+		}
+
+	}
+
 
 
 	void ConfigurationSet::addConfiguration(ConfigurationPtr c) {
 #ifdef _DEBUG
-		if (c->confspace != this->confspace) {
+		if (&(c->confspace) != &(*(this->confspace))) {
 			throw EParetoCalculatorError("Error: configuration is of wrong type in ConfigurationSet::addConfiguration");
 		}
 #endif
 		confs.insert(c);
 	}
 
-	void ConfigurationSet::addUniqueConfiguration(const Configuration& c) {
+	void ConfigurationSet::addUniqueConfiguration(ConfigurationPtr c) {
 		// Note: Use this method only if you are sure that the configuration does not already occur in the set!
 #ifdef _DEBUG
-		if (&(c.confspace) != &(this->confspace)) {
+		if (&(c->confspace) != &(*(this->confspace))) {
 			throw EParetoCalculatorError("Error: configuration is of wrong type in ConfigurationSet::addConfiguration");
 		}
 #endif
 		confs.insert(c);
 	}
 
-	void ConfigurationSet::addConfigurationAndFilter(const Configuration& c) {
+	void ConfigurationSet::addConfigurationAndFilter(ConfigurationPtr c) {
 		// assumes the configurations set is minimal
 		// post: set is minimal version of set plus new configuration
 		SetOfConfigurations::iterator i = this->confs.begin();
 		while (i != this->confs.end()) {
-			const Configuration& a = *i;
-			if (a <= c) {
+			ConfigurationPtr a = *i;
+			if (*a <= *c) {
 				// c is dominated by a conf in this -> don't use c
 				return;
 			}
-			else if (c <= a) {
+			else if (*c <= *a) {
 				// remove a
 				SetOfConfigurations::iterator it = i;
 				i++;
@@ -402,15 +424,15 @@ namespace Pareto {
 		this->confs.insert(c);
 	}
 
-	void ConfigurationSet::addUniqueConfigurationsOf(ConfigurationSet& cs) {
-		for (SetOfConfigurations::iterator i = cs.confs.begin(); i != cs.confs.end(); i++) {
-			const Configuration* c = &(*i);
-			this->addUniqueConfiguration(*c);
+	void ConfigurationSet::addUniqueConfigurationsOf(ConfigurationSetPtr cs) {
+		for (SetOfConfigurations::iterator i = cs->confs.begin(); i != cs->confs.end(); i++) {
+			ConfigurationPtr c = (*i);
+			this->addUniqueConfiguration(c);
 		}
 	}
 
 
-	bool ConfigurationSet::containsConfiguration(Configuration& c) {
+	bool ConfigurationSet::containsConfiguration(ConfigurationPtr c) {
 		return confs.find(c) != confs.end();
 	}
 
@@ -419,20 +441,20 @@ namespace Pareto {
 		SetOfConfigurations::iterator i;
 		unsigned int n = 0;
 		for (i = confs.begin(); i != confs.end(); i++, n++) {
-			const Configuration* c = &(*i);
+			ConfigurationPtr c = *i;
 			os << c;
 			if (n < confs.size() - 1) os << ", " << std::endl;
 		}
 		os << "}";
 	}
 
-	StorableObject& ConfigurationSet::copy(void) const
+	StorableObjectPtr ConfigurationSet::copy(void) const
 	{
-		return * new ConfigurationSet(*this);
+		return std::make_shared<ConfigurationSet>(*this);
 	}
 
 	const QuantityValue& ConfigurationIndexReference::value(void) const {
-		return (this->conf).getQuantity(index.quantity);
+		return (this->conf)->getQuantity(index.quantity);
 	}
 
 
@@ -452,31 +474,30 @@ namespace Pareto {
 		throw EParetoCalculatorError("Error: < should not be called on abstract ConfigurationIndexReference");
 	}
 
-	ConfigurationIndexReference& IndexOnConfigurationSet::get(int n) {
+	ConfigurationIndexReferencePtr IndexOnConfigurationSet::get(int n) {
 		throw EParetoCalculatorError("Error: 'get' should not be called on abstract ConfigurationIndexReference");
 	}
 
-	ConfigurationSet& IndexOnConfigurationSet::copyFromTo(int f, int t) {
+	ConfigurationSetPtr IndexOnConfigurationSet::copyFromTo(int f, int t) {
 		throw EParetoCalculatorError("Error: 'copyFromTo' should not be called on abstract ConfigurationIndexReference");
 	}
 
 
+	//ConfigurationIndexOnTotalOrderReference& ConfigurationIndexOnTotalOrderReference::operator= (ConfigurationIndexOnTotalOrderReference& right) {
+	//	this->conf = right.conf;
+	//	this->index = right.index;
+	//	return *this;
+	//}
 
-	const ConfigurationIndexOnTotalOrderReference& ConfigurationIndexOnTotalOrderReference::operator= (const ConfigurationIndexOnTotalOrderReference& right) {
-		this->conf = right.conf;
-		this->index = right.index;
-		return *this;
+
+	IndexOnConfigurationSet::IndexOnConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs) : quantity(qn), confset(cs) {
 	}
 
 
-	IndexOnConfigurationSet::IndexOnConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs) : quantity(qn), confset(cs) {
-	}
-
-
-	IndexOnTotalOrderConfigurationSet::IndexOnTotalOrderConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs) : IndexOnConfigurationSet(qn, cs) {
+	IndexOnTotalOrderConfigurationSet::IndexOnTotalOrderConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs) : IndexOnConfigurationSet(qn, cs) {
 		SetOfConfigurations::iterator i;
-		for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
-			ConfigurationIndexOnTotalOrderReference& r = *new ConfigurationIndexOnTotalOrderReference(*i, *this);
+		for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
+			std::shared_ptr<ConfigurationIndexOnTotalOrderReference> r = std::make_shared<ConfigurationIndexOnTotalOrderReference>(*i, *this);
 			this->push_back(r);
 		}
 		std::sort(this->begin(), this->end());
@@ -486,10 +507,10 @@ namespace Pareto {
 	int IndexOnConfigurationSet::lower(const ConfigurationIndexReference& v) {
 		int a, b, m;
 		a = -1; // S[a,Q]<v
-		b = this->confset.confs.size(); // S[b,Q]>=v;
+		b = this->confset->confs.size(); // S[b,Q]>=v;
 		while (b - a > 1) {
 			m = (a + b) / 2;
-			if ((this->get(m)) < v) {
+			if (*(this->get(m)) < v) {
 				a = m;
 			}
 			else {
@@ -504,10 +525,10 @@ namespace Pareto {
 	int IndexOnConfigurationSet::upper(const ConfigurationIndexReference& v) {
 		int a, b, m;
 		a = -1; // S[a,Q]<=v
-		b = this->confset.confs.size(); // S[b,Q]>v;
+		b = this->confset->confs.size(); // S[b,Q]>v;
 		while (b - a > 1) {
 			m = (a + b) / 2;
-			if ((this->get(m)) > v) {
+			if (*(this->get(m)) > v) {
 				b = m;
 			}
 			else {
@@ -518,23 +539,23 @@ namespace Pareto {
 	}
 
 
-	ConfigurationSet& IndexOnTotalOrderConfigurationSet::copyFromTo(int f, int t) {
-		ConfigurationSet& res = *new ConfigurationSet(this->confset.confspace, this->confset.name + " range");
+	ConfigurationSetPtr IndexOnTotalOrderConfigurationSet::copyFromTo(int f, int t) {
+		ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(this->confset->confspace, this->confset->name + " range");
 		IndexOnTotalOrderConfigurationSet::iterator i = this->begin();
 		for (int j = 0; j < f; j++, i++);
 		for (int j = f; j <= t; j++, i++) {
-			res.addConfiguration((*i).conf);
+			res->addConfiguration((*i)->conf);
 		}
 		return res;
 	}
 
 
-	ConfigurationSet& IndexOnUnorderedConfigurationSet::copyFromTo(int f, int t) {
-		ConfigurationSet& res = *new ConfigurationSet(this->confset.confspace, this->confset.name + " range");
+	ConfigurationSetPtr IndexOnUnorderedConfigurationSet::copyFromTo(int f, int t) {
+		ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(this->confset->confspace, this->confset->name + " range");
 		IndexOnUnorderedConfigurationSet::iterator i = this->begin();
 		for (int j = 0; j < f; j++, i++);
 		for (int j = f; j <= t; j++, i++) {
-			res.addConfiguration((*i).conf);
+			res->addConfiguration((*i)->conf);
 		}
 		return res;
 	}
@@ -549,17 +570,17 @@ namespace Pareto {
 	}
 
 
-	const ConfigurationIndexOnUnorderedReference& ConfigurationIndexOnUnorderedReference::operator= (const ConfigurationIndexOnUnorderedReference& right) {
-		this->conf = right.conf;
-		this->index = right.index;
-		return *this;
-	}
+	//ConfigurationIndexOnUnorderedReference& ConfigurationIndexOnUnorderedReference::operator= (ConfigurationIndexOnUnorderedReference& right) {
+	//	this->conf = right.conf;
+	//	this->index = right.index;
+	//	return *this;
+	//}
 
 
-	IndexOnUnorderedConfigurationSet::IndexOnUnorderedConfigurationSet(const QuantityName& qn, const ConfigurationSet& cs) : IndexOnConfigurationSet(qn, cs) {
+	IndexOnUnorderedConfigurationSet::IndexOnUnorderedConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs) : IndexOnConfigurationSet(qn, cs) {
 		SetOfConfigurations::iterator i;
-		for (i = cs.confs.begin(); i != cs.confs.end(); i++) {
-			ConfigurationIndexOnUnorderedReference& r = *new ConfigurationIndexOnUnorderedReference(*i, *this);
+		for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
+			std::shared_ptr<ConfigurationIndexOnUnorderedReference> r = std::make_shared<ConfigurationIndexOnUnorderedReference>(*i, *this);
 			this->push_back(r);
 		}
 		std::sort(this->begin(), this->end());

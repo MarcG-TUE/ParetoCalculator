@@ -75,8 +75,8 @@ namespace Pareto {
 
 		xmlXPathContextPtr xpathCtx = nullptr;
 
-		ListOfQuantityNames& getListOfQuantityNames(xmlNodePtr pOperationNode);
-		JoinMap& getJoinMap(xmlNodePtr pOperationNode);
+		std::shared_ptr<ListOfQuantityNames> getListOfQuantityNames(xmlNodePtr pOperationNode);
+		std::shared_ptr<JoinMap> getJoinMap(xmlNodePtr pOperationNode);
 	};
 
 }

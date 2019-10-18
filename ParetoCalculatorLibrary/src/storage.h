@@ -47,6 +47,12 @@
 
 namespace Pareto {
 
+	// forward declarations
+	class StorableObject;
+
+	// define a shared pointer to a storable object
+	typedef std::shared_ptr<StorableObject> StorableObjectPtr;
+
 	/// StorableObject is an abstract superclass of anything we want to 
 	/// put on a stack or in the memory of the calculator.
 	///
@@ -73,17 +79,14 @@ namespace Pareto {
 		virtual bool isString(void) const = 0;
 
 		/// copy the object
-		virtual StorableObject& copy(void) const = 0;
+		virtual StorableObjectPtr copy(void) const = 0;
 
 		// public member variables
 
 		/// name of the object
-		const std::string name;
+		std::string name;
 
 	};
-
-	// define a shared pointer to a storable object
-	typedef std::shared_ptr<const StorableObject> StorableObjectPtr;
 
 	/// Storage Map is a mapping between names (strings) and (pointers to) storable objects
 	class StorageMap : public std::map<const std::string,const StorableObjectPtr>{};
@@ -98,7 +101,7 @@ namespace Pareto {
 		virtual bool isConfigurationSpace(void) const {return false;}
 		virtual bool isQuantityType(void) const {return false;}
 		virtual bool isString(void) const {return true;}
-		virtual StorableObject& copy(void) const;
+		virtual StorableObjectPtr copy(void) const;
 	};
 
 	typedef std::shared_ptr<const StorableString> StorableStringPtr;

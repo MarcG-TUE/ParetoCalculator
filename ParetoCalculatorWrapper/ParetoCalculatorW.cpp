@@ -16,7 +16,7 @@ ParetoCalculatorW::ParetoCalculatorW() {
 void ParetoCalculatorW::LoadFile(String^ fn)
 {
 	try {
-		this->pc->LoadFile(system_to_std_wstring(fn));
+		this->pc->LoadFile(system_to_std_string(fn));
 	}
 	catch (EParetoCalculatorError e) {
 		throw gcnew ParetoCalculatorExceptionW(std_to_system_string(e.errorMsg));
@@ -66,8 +66,8 @@ void ParetoCalculatorW::minimize()
 ArrayList^ ParetoCalculatorW::getStackItemStrings()
 {
 	ArrayList^ res = gcnew ArrayList();
-	std::vector<const StorableObject*> stack = this->pc->stack;
-	std::vector<const StorableObject*>::iterator i;
+	std::vector<StorableObjectPtr>& stack = this->pc->stack;
+	std::vector<StorableObjectPtr>::iterator i;
 	for (i = stack.begin(); i != stack.end(); i++)
 	{
 		res->Insert(0, gcnew System::String((*i)->asString().c_str()));
@@ -93,19 +93,19 @@ int ParetoCalculatorW::stackSize()
 
 String^ ParetoCalculatorW::pop()
 {
-	const StorableObject* so = this->pc->pop();
+	StorableObjectPtr so = this->pc->pop();
 	return gcnew System::String(so->asString().c_str());
 }
 
 String^ ParetoCalculatorW::peek()
 {
-	const StorableObject* so = this->pc->peek();
+	StorableObjectPtr so = this->pc->peek();
 	return gcnew System::String(so->asString().c_str());
 }
 
 String^ ParetoCalculatorW::peek(int n)
 {
-	const StorableObject* so = this->pc->stack[n];
+	StorableObjectPtr so = this->pc->stack[n];
 	return gcnew System::String(so->asString().c_str());
 }
 
@@ -116,9 +116,9 @@ bool ParetoCalculatorW::stackEmpty()
 
 void ParetoCalculatorW::storePop(String^ name)
 {
-	StorableObject* so = &this->pc->pop()->copy();
+	StorableObjectPtr so = this->pc->pop()->copy();
 	so->name = system_to_std_string(name);
-	this->pc->store(*so);
+	this->pc->store(so);
 }
 
 void ParetoCalculatorW::executeProdCons(String^ pq, String^ cq)
@@ -131,7 +131,7 @@ void ParetoCalculatorW::executeAbstract(String^ qn)
 {
 	ListOfQuantityNames lqn;
 	lqn.push_back(system_to_std_string(qn));
-	POperation_Abstract& ao = *new POperation_Abstract(&lqn);
+	POperation_Abstract ao(lqn);
 	ao.executeOn(*this->pc);
 }
 
@@ -140,7 +140,7 @@ void ParetoCalculatorW::executeJoin(String^ qn)
 	JoinMap jm;
 	std::string q = system_to_std_string(qn);
 	jm[q] = q;
-	POperation_EfficientJoin& jo = *new POperation_EfficientJoin(&jm);
+	POperation_EfficientJoin jo(jm);
 	jo.executeOn(*this->pc);
 }
 
@@ -178,8 +178,8 @@ ArrayList^ ParetoCalculatorW::getScattterPoints(String^ qxs, String^ qys)
 	int qix, qiy;
 	std::string qx = system_to_std_string(qxs);
 	std::string qy = system_to_std_string(qys);
-	const ConfigurationSet* cs = dynamic_cast<const ConfigurationSet*> (this->pc->peek());
-	const ConfigurationSpace* csp = cs->confspace;
+	ConfigurationSetPtr cs = std::dynamic_pointer_cast<ConfigurationSet> (this->pc->peek());
+	ConfigurationSpacePtr csp = cs->confspace;
 	if (csp->includesQuantityNamed(qx)) {
 		qix = cs->confspace->indexOfQuantity(qx);
 	}
@@ -217,7 +217,7 @@ ArrayList^ ParetoCalculatorW::getScattterPoints(String^ qxs, String^ qys)
 ArrayList^ ParetoCalculatorW::confsetConfspaceQuantityNames()
 {
 	ArrayList^ res = gcnew ArrayList();
-	const ConfigurationSet* cs = dynamic_cast<const ConfigurationSet*>(this->pc->peek());
+	ConfigurationSetPtr cs = std::dynamic_pointer_cast<ConfigurationSet>(this->pc->peek());
 	const QuantityIntMap& qm = cs->confspace->quantityNames;
 	QuantityIntMap::const_iterator i;
 	for (i = qm.begin(); i != qm.end(); i++) {

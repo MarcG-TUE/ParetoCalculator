@@ -154,9 +154,9 @@ namespace Pareto {
 #endif
 	}
 
-	StorableObject& QuantityType_Enum::copy(void) const
+	StorableObjectPtr QuantityType_Enum::copy(void) const
 	{
-		return *new QuantityType_Enum(*this);
+		return std::make_shared<QuantityType_Enum>(*this);
 	}
 
 
@@ -170,9 +170,9 @@ namespace Pareto {
 		else return false;
 	}
 
-	StorableObject& QuantityType_Enum_Unordered::copy(void) const
+	StorableObjectPtr QuantityType_Enum_Unordered::copy(void) const
 	{
-		return *new QuantityType_Enum_Unordered(*this);
+		return std::make_shared<QuantityType_Enum_Unordered>(*this);
 	}
 
 
@@ -185,10 +185,10 @@ namespace Pareto {
 		os << "a value of " << qtype;
 	}
 
-	std::string& QuantityValue::asString(void) const {
+	std::string QuantityValue::asString(void) const {
 		std::ostringstream myString;
 		this->streamOn(myString);
-		return *new std::string(myString.str());
+		return std::string(myString.str());
 	}
 
 	bool operator<=(const QuantityValue& q1, const QuantityValue& q2) {
@@ -274,9 +274,9 @@ namespace Pareto {
 #endif
 	}
 
-	StorableObject& QuantityType_Integer::copy(void) const
+	StorableObjectPtr QuantityType_Integer::copy(void) const
 	{
-		return *new QuantityType_Integer(*this);
+		return std::make_shared<QuantityType_Integer>(*this);
 	}
 
 	///////////////// QuantityValue_Integer ///////////////////
@@ -340,9 +340,9 @@ namespace Pareto {
 #endif
 	}
 
-	StorableObject& QuantityType_Real::copy(void) const
+	StorableObjectPtr QuantityType_Real::copy(void) const
 	{
-		return *new QuantityType_Real(*this);
+		return std::make_shared<QuantityType_Real>(*this);
 	}
 
 

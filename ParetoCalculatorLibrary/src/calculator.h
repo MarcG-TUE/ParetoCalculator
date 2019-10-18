@@ -74,10 +74,10 @@ namespace Pareto {
 		StorageMap memory;
 
 		/// store an StorableObject 'o'in memory under its name
-		void store(const StorableObjectPtr o);
+		void store(StorableObjectPtr o);
 
 		/// store an StorableObject 'o'in memory under key
-		void store(const StorableObject& o, const std::string& key);
+		void store(StorableObjectPtr o, const std::string& key);
 
 		/// pop an object from the stack and store it in memory, filed under its name
 		void store(void);
@@ -86,10 +86,10 @@ namespace Pareto {
 		void store(const std::string& key);
 
 		/// retrieve an object from the memory 
-		const StorableObject& retrieve(const std::string& oname); 
+		StorableObjectPtr retrieve(const std::string& oname); 
 
 		/// retrieve a quantity type from the memory 
-		const QuantityType& retrieveQuantityType(const std::string& oname); 
+		QuantityTypePtr retrieveQuantityType(const std::string& oname); 
 
 		/// push an object 'o' onto the calculator stack
 		void push(const StorableObjectPtr o);
@@ -109,7 +109,7 @@ namespace Pareto {
 		StorableStringPtr popStorableString();
 
 		/// return a pointer to the object on top of the stack without removing it.
-		const StorableObject& peek(); 
+		StorableObjectPtr peek(); 
 
 		/// duplicate the object on top of the stack
 		void duplicate();
@@ -133,7 +133,7 @@ namespace Pareto {
 		StatusCallback* statusObject = nullptr;
 
 		/// Register a StatusCallBack object.
-		void setStatusCallbackObject(StatusCallback& o);
+		void setStatusCallbackObject(StatusCallback* o);
 
 		// called by the calculator when its status changes
 		void setStatus(const std::string& newStatus);
@@ -194,7 +194,7 @@ namespace Pareto {
 		void constraint(bool (*testConstraint)(const Configuration&));
 
 		// parsing
-		ParetoParser *parser = nullptr;
+		std::unique_ptr<ParetoParser> parser = nullptr;
 		
 		/// call this function before using the parser function below.
 		void initParser();
@@ -229,7 +229,7 @@ namespace Pareto {
 		static ConfigurationSetPtr efficient_minimize_filter3(ConfigurationSetPtr csa, ConfigurationSetPtr csb);
 		static ConfigurationSetPtr efficient_minimize_filter4(ConfigurationSetPtr csa, ConfigurationSetPtr csb);
 		static const QuantityValue& efficient_minimize_getPivot(ConfigurationSetPtr cs, const QuantityName& qn);
-		static void efficient_minimize_filter_split(ConfigurationSetPtr cs, const QuantityName& qn, const QuantityValue& pivot, ConfigurationSet* *csl, ConfigurationSet* *csh);
+		static void efficient_minimize_filter_split(ConfigurationSetPtr cs, const QuantityName& qn, const QuantityValue& pivot, ConfigurationSetPtr *csl, ConfigurationSetPtr *csh);
 
 
 	};

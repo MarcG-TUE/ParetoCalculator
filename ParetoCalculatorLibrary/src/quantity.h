@@ -45,6 +45,7 @@ namespace Pareto {
 
 	/// name of a quantity type
 	typedef std::string QuantityName ;
+	typedef std::shared_ptr<QuantityName> QuantityNamePtr;
 
 	class QuantityValue;
 
@@ -73,7 +74,7 @@ namespace Pareto {
 		virtual QuantityValue& valueFromString(const std::string s) const;
 
 		/// returns a string representation of this quantity type.
-		virtual std::string& asString(){return this->name;}
+		virtual const std::string& asString(){return this->name;}
 
 		// Run-time type checking
 		virtual bool isConfigurationSet(void) const { return false;}
@@ -92,6 +93,8 @@ namespace Pareto {
 		virtual std::string* xmlTypeString(void) = 0;
 	};
 
+	/// Pointer to QuantityType
+	typedef std::shared_ptr<const QuantityType> QuantityTypePtr;
 
 	/// QuantityValues represent the data in individual quantities of configurations
 	///
@@ -109,7 +112,7 @@ namespace Pareto {
 		virtual void streamOn(std::ostream& os) const;
 
 		/// return a string representation of the quantity value
-		std::string& asString(void) const;
+		std::string asString(void) const;
 
 		/// The quantity type of this quantity value
 		const QuantityType& qtype;
@@ -162,7 +165,7 @@ namespace Pareto {
 		virtual bool isUnordered(void) const {return false;}
 
 		// copying
-		virtual StorableObject& copy(void) const;
+		virtual StorableObjectPtr copy(void) const;
 
 		// XML support
 		virtual std::string* xmlTypeString(void) {return new std::string("enum");}
@@ -196,7 +199,7 @@ namespace Pareto {
 		virtual bool isUnordered(void) const {return true;}
 
 		// copying
-		virtual StorableObject& copy(void) const;
+		virtual StorableObjectPtr copy(void) const;
 
 		// XML support
 		virtual std::string* xmlTypeString(void) {return new std::string("unordered");}
@@ -228,7 +231,7 @@ namespace Pareto {
 		virtual bool isUnordered(void) const {return false;}
 
 		// copying
-		virtual StorableObject& copy(void) const;
+		virtual StorableObjectPtr copy(void) const;
 
 		// XML support
 		virtual std::string* xmlTypeString(void) {return new std::string("integer");}
@@ -274,7 +277,7 @@ namespace Pareto {
 		virtual bool isUnordered(void) const {return false;}
 
 		// copying
-		virtual StorableObject& copy(void) const;
+		virtual StorableObjectPtr copy(void) const;
 
 		// XML support
 		virtual std::string* xmlTypeString(void) {return new std::string("real");}

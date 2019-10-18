@@ -79,9 +79,9 @@ namespace Pareto {
 		this->push_back(this->back());
 	}
 
-	StorableObject& StorableString::copy(void) const
+	StorableObjectPtr StorableString::copy(void) const
 	{
-		return *new StorableString(*this);
+		return std::make_shared<StorableString>(*this);
 	}
 
 };

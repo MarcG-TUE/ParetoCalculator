@@ -43,6 +43,7 @@
 #include <set>
 #include <string>
 #include <map>
+#include <memory>
 #include <iostream>
 #include "exceptions.h"
 #include "quantity.h"
@@ -87,6 +88,18 @@ namespace Pareto {
 	/// Additionally, quantities in the space may be hidden or visible as indicated
 	/// by 'quantityVisibility'.
 	///
+
+
+	// forward declaration for pointer
+	class Configuration;
+	class ConfigurationSpace;
+	class ConfigurationSet;
+
+	/// Pointer definitions
+	typedef std::shared_ptr<ConfigurationSpace> ConfigurationSpacePtr;
+	typedef std::shared_ptr<Configuration> ConfigurationPtr;
+	typedef std::shared_ptr<ConfigurationSet> ConfigurationSetPtr;
+
 	class ConfigurationSpace: public StorableObject {
 	public:
 		ListOfQuantityTypes quantities;
@@ -128,7 +141,7 @@ namespace Pareto {
 		const QuantityType& getQuantity(const QuantityName& qn) const; 
 
 		/// create a new configuration in this configuration space
-		Configuration* newConfiguration(void);
+		ConfigurationPtr newConfiguration(void);
 
 		/// returns the number of visible (not hidden) quantities in the space
 		unsigned int nrOfVisibleQuantities(void) const;
@@ -139,12 +152,12 @@ namespace Pareto {
 		/// returns an arbitrary unordered quantity from the configuration space if one exists.
 		///
 		/// returns nullptr otherwise
-		const QuantityName* getUnorderedQuantity() const;
+		QuantityNamePtr getUnorderedQuantity() const;
 
 		/// returns an arbitrary totally ordered quantity from the configuration space if one exists.
 		///
 		/// returns nullptr otherwise
-		const QuantityName* getTotallyOrderedQuantity() const;
+		QuantityNamePtr getTotallyOrderedQuantity() const;
 
 		/// retrieve the name of quantity number 'n'
 		const QuantityName nameOfQuantityNr(const unsigned int n) const;
@@ -177,12 +190,10 @@ namespace Pareto {
 		virtual bool isString(void) const { return false;} // override
 
 		// copying
-		virtual StorableObject& copy(void) const;
+		virtual StorableObjectPtr copy(void) const;
 
 	};
 
-	/// Pointer to ConfigurationSpace
-	typedef std::shared_ptr<ConfigurationSpace> ConfigurationSpacePtr;
 
 	bool operator!=(ConfigurationSpace& cs1, ConfigurationSpace& cs2);
 
@@ -199,13 +210,15 @@ namespace Pareto {
 	// public member variables
 	public:
 		/// The member 'confspace' refers to this space
-		ConfigurationSpacePtr confspace;
+		const ConfigurationSpace& confspace;
 		/// 'quantities' is a list of quantity values that defines the configuration.
 		ListOfQuantityValues quantities;
 
 	public:
 		/// Use ConfigurationSpace::newConfiguration() to create configurations!
 		Configuration(const ConfigurationSpace& cs);
+		// 'copy constructor' from pointer
+		Configuration(ConfigurationPtr c);
 
 		virtual ~Configuration(){};
 
@@ -228,10 +241,9 @@ namespace Pareto {
 		virtual void streamOn(std::ostream& os) const;
 
 		/// returns a string representation of the configuration
-        std::string& asString();
+        std::unique_ptr<std::string> asString();
 	};
 
-	typedef std::shared_ptr<Configuration> ConfigurationPtr;
 
     std::ostream& operator<<(std::ostream& os, const Configuration* c);
 
@@ -261,18 +273,20 @@ namespace Pareto {
 
 	class ConfigurationIndexOnTotalOrderReference : public ConfigurationIndexReference {
 	public:
-		ConfigurationIndexOnTotalOrderReference(const Configuration& c, IndexOnConfigurationSet& i): ConfigurationIndexReference(c, i){}
+		ConfigurationIndexOnTotalOrderReference(ConfigurationPtr c, IndexOnConfigurationSet& i): ConfigurationIndexReference(c, i){}
 		virtual bool operator<(const ConfigurationIndexReference& right) const ;
 
-		const ConfigurationIndexOnTotalOrderReference& operator= (const ConfigurationIndexOnTotalOrderReference& right);
+		//ConfigurationIndexOnTotalOrderReference& operator= (ConfigurationIndexOnTotalOrderReference& right);
 	};
+
+	typedef std::shared_ptr<ConfigurationIndexReference> ConfigurationIndexReferencePtr;
 
 	class ConfigurationIndexOnUnorderedReference : public ConfigurationIndexReference {
 	public:
-		ConfigurationIndexOnUnorderedReference(const Configuration& c, IndexOnConfigurationSet& i): ConfigurationIndexReference(c, i){}
+		ConfigurationIndexOnUnorderedReference(ConfigurationPtr c, IndexOnConfigurationSet& i): ConfigurationIndexReference(c, i){}
 		virtual bool operator<(const ConfigurationIndexReference& right) const ;
 
-		const ConfigurationIndexOnUnorderedReference& operator= (const ConfigurationIndexOnUnorderedReference& right);
+		//ConfigurationIndexOnUnorderedReference& operator= (ConfigurationIndexOnUnorderedReference& right);
 	};
 
 	class IndexOnConfigurationSet {
@@ -284,24 +298,24 @@ namespace Pareto {
 		virtual ConfigurationSetPtr copyFromTo(int f, int t);
 		int lower(const ConfigurationIndexReference& v);
 		int upper(const ConfigurationIndexReference& v);
-		virtual ConfigurationIndexReference& get(int n);
+		virtual ConfigurationIndexReferencePtr get(int n);
 	};
 
 	// implements an index on the configurations of a configurationset
 	// used for sorting the configurations w.r.t. different quantities.
-	class IndexOnTotalOrderConfigurationSet: public std::vector<ConfigurationIndexOnTotalOrderReference>, public IndexOnConfigurationSet {
+	class IndexOnTotalOrderConfigurationSet: public std::vector<std::shared_ptr<ConfigurationIndexOnTotalOrderReference>>, public IndexOnConfigurationSet {
 	public:
 		IndexOnTotalOrderConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs);
-		virtual ConfigurationIndexReference& get(int n) {return (this->at(n));}
+		virtual ConfigurationIndexReferencePtr get(int n) {return (this->at(n));}
 		virtual ConfigurationSetPtr copyFromTo(int f, int t);
 	};
 
 	// Make an index on an unordered quantity, based on a total order derived from the string
 	// representation of the quantity values
-	class IndexOnUnorderedConfigurationSet: public std::vector<ConfigurationIndexOnUnorderedReference>, public IndexOnConfigurationSet {
+	class IndexOnUnorderedConfigurationSet: public std::vector<std::shared_ptr<ConfigurationIndexOnUnorderedReference>>, public IndexOnConfigurationSet {
 	public:
 		IndexOnUnorderedConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs);
-		virtual ConfigurationIndexReference& get(int n) {return (this->at(n));}
+		virtual ConfigurationIndexReferencePtr get(int n) {return (this->at(n));}
 		virtual ConfigurationSetPtr copyFromTo(int f, int t);
 	};
 
@@ -311,7 +325,7 @@ namespace Pareto {
 
 	struct CompareConfiguration
 	{
-	  bool operator()(ConfigurationPtr& c1, ConfigurationPtr& c2) const
+	  bool operator()(ConfigurationPtr c1, ConfigurationPtr c2) const
 	  {
 		  return ConfigurationSpace::LexicographicCompare(*c1, *c2);
 	  }
@@ -325,7 +339,10 @@ namespace Pareto {
 	class ConfigurationSet : public StorableObject {
 	public:
 		/// constructor of a set of configurations on configuration space 'cs' and with name 'n'
-		ConfigurationSet(const ConfigurationSpace& cs, const std::string n);
+		ConfigurationSet(ConfigurationSpacePtr cs, const std::string n);
+		
+		/// copy constructor of a set of configurations on configuration space 'cs' and with name 'n'
+		ConfigurationSet(ConfigurationSetPtr cs);
 
 		/// add a configuration to the set
 		void addConfiguration(ConfigurationPtr c);
@@ -341,10 +358,10 @@ namespace Pareto {
 
 		// add all configurations of cs to this configuration set
 		// Assumes that the new configurations are not already included 
-		void addUniqueConfigurationsOf(ConfigurationSet& cs);
+		void addUniqueConfigurationsOf(ConfigurationSetPtr cs);
 
 		/// test whether the configuration is included in the set
-		bool containsConfiguration(Configuration& c);
+		bool containsConfiguration(ConfigurationPtr c);
 
 		/// stream a string representation of the configuration set to 'os'
 		virtual void streamOn(std::ostream& os) const;
@@ -356,7 +373,7 @@ namespace Pareto {
 		virtual bool isString(void) const { return false; }
 
 		// copying
-		virtual StorableObject& copy(void) const;
+		virtual StorableObjectPtr copy(void) const;
 	
 
 		// the actual configurations
@@ -366,8 +383,6 @@ namespace Pareto {
 		ConfigurationSpacePtr confspace;
 	};
 
-	/// Shared pointer to ConfigurationSet
-	typedef std::shared_ptr<ConfigurationSet> ConfigurationSetPtr;
 
 }
 
