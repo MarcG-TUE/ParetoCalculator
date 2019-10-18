@@ -14,7 +14,7 @@ See [README.md](README.md) for a description.
 
 3. Provide the path to the `libxml2` library for the linker.
    Select from the menu: `View -> Property Manager`.
-     Under any of the different configurations (it does not matter which one you use), find the property sheet named `ExternalLibraries`
+     Under the `ParetoCalculatorLibrary` project, under any of its configurations (it does not matter which one you use), find the property sheet named `ExternalLibraries`
      Double click it and on the properties page go to: `Common Properties -> User Macros`.
      Then edit the `LibxmlDir` property appropriately. Make sure it has a trailing `\` symbol.
      It should for instance be something like:
