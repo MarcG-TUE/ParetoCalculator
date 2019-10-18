@@ -675,7 +675,7 @@ void ParetoCalculator::push(const std::string& oname) //throw(EParetoCalculatorE
 const StorableObject& ParetoCalculator::pop() //throw(EParetoCalculatorError)
 {
 	if (stack.size() > 0) {
-		return stack.pop();
+		return *stack.pop();
 	}
 	else {
 		throw EParetoCalculatorError("Stack is empty in ParetoCalculator::pop()");

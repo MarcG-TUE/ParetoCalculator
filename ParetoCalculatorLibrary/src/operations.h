@@ -89,8 +89,8 @@ namespace Pareto {
 	/// The abstraction operator
 	class POperation_Abstract: public ParetoCalculatorOperation {
 	public:
-		ListOfQuantityNames* lqn;
-		POperation_Abstract(ListOfQuantityNames* qnames);
+		ListOfQuantityNames& lqn;
+		POperation_Abstract(ListOfQuantityNames& qnames);
 		virtual void executeOn(ParetoCalculator& c);
 	};
 
@@ -205,10 +205,10 @@ namespace Pareto {
 	/// a list of quantity names
 	class POperation_Aggregate: public ParetoCalculatorOperation {
 	public:
-		POperation_Aggregate(ListOfQuantityNames *ag_quants, std::string& agname);
+		POperation_Aggregate(ListOfQuantityNames& ag_quants, std::string& agname);
 		virtual void executeOn(ParetoCalculator& c);
 	private:
-		ListOfQuantityNames *aggregate_quants;
+		ListOfQuantityNames& aggregate_quants;
 		std::string newName;
 	};
 
@@ -220,10 +220,10 @@ namespace Pareto {
 	/// Consider using EfficientJoin
 	class POperation_Join: public ParetoCalculatorOperation {
 	public:
-		JoinMap* j_quants;
+		JoinMap& j_quants;
 		static std::vector<int> qan;
 		static std::vector<int> qbn;
-		POperation_Join(JoinMap* jqnamemap);
+		POperation_Join(JoinMap& jqnamemap);
 		static bool testConstraint(const Configuration& c);
 		virtual void executeOn(ParetoCalculator& c);
 	};
@@ -235,8 +235,8 @@ namespace Pareto {
 	/// in future versions. For now consider using the naive join operation...
 	class POperation_EfficientJoin: public ParetoCalculatorOperation {
 	public:
-		JoinMap* j_quants;
-		POperation_EfficientJoin(JoinMap* jqnamemap);
+		JoinMap& j_quants;
+		POperation_EfficientJoin(JoinMap& jqnamemap);
 		virtual void executeOn(ParetoCalculator& c);
 	};
 

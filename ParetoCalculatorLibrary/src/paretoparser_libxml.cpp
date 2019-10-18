@@ -49,9 +49,8 @@ using namespace Pareto;
 static xmlDocPtr pXMLDoc;
 
 
-ParetoParser::ParetoParser(Pareto::ParetoCalculator* forPC)
+ParetoParser::ParetoParser(Pareto::ParetoCalculator& forPC): pc(forPC)
 {
-	pc = forPC;
 }
 
 
@@ -59,7 +58,7 @@ ParetoParser::ParetoParser(Pareto::ParetoCalculator* forPC)
 void ParetoParser::LoadFile(std::string f) {
 	pXMLDoc = xmlParseFile(f.c_str());
 	if (pXMLDoc == nullptr) {
-		pc->verbose("Document not parsed successfully. \n");
+		pc.verbose("Document not parsed successfully. \n");
 	}
 	xpathCtx = xmlXPathNewContext(pXMLDoc);
 	xmlXPathRegisterNs(xpathCtx, (xmlChar*)"pa", (xmlChar*)"uri:pareto");
@@ -130,7 +129,7 @@ void ParetoParser::LoadQuantityTypes() {
 			if (!typeDetermined) {
 				throw EParetoCalculatorError(std::string("Quantity of unknown type " + pTypeStr));
 			}
-			pc->store(*qn);
+			pc.store(*qn);
 		}
 		xmlXPathFreeObject(result);
 	}
@@ -158,7 +157,7 @@ void ParetoParser::LoadConfigurationSpaces() {
 				xmlNodeSetPtr nodeset_quantities = result_quantities->nodesetval;
 				for (int j = 0; j < nodeset_quantities->nodeNr; j++) {
 					xmlNodePtr pQuantityNode = nodeset_quantities->nodeTab[j];
-					const QuantityType& qu = dynamic_cast<const QuantityType&>(*pc->retrieve(getNodeAttribute(pQuantityNode, (xmlChar*)"name")));
+					const QuantityType& qu = dynamic_cast<const QuantityType&>(pc.retrieve(getNodeAttribute(pQuantityNode, (xmlChar*)"name")));
 					QuantityName qn;
 					if (hasNodeAttribute(pQuantityNode, (xmlChar*)"referBy")) {
 						qn = getNodeAttribute(pQuantityNode, (xmlChar*)"referBy");
@@ -169,7 +168,7 @@ void ParetoParser::LoadConfigurationSpaces() {
 					cs->addQuantityAs(qu, qn);
 				}
 			}
-			pc->store(*cs);
+			pc.store(*cs);
 		}
 		xmlXPathFreeObject(result);
 	}
@@ -188,10 +187,10 @@ void ParetoParser::LoadConfigurationSets() {
 			// for each configuration space node pSpaceNode ...
 			xmlNodePtr pConfSetNode = nodeset->nodeTab[i];
 
-			const ConfigurationSpace* sp = dynamic_cast<const ConfigurationSpace*>(pc->retrieve(getNodeAttribute(pConfSetNode, (xmlChar*)"space_id")));
+			const ConfigurationSpace& sp = dynamic_cast<const ConfigurationSpace&>(pc.retrieve(getNodeAttribute(pConfSetNode, (xmlChar*)"space_id")));
 
-			ConfigurationSet* cs = new ConfigurationSet(sp, getNodeAttribute(pConfSetNode, (xmlChar*)"name"));
-			const ListOfQuantityTypes* qts = &sp->quantities;
+			ConfigurationSet& cs = *new ConfigurationSet(sp, getNodeAttribute(pConfSetNode, (xmlChar*)"name"));
+			const ListOfQuantityTypes& qts = sp.quantities;
 
 			// get all the configurations and add them to the set
 			xmlXPathObjectPtr result_confs = getNodeSetXPathNode(pXMLDoc, pConfSetNode, (xmlChar*)"pa:configurations/pa:configuration", xpathCtx);
@@ -200,7 +199,7 @@ void ParetoParser::LoadConfigurationSets() {
 				for (int j = 0; j < nodeset_confs->nodeNr; j++) {
 					// for each configuration node pConfNode ...
 					xmlNodePtr pConfNode = nodeset_confs->nodeTab[j];
-					Configuration* cf = new Configuration(sp);
+					Configuration& cf = *new Configuration(sp);
 
 					// get all the values and add them to the configuration
 					xmlXPathObjectPtr result_value = getNodeSetXPathNode(pXMLDoc, pConfNode, (xmlChar*)"pa:value", xpathCtx);
@@ -209,24 +208,24 @@ void ParetoParser::LoadConfigurationSets() {
 						for (int k = 0; k < nodeset_value->nodeNr; k++) {
 							// for each value node pValueNode ...
 							xmlNodePtr pValueNode = nodeset_value->nodeTab[k];
-							const QuantityValue& qv = (*qts)[k]->valueFromString(getNodeText(pXMLDoc, pValueNode));
-							cf->addQuantity(qv);
+							const QuantityValue& qv = (qts)[k]->valueFromString(getNodeText(pXMLDoc, pValueNode));
+							cf.addQuantity(qv);
 						}
 					}
-					cs->addConfiguration(*cf);
+					cs.addConfiguration(cf);
 				}
 				xmlXPathFreeObject(result_confs);
 			}
-			pc->store(*cs);
+			pc.store(cs);
 		}
 		xmlXPathFreeObject(result);
 	}
 }
 
 
-ListOfQuantityNames* ParetoParser::getListOfQuantityNames(xmlNodePtr pOperationNode)
+ListOfQuantityNames& ParetoParser::getListOfQuantityNames(xmlNodePtr pOperationNode)
 {
-	ListOfQuantityNames* lqn = new ListOfQuantityNames();
+	ListOfQuantityNames& lqn = *new ListOfQuantityNames();
 
 	// Select the quantity nodes
 	xmlXPathObjectPtr result_quants = getNodeSetXPathNode(pXMLDoc, pOperationNode, (xmlChar*)"pa:quant", xpathCtx);
@@ -236,16 +235,16 @@ ListOfQuantityNames* ParetoParser::getListOfQuantityNames(xmlNodePtr pOperationN
 			// for each quantity ...
 			xmlNodePtr pQuantNode = quantset->nodeTab[j];
 			std::string q = getNodeText(pXMLDoc, pQuantNode);
-			lqn->push_back(q);
+			lqn.push_back(q);
 		}
 		xmlXPathFreeObject(result_quants);
 	}
 	return lqn;
 }
 
-JoinMap* ParetoParser::getJoinMap(xmlNodePtr pOperationNode)
+JoinMap& ParetoParser::getJoinMap(xmlNodePtr pOperationNode)
 {
-	JoinMap* jm = new JoinMap();
+	JoinMap& jm = *new JoinMap();
 	// Select the configuration set nodes
 	xmlXPathObjectPtr result_pairs = getNodeSetXPathNode(pXMLDoc, pOperationNode, (xmlChar*)"pa:between", xpathCtx);
 	if (result_pairs) {
@@ -257,7 +256,7 @@ JoinMap* ParetoParser::getJoinMap(xmlNodePtr pOperationNode)
 			std::string qa = getNodeAttribute(pJoinNode, (xmlChar*)"quanta");
 			std::string qb = getNodeAttribute(pJoinNode, (xmlChar*)"quantb");
 			// add the join to the map
-			(*jm)[qa] = qb;
+			jm[qa] = qb;
 		}
 		xmlXPathFreeObject(result_pairs);
 	}
@@ -288,77 +287,77 @@ void ParetoParser::LoadOperations()
 		std::string nodeName = getNodeType(pOperationNode);
 
 		if (nodeName == "join") {
-			pc->verbose("join on multiple attributes\n");
+			pc.verbose("join on multiple attributes\n");
 
-			JoinMap* qm = this->getJoinMap(pOperationNode);
+			JoinMap& qm = this->getJoinMap(pOperationNode);
 
 			// create an operation and execute it
 			POperation_Join op(qm);
-			op.executeOn(*pc);
+			op.executeOn(pc);
 		}
 
 		if (nodeName == "join_eff") {
-			pc->verbose("efficient join on multiple attributes\n");
+			pc.verbose("efficient join on multiple attributes\n");
 
-			JoinMap* qm = this->getJoinMap(pOperationNode);
+			JoinMap& qm = this->getJoinMap(pOperationNode);
 
 			// create an operation and execute it
 			POperation_EfficientJoin op(qm);
-			op.executeOn(*pc);
+			op.executeOn(pc);
 		}
 
 		else if (nodeName == "abstract") {
-			pc->verbose("abstraction of quantities\n");
+			pc.verbose("abstraction of quantities\n");
 
 			// get the quantities
-			ListOfQuantityNames* lqn = getListOfQuantityNames(pOperationNode);
+			ListOfQuantityNames& lqn = getListOfQuantityNames(pOperationNode);
 
 			// create an operation and execute it
 			POperation_Abstract op(lqn);
-			op.executeOn(*pc);
+			op.executeOn(pc);
 			
 			// cleanup
-			delete lqn;
+			delete &lqn;
 		}
 
 		else if (nodeName == "hide") {
-			pc->verbose("hiding quantities\n");
+			pc.verbose("hiding quantities\n");
 
 			// get the quantities
-			ListOfQuantityNames* lqn = getListOfQuantityNames(pOperationNode);
+			ListOfQuantityNames& lqn = getListOfQuantityNames(pOperationNode);
 
 			// create an operation and execute it
 			POperation_Hide op(lqn);
-			op.executeOn(*pc);
+			op.executeOn(pc);
 
 			// cleanup
-			delete lqn;
+			delete &lqn;
 		}
 
 		else if (nodeName == "aggregate") {
-			pc->verbose("aggregating attributes\n");
+			pc.verbose("aggregating attributes\n");
 
 			// get the quantities
-			ListOfQuantityNames* lqn = getListOfQuantityNames(pOperationNode);
+			ListOfQuantityNames& lqn = getListOfQuantityNames(pOperationNode);
 
 			// Select the name node
 			xmlNodePtr pNameNode = getNodeXPathNode(pXMLDoc, pOperationNode, (xmlChar*)"pa:name", xpathCtx);
 			if (!pNameNode) {
-				delete lqn;
+				delete &lqn;
 				throw EParetoCalculatorError("Name node missing in aggregate operation");
 			}
 			std::string newname = getNodeText(pXMLDoc, pNameNode);
 
 			// create an operation and execute it
 			POperation_Aggregate op(lqn, newname);
-			op.executeOn(*pc);
+			op.executeOn(pc);
 
 			// cleanup
-			delete lqn;
+			delete &lqn;
 		}
 
 		else if (nodeName == "prodcons") {
-			pc->verbose("applying producer consumer constraint\n");
+			pc.verbose("applying producer consumer constraint\n");
 
 			// Select the producer and consumer quantity nodes
 			xmlNodePtr pProdNode = getNodeXPathNode(pXMLDoc, pOperationNode, (xmlChar*)"pa:producer_quant", xpathCtx);
@@ -369,11 +368,11 @@ void ParetoParser::LoadOperations()
 
 			// create an operation and execute it
 			POperation_ProdCons op(pq, cq);
-			op.executeOn(*pc);
+			op.executeOn(pc);
 		}
 
 		else if (nodeName == "prodcons_eff") {
-			pc->verbose("applying efficient producer consumer constraint\n");
+			pc.verbose("applying efficient producer consumer constraint\n");
 
 			// Select the producer and consumer quantity nodes
 			xmlNodePtr pProdNode = getNodeXPathNode(pXMLDoc, pOperationNode, (xmlChar*)"pa:producer_quant", xpathCtx);
@@ -383,63 +382,63 @@ void ParetoParser::LoadOperations()
 
 			// create an operation and execute it
 			POperation_EfficientProdCons op(pq, cq);
-			op.executeOn(*pc);
+			op.executeOn(pc);
 		}
 
 		else if (nodeName == "push") {
-			pc->verbose("pushing object onto the stack\n");
+			pc.verbose("pushing object onto the stack\n");
 				
 			// create an operation and execute it
 			POperation_Push op(getNodeAttribute(pOperationNode, (xmlChar*)"name"));
-			op.executeOn(*pc);
+			op.executeOn(pc);
 		}
 
 		else if (nodeName == "store") {
-			pc->verbose("storing object from the stack\n");
+			pc.verbose("storing object from the stack\n");
 			
 			// create an operation and execute it
 			POperation_Store op(getNodeAttribute(pOperationNode, (xmlChar*)"name"));
-			op.executeOn(*pc);
+			op.executeOn(pc);
 		}
 
 		else if (nodeName == "minimize") {
-			pc->verbose("minimizing set of configurations\n");
+			pc.verbose("minimizing set of configurations\n");
 
 			// create an operation and execute it
 			POperation_Minimize op;
-			op.executeOn(*pc);
+			op.executeOn(pc);
 		}
 		
 		else if (nodeName == "minimize_eff") {
-			pc->verbose("minimizing set of configurations\n");
+			pc.verbose("minimizing set of configurations\n");
 
 			// create an operation and execute it
 			POperation_EfficientMinimize op;
-			op.executeOn(*pc);
+			op.executeOn(pc);
 		}
 
 		else if (nodeName == "pop") {
-			pc->verbose("popping element from the stack\n");
+			pc.verbose("popping element from the stack\n");
 			POperation_Pop op;
-			op.executeOn(*pc);
+			op.executeOn(pc);
 		}
 
 		else if (nodeName == "duplicate") {
-			pc->verbose("duplicating element on top of the stack\n");
+			pc.verbose("duplicating element on top of the stack\n");
 			POperation_Duplicate op;
-			op.executeOn(*pc);
+			op.executeOn(pc);
 		}
 
 		else if (nodeName == "print") {
-			pc->verbose("printing element from the stack:\n");
+			pc.verbose("printing element from the stack:\n");
 			POperation_Print op;
-			op.executeOn(*pc);
+			op.executeOn(pc);
 		}
 
 		else if (nodeName == "product") {
-			pc->verbose("computing product of sets of configurations\n");
+			pc.verbose("computing product of sets of configurations\n");
 			POperation_Product op;
-			op.executeOn(*pc);
+			op.executeOn(pc);
 		}
 
 	}
@@ -447,12 +446,6 @@ void ParetoParser::LoadOperations()
 }
 
 
-
-
-std::vector<QuantityType*>& ParetoParser::getQuantityTypes() {
-	std::vector<QuantityType*>* v = new(std::vector<QuantityType*>);
-	return *v;
-}
 
 
 void ParetoParser::SaveAll(std::string f)

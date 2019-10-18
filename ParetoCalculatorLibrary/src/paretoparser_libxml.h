@@ -37,6 +37,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "quantity.h"
 #include "operations.h"
 
@@ -51,7 +52,7 @@ namespace Pareto {
 	//Encapsulates the libXML specific XML parser classes
 	class ParetoParser {
 	public:
-		ParetoParser(ParetoCalculator* forPC);
+		ParetoParser(ParetoCalculator& forPC);
 
 		void LoadFile(std::string f);
 		void SaveAll(std::string f);						// forget about saving for now
@@ -63,19 +64,19 @@ namespace Pareto {
 		void LoadConfigurationSets();
 		//void SaveConfigurationSets();
 		void LoadOperations();
-		std::vector<QuantityType*>& getQuantityTypes();
-		std::vector<QuantityType*>& getConfigurationSpaces();
-		std::vector<QuantityType*>& getConfigurationSets();
+		std::vector<std::shared_ptr<QuantityType>>& getQuantityTypes();
+		std::vector<std::shared_ptr<ConfigurationSpace>>& getConfigurationSpaces();
+		std::vector<std::shared_ptr<ConfigurationSet>>& getConfigurationSets();
 		ParetoCalculatorOperation& getNextOperation();
 
 	private:
 
-		ParetoCalculator* pc;
+		ParetoCalculator& pc;
 
 		xmlXPathContextPtr xpathCtx = nullptr;
 
-		ListOfQuantityNames* getListOfQuantityNames(xmlNodePtr pOperationNode);
-		JoinMap* getJoinMap(xmlNodePtr pOperationNode);
+		ListOfQuantityNames& getListOfQuantityNames(xmlNodePtr pOperationNode);
+		JoinMap& getJoinMap(xmlNodePtr pOperationNode);
 	};
 
 }

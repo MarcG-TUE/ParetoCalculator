@@ -189,9 +189,9 @@ void POperation_Derived::executeOn(ParetoCalculator& c) {
 	c.push(*sconfs);
 }
 
-POperation_Aggregate::POperation_Aggregate(ListOfQuantityNames* ag_quants, std::string& agname)
+POperation_Aggregate::POperation_Aggregate(ListOfQuantityNames& ag_quants, std::string& agname):
+	aggregate_quants(ag_quants)
 {
-	this->aggregate_quants = ag_quants;
 	this->newName = agname;
 }
 
@@ -217,7 +217,7 @@ void POperation_Aggregate::executeOn(ParetoCalculator& c)
 
 	// find positions of quantities to aggregate
 	std::vector<unsigned int> idx;
-	for (ListOfQuantityNames::iterator i = this->aggregate_quants->begin(); i != this->aggregate_quants->end(); i++) {
+	for (ListOfQuantityNames::iterator i = this->aggregate_quants.begin(); i != this->aggregate_quants.end(); i++) {
 		std::string& qn = *i;
 		idx.push_back(cs.confspace.indexOfQuantity(qn));
 	}
@@ -298,8 +298,9 @@ std::string POperation_Multiply::description() {
 }
 
 
-POperation_Abstract::POperation_Abstract(ListOfQuantityNames* qnames) {
-	this->lqn = qnames;
+POperation_Abstract::POperation_Abstract(ListOfQuantityNames& qnames):
+	lqn(qnames)
+{
 }
 
 void POperation_Abstract::executeOn(ParetoCalculator& c) {
@@ -307,7 +308,7 @@ void POperation_Abstract::executeOn(ParetoCalculator& c) {
 	// Surely, this can be done a lot more efficiently...
 	c.push(cs);
 	ListOfQuantityNames::iterator i;
-	for (i = this->lqn->begin(); i != this->lqn->end(); i++) {
+	for (i = this->lqn.begin(); i != this->lqn.end(); i++) {
 		c.push(*new StorableString(*i));
 		c.abstract();
 	}
@@ -326,8 +327,9 @@ void POperation_Hide::executeOn(ParetoCalculator& c) {
 
 
 
-POperation_Join::POperation_Join(JoinMap* jqnamemap) {
-	j_quants = jqnamemap;
+POperation_Join::POperation_Join(JoinMap& jqnamemap) :
+	j_quants(jqnamemap)
+{
 }
 
 bool POperation_Join::testConstraint(const Pareto::Configuration& c) {
@@ -361,7 +363,7 @@ void POperation_Join::executeOn(ParetoCalculator& c) {
 
 	JoinMap::iterator i;
 
-	for (i = j_quants->begin(); i != j_quants->end(); i++) {
+	for (i = j_quants.begin(); i != j_quants.end(); i++) {
 		qan.push_back(csa.confspace.indexOfQuantity(i->first));
 		qbn.push_back(csb.confspace.indexOfQuantity(i->second) + (int)csa.confspace.quantities.size());
 	}
@@ -376,8 +378,7 @@ void POperation_Join::executeOn(ParetoCalculator& c) {
 };
 
 
-POperation_EfficientJoin::POperation_EfficientJoin(JoinMap* jqnamemap) {
-	this->j_quants = jqnamemap;
+POperation_EfficientJoin::POperation_EfficientJoin(JoinMap& jqnamemap): j_quants(jqnamemap) {
 }
 
 ConfigurationSet& recursiveEfficientJoin(ParetoCalculator& c, JoinMap& jqnamemap, const ConfigurationSet& A, const ConfigurationSet& B, ConfigurationSpace& productspace) {
@@ -390,16 +391,16 @@ ConfigurationSet& recursiveEfficientJoin(ParetoCalculator& c, JoinMap& jqnamemap
 		return result;
 	}
 	else {
-		QuantityName qa = jqnamemap->begin()->first;
-		QuantityName qb = jqnamemap->begin()->second;
+		QuantityName qa = jqnamemap.begin()->first;
+		QuantityName qb = jqnamemap.begin()->second;
 		IndexOnConfigurationSet* ia, * ib;
-		if (A->confspace->getQuantity(qa).isTotallyOrdered()) {
+		if (A.confspace.getQuantity(qa).isTotallyOrdered()) {
 			ia = new IndexOnTotalOrderConfigurationSet(qa, A);
 		}
 		else {
 			ia = new IndexOnUnorderedConfigurationSet(qa, A);
 		}
-		if (B->confspace->getQuantity(qb).isTotallyOrdered()) {
+		if (B.confspace.getQuantity(qb).isTotallyOrdered()) {
 			ib = new IndexOnTotalOrderConfigurationSet(qb, B);
 		}
 		else {
@@ -407,29 +408,29 @@ ConfigurationSet& recursiveEfficientJoin(ParetoCalculator& c, JoinMap& jqnamemap
 		}
 
 		JoinMap newnamemap;
-		JoinMap::iterator i = jqnamemap->begin();
+		JoinMap::iterator i = jqnamemap.begin();
 		i++;
-		for (; i != jqnamemap->end(); i++) {
+		for (; i != jqnamemap.end(); i++) {
 			newnamemap[i->first] = i->second;
 		}
 
-		ConfigurationSet* result = new ConfigurationSet(productspace, "result");
+		ConfigurationSet& result = *new ConfigurationSet(productspace, "result");
 
 		unsigned int j = 0;
 		int l_x, u_x, v_x, w_x;
-		while (j < ia->confset->confs.size()) {
-			ConfigurationIndexReference& x = *(ia->get(j));
+		while (j < ia->confset.confs.size()) {
+			ConfigurationIndexReference& x = ia->get(j);
 			l_x = ia->lower(x);
 			u_x = ia->upper(x);
 			v_x = ib->lower(x);
 			w_x = ib->upper(x);
 
-			ConfigurationSet* Asub = ia->copyFromTo(l_x, u_x);
-			ConfigurationSet* Bsub = ib->copyFromTo(v_x, w_x);
+			ConfigurationSet& Asub = ia->copyFromTo(l_x, u_x);
+			ConfigurationSet& Bsub = ib->copyFromTo(v_x, w_x);
 
-			ConfigurationSet* temp = recursiveEfficientJoin(c, &newnamemap, Asub, Bsub, productspace);
-			result->addUniqueConfigurationsOf(*temp);
-			delete temp;
+			ConfigurationSet& temp = recursiveEfficientJoin(c, newnamemap, Asub, Bsub, productspace);
+			result.addUniqueConfigurationsOf(temp);
+			delete &temp;
 
 			j = u_x + 1;
 		}
@@ -441,9 +442,9 @@ void POperation_EfficientJoin::executeOn(ParetoCalculator& c) {
 	const ConfigurationSet& csa = c.popConfigurationSet();
 	const ConfigurationSet& csb = c.popConfigurationSet();
 
-	ConfigurationSpace* productspace = csa.confspace->productWith(*(csb.confspace));
-	ConfigurationSet* result = recursiveEfficientJoin(c, this->j_quants, &csa, &csb, productspace);
-	c.push(*result);
+	ConfigurationSpace& productspace = csa.confspace.productWith(csb.confspace);
+	ConfigurationSet& result = recursiveEfficientJoin(c, this->j_quants, csa, csb, productspace);
+	c.push(result);
 };
 
 
@@ -466,17 +467,17 @@ void POperation_EfficientProdCons::executeOn(ParetoCalculator& c) {
 	const ConfigurationSet& csc = c.popConfigurationSet();
 	const ConfigurationSet& csp = c.popConfigurationSet();
 
-	if (!(csp.confspace->getQuantity(p_quant).isTotallyOrdered() && csc.confspace->getQuantity(c_quant).isTotallyOrdered())) {
+	if (!(csp.confspace.getQuantity(p_quant).isTotallyOrdered() && csc.confspace.getQuantity(c_quant).isTotallyOrdered())) {
 		throw EParetoCalculatorError("Dimensions must be totally ordered for efficient producer-consumer");
 	}
 
 	// To do: I'm computing products of spaces everywhere, make one method in ConfSpace class.
-	ConfigurationSpace* nspace = csp.confspace->productWith(*(csc.confspace));	
+	ConfigurationSpace& nspace = csp.confspace.productWith(csc.confspace);	
 	std::string name = "Producer-Consumer ( " + csp.name + ", " + csc.name + ", " + p_quant + ", " + c_quant + ")";
-	ConfigurationSet* ns = new ConfigurationSet(nspace, name);
+	ConfigurationSet& ns = *new ConfigurationSet(nspace, name);
 
-	IndexOnTotalOrderConfigurationSet ip(p_quant, &csp);
-	IndexOnTotalOrderConfigurationSet ic(c_quant, &csc);
+	IndexOnTotalOrderConfigurationSet ip(p_quant, csp);
+	IndexOnTotalOrderConfigurationSet ic(c_quant, csc);
 
 
 	unsigned int i = 0;
@@ -484,9 +485,9 @@ void POperation_EfficientProdCons::executeOn(ParetoCalculator& c) {
 	while (i < ic.size() && j >= 0) {
 		if (default_match(ip.at(j).value(), ic.at(i).value())) {
 			Configuration* c = new Configuration(nspace);
-			c->addQuantitiesOf(*ic.at(i).conf);
-			c->addQuantitiesOf(*ip.at(j).conf);
-			ns->addConfiguration(*c);
+			c->addQuantitiesOf(ic.at(i).conf);
+			c->addQuantitiesOf(ip.at(j).conf);
+			ns.addConfiguration(*c);
 			i = i + 1;
 		}
 		else {
@@ -494,9 +495,9 @@ void POperation_EfficientProdCons::executeOn(ParetoCalculator& c) {
 			if (j >= 0) {
 				for (unsigned int k = 0; k < i; k++) {
 					Configuration* c = new Configuration(nspace);
-					c->addQuantitiesOf(*ic.at(k).conf);
-					c->addQuantitiesOf(*ip.at(j).conf);
-					ns->addConfiguration(*c);
+					c->addQuantitiesOf(ic.at(k).conf);
+					c->addQuantitiesOf(ip.at(j).conf);
+					ns.addConfiguration(*c);
 				}
 			}
 		}
@@ -504,12 +505,12 @@ void POperation_EfficientProdCons::executeOn(ParetoCalculator& c) {
 	if (i == ic.size()) {
 		for (int l = 0; l < j; l++) {
 			for (unsigned int k = 0; k < ic.size(); k++) {
-				Configuration* c = new Configuration(nspace);
-				c->addQuantitiesOf(*ic.at(k).conf);
-				c->addQuantitiesOf(*ip.at(l).conf);
-				ns->addConfiguration(*c);
+				Configuration& c = *new Configuration(nspace);
+				c.addQuantitiesOf(ic.at(k).conf);
+				c.addQuantitiesOf(ip.at(l).conf);
+				ns.addConfiguration(c);
 			}
 		}
 	}
-	c.push(*ns);
+	c.push(ns);
 }

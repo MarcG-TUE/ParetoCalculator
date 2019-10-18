@@ -60,17 +60,17 @@ namespace Pareto {
 		return os;
 	}
 
-	const StorableObject* StackOfStorageObjects::pop(void){
-		const StorableObject* b = this->back();
+	StorableObjectPtr StackOfStorageObjects::pop(void){
+		StorableObjectPtr b = this->back();
 		this->pop_back();
 		return b;
 	}
 
-	void StackOfStorageObjects::push(const StorableObject* o){
+	void StackOfStorageObjects::push(const StorableObjectPtr o){
 		this->push_back(o);
 	}
 
-	const StorableObject* StackOfStorageObjects::peek(void){
+	StorableObjectPtr StackOfStorageObjects::peek(void){
 		return this->back();
 	}
 

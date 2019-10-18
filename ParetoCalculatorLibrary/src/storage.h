@@ -38,6 +38,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <memory>
 
 
 namespace Pareto {
@@ -74,6 +75,8 @@ namespace Pareto {
 		virtual StorableObject& copy(void) const = 0;
 	};
 
+	typedef std::shared_ptr<const StorableObject> StorableObjectPtr;
+
 	class StorageMap : public std::map<const std::string,const StorableObject*>{};
 
 	/// A string that can be stored in calculator storage
@@ -93,11 +96,11 @@ namespace Pareto {
     std::ostream& operator<<(std::ostream& os, const StorableObject& o);
 
 	/// A stack of StorableObjects
-	class StackOfStorageObjects: public std::vector<const StorableObject*>{
+	class StackOfStorageObjects: public std::vector<std::shared_ptr<const StorableObject>>{
 	public:
-		const StorableObject& pop(void);
-		void push(const StorableObject& o);
-		const StorableObject& peek(void);
+		StorableObjectPtr pop(void);
+		void push(StorableObjectPtr o);
+		StorableObjectPtr peek(void);
 		void duplicate(void);
 	};
 }
