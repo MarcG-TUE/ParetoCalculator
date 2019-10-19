@@ -195,8 +195,8 @@ namespace Pareto {
 		void constraint(bool (*testConstraint)(const Configuration&));
 
 		// parsing
-		std::unique_ptr<ParetoParser> parser = nullptr;
-		
+		ParetoParser* parser = nullptr;
+
 		/// call this function before using the parser function below.
 		void initParser();
 

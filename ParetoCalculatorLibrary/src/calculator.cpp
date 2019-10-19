@@ -821,7 +821,7 @@ void ParetoCalculator::initParser() {
 	if (parser == nullptr) {
 		this->setStatus("Creating XML Parser");
 		this->verbose("Creating XML Parser\n");
-		parser = std::make_unique<ParetoParser>(*this);
+		parser = new ParetoParser(*this);
 	}
 }
 

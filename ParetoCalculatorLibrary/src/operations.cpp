@@ -179,8 +179,8 @@ void POperation_Derived::executeOn(ParetoCalculator& c) {
 		double va = dynamic_cast<const QuantityValue_Real*>(&c->getQuantity(a_quant))->value;
 		double vb = dynamic_cast<const QuantityValue_Real*>(&c->getQuantity(b_quant))->value;
 #else
-		double va = ((const QuantityValue_Real*)(&c.getQuantity(a_quant)))->value;
-		double vb = ((const QuantityValue_Real*)(&c.getQuantity(b_quant)))->value;
+		double va = ((const QuantityValue_Real*)(&c->getQuantity(a_quant)))->value;
+		double vb = ((const QuantityValue_Real*)(&c->getQuantity(b_quant)))->value;
 #endif
 		std::shared_ptr<QuantityValue_Real> sqv = std::make_shared<QuantityValue_Real>(*sqt, this->derive(va, +vb));
 		scf->addQuantity(*sqv);
@@ -236,7 +236,7 @@ void POperation_Aggregate::executeOn(ParetoCalculator& c)
 #ifdef _DEBUG
 			const QuantityValue_Real& qvr = dynamic_cast<const QuantityValue_Real&>(cf->getQuantity(k));
 #else
-			const QuantityValue_Real& qvr = (const QuantityValue_Real&)(cf.getQuantity(k));
+			const QuantityValue_Real& qvr = (const QuantityValue_Real&)(cf->getQuantity(k));
 #endif
 			sum = sum + qvr.value;
 
