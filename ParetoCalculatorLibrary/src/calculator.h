@@ -37,6 +37,7 @@
 #include <functional>
 #include "operations.h"
 
+
 namespace Pareto {
 
 	class ParetoParser;

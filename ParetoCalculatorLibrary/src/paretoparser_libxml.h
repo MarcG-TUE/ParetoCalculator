@@ -64,10 +64,10 @@ namespace Pareto {
 		void LoadConfigurationSets();
 		//void SaveConfigurationSets();
 		void LoadOperations();
-		std::vector<std::shared_ptr<QuantityType>>& getQuantityTypes();
-		std::vector<std::shared_ptr<ConfigurationSpace>>& getConfigurationSpaces();
-		std::vector<std::shared_ptr<ConfigurationSet>>& getConfigurationSets();
-		ParetoCalculatorOperation& getNextOperation();
+		//std::vector<std::shared_ptr<QuantityType>>& getQuantityTypes();
+		//std::vector<std::shared_ptr<ConfigurationSpace>>& getConfigurationSpaces();
+		//std::vector<std::shared_ptr<ConfigurationSet>>& getConfigurationSets();
+		//ParetoCalculatorOperation& getNextOperation();
 
 	private:
 
