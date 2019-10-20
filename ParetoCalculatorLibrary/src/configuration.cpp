@@ -168,8 +168,8 @@ namespace Pareto {
 	{
 		unsigned int k = c1.confspace.quantities.size();
 		for (unsigned int i = 0; i < k; i++) {
-			const QuantityValue* v1 = &(c1.getQuantity(i));
-			const QuantityValue* v2 = &(c2.getQuantity(i));
+			QuantityValuePtr v1 = c1.getQuantity(i);
+			QuantityValuePtr v2 = c2.getQuantity(i);
 			if (v1->totalOrderSmaller(*v2)) { return true; }
 			if (v2->totalOrderSmaller(*v1)) { return false; }
 		}
@@ -260,7 +260,7 @@ namespace Pareto {
 
 		ListOfQuantityTypes::iterator i;
 		for (i = quantities.begin(); i != quantities.end(); i++) {
-			const QuantityValue& v = (*i)->defaultValue();
+			QuantityValuePtr v = (*i)->defaultValue();
 			c->addQuantity(v);
 		}
 		return c;
@@ -287,9 +287,8 @@ namespace Pareto {
 		}
 	}
 
-	void Configuration::addQuantity(const QuantityValue& q) {
-		Pareto::QuantityValue& qp = const_cast<Pareto::QuantityValue&>(q);
-		quantities.push_back(qp);
+	void Configuration::addQuantity(QuantityValuePtr q) {
+		quantities.push_back(q);
 	}
 
 	void Configuration::addQuantitiesOf(ConfigurationPtr c) {
@@ -306,7 +305,7 @@ namespace Pareto {
 		unsigned int n = 0;
 		for (i = quantities.begin(); i != quantities.end(); i++, n++) {
 			if (this->confspace.quantityVisibility[n]) {
-				QuantityValue& v = (*i);
+				QuantityValuePtr v = (*i);
 				os << v;
 			}
 			else {
@@ -317,12 +316,12 @@ namespace Pareto {
 		os << ")";
 	}
 
-	void Configuration::setQuantity(int n, QuantityValue& v) {
+	void Configuration::setQuantity(int n, QuantityValuePtr v) {
 		quantities[n] = v;
 	}
 
 
-	const QuantityValue& Configuration::getQuantity(const unsigned int n) const {
+	QuantityValuePtr Configuration::getQuantity(const unsigned int n) const {
 #ifdef _DEBUG
 		if (n > quantities.size()) {
 			throw EParetoCalculatorError("Index out of bounds in Configuration::getQuantity(int).");
@@ -332,7 +331,7 @@ namespace Pareto {
 		return quantities[n];
 	}
 
-	const QuantityValue& Configuration::getQuantity(const QuantityName& n) const {
+	QuantityValuePtr Configuration::getQuantity(const QuantityName& n) const {
 		unsigned int k = this->confspace.indexOfQuantity(n);
 		return this->quantities[k];
 	}
@@ -453,7 +452,7 @@ namespace Pareto {
 		return std::make_shared<ConfigurationSet>(*this);
 	}
 
-	const QuantityValue& ConfigurationIndexReference::value(void) const {
+	QuantityValuePtr ConfigurationIndexReference::value(void) const {
 		return (this->conf)->getQuantity(index.quantity);
 	}
 
@@ -562,8 +561,8 @@ namespace Pareto {
 
 
 	bool ConfigurationIndexOnUnorderedReference::operator<(const ConfigurationIndexReference& right) const {
-		const QuantityValue* addrA = &(this->value());
-		const QuantityValue* addrB = &(right.value());
+		QuantityValuePtr addrA = this->value();
+		QuantityValuePtr addrB = right.value();
 		return addrA < addrB;
 		// TODO: check, it this always safe. maybe replace by efficient direct comparison of strings without making too many copies.
 		// was:	return this->value().asString()<right.value().asString();
@@ -592,7 +591,7 @@ namespace Pareto {
 
 
 
-	std::ostream& operator<<(std::ostream& os, const Configuration* c) {
+	std::ostream& operator<<(std::ostream& os, ConfigurationPtr c) {
 		c->streamOn(os);
 		return os;
 	}

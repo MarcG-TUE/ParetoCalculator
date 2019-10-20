@@ -61,13 +61,13 @@ namespace Pareto {
 		os << name;
 	}
 
-	QuantityValue& QuantityType::defaultValue(void) const {
+	QuantityValuePtr QuantityType::defaultValue(void) const {
 		throw EParetoCalculatorError("defaultValue in abstract class QuantityType should not be called");
-		QuantityValue& v = *new QuantityValue(*this);
+		QuantityValuePtr v = std::make_shared<QuantityValue>(*this);
 		return v;
 	}
 
-	QuantityValue& QuantityType::valueFromString(const std::string s) const {
+	QuantityValuePtr QuantityType::valueFromString(const std::string s) const {
 		throw EParetoCalculatorError("valueFromString in abstract class QuantityType should not be called");
 		return this->defaultValue();
 	}
@@ -91,7 +91,7 @@ namespace Pareto {
 
 	void QuantityType_Enum::addQuantity(std::string s) {
 		names.push_back(s);
-		quantities.push_back(new QuantityValue_Enum(*this, s));
+		quantities.push_back(std::make_shared<QuantityValue_Enum>(*this, s));
 	};
 
 
@@ -106,17 +106,17 @@ namespace Pareto {
 	}
 
 
-	QuantityValue& QuantityType_Enum::defaultValue(void) const {
-		return **quantities.begin();
+	QuantityValuePtr QuantityType_Enum::defaultValue(void) const {
+		return *quantities.begin();
 	}
 
-	QuantityValue& QuantityType_Enum::valueFromString(const std::string qn) const {
+	QuantityValuePtr QuantityType_Enum::valueFromString(const std::string qn) const {
 		std::vector<std::string>::const_iterator n_iter;
-		std::vector<QuantityValue_Enum*>::const_iterator q_iter;
+		ListOfQuantityValueEnum::const_iterator q_iter;
 
 		for (n_iter = names.begin(), q_iter = quantities.begin(); n_iter != names.end(); n_iter++, q_iter++)
 		{
-			if ((*n_iter) == qn) { return **q_iter; }
+			if ((*n_iter) == qn) { return *q_iter; }
 		}
 		throw EParetoCalculatorError("Quantity" + qn + " unknown in quantity type " + name + ". default quantity returned in function getQuantity.");
 		return this->defaultValue();
@@ -242,9 +242,9 @@ namespace Pareto {
 		return *v;
 	}
 
-	QuantityValue& QuantityType_Integer::valueFromString(const std::string s) const {
+	QuantityValuePtr QuantityType_Integer::valueFromString(const std::string s) const {
 		int number = std::strtol(s.c_str(), 0, 10);
-		return *new QuantityValue_Integer(*this, number);
+		return std::make_shared<QuantityValue_Integer>(*this, number);
 	}
 
 
@@ -310,8 +310,8 @@ namespace Pareto {
 		return *v;
 	}
 
-	QuantityValue& QuantityType_Real::valueFromString(const std::string s) const {
-		return *new QuantityValue_Real(*this, strtod(s.c_str(), nullptr));
+	QuantityValuePtr QuantityType_Real::valueFromString(const std::string s) const {
+		return std::make_shared<QuantityValue_Real>(*this, strtod(s.c_str(), nullptr));
 	}
 
 	bool QuantityType_Real::compare(const QuantityValue& q1, const QuantityValue& q2) const {
@@ -369,16 +369,23 @@ namespace Pareto {
 	// return os;
 	//}
 
-	std::ostream& operator<<(std::ostream& os, QuantityValue& v) {
+	std::ostream& operator<<(std::ostream& os, const QuantityValue& v){
 		v.streamOn(os);
 		return os;
 	}
 
 
+	std::ostream& operator<<(std::ostream& os, QuantityValuePtr v) {
+		v->streamOn(os);
+		return os;
+	}
+
+
 	unsigned int QuantityValue_Enum::index(void) const {
-		unsigned int s = dynamic_cast<const QuantityType_Enum&>(qtype).quantities.size();
+		const QuantityType_Enum& qt = dynamic_cast<const QuantityType_Enum&>(qtype);
+		unsigned int s = qt.quantities.size();
 		for (unsigned int i = 0; i < s; i++) {
-			if (dynamic_cast<const QuantityType_Enum&>(qtype).quantities[i] == this) { return i; }
+			if (*qt.quantities[i] == *this) { return i; }
 		}
 		throw EParetoCalculatorError("Error: value not found in QuantitityType in QuantityValue_Enum::index");
 		return 0;

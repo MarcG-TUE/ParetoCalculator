@@ -223,14 +223,14 @@ namespace Pareto {
 		static ListOfConfSetPtr splitClasses(ConfigurationSetPtr cs, const QuantityName& qn);
 		static ConfigurationSetPtr efficient_minimize_totally_ordered(ConfigurationSetPtr cs, const QuantityName& qn);
 		static ConfigurationSetPtr efficient_minimize_totally_ordered_recursive(ConfigurationSetPtr cs, const QuantityName& qn);
-		static ListOfConfSetPtr splitLowHigh(ConfigurationSetPtr cs, const QuantityName& qn, const QuantityValue **v);
+		static ListOfConfSetPtr splitLowHigh(ConfigurationSetPtr cs, const QuantityName& qn, QuantityValuePtr *v);
 		static ConfigurationSetPtr efficient_minimize_dcmerge(ConfigurationSetPtr csl, ConfigurationSetPtr csh, const QuantityName& qn, const QuantityValue& v);
 		static ConfigurationSetPtr efficient_minimize_filter1(ConfigurationSetPtr csl, ConfigurationSetPtr csh, const QuantityName& qn);
 		static ConfigurationSetPtr efficient_minimize_filter2(ConfigurationSetPtr csa, ConfigurationSetPtr csb);
 		static ConfigurationSetPtr efficient_minimize_filter3(ConfigurationSetPtr csa, ConfigurationSetPtr csb);
 		static ConfigurationSetPtr efficient_minimize_filter4(ConfigurationSetPtr csa, ConfigurationSetPtr csb);
-		static const QuantityValue& efficient_minimize_getPivot(ConfigurationSetPtr cs, const QuantityName& qn);
-		static void efficient_minimize_filter_split(ConfigurationSetPtr cs, const QuantityName& qn, const QuantityValue& pivot, ConfigurationSetPtr *csl, ConfigurationSetPtr *csh);
+		static QuantityValuePtr efficient_minimize_getPivot(ConfigurationSetPtr cs, const QuantityName& qn);
+		static void efficient_minimize_filter_split(ConfigurationSetPtr cs, const QuantityName& qn, QuantityValuePtr pivot, ConfigurationSetPtr *csl, ConfigurationSetPtr *csh);
 
 
 	};

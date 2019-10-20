@@ -198,7 +198,7 @@ namespace Pareto {
 	bool operator!=(ConfigurationSpace& cs1, ConfigurationSpace& cs2);
 
 	// An STL vector of QuantityValues
-	class ListOfQuantityValues : public std::vector<std::reference_wrapper<QuantityValue>> {
+	class ListOfQuantityValues : public std::vector<QuantityValuePtr> {
 	};
 
 	/// A configuration of Pareto Algebra.
@@ -223,19 +223,19 @@ namespace Pareto {
 		virtual ~Configuration(){};
 
 		// Add a quantity value to the configuration
-		virtual void addQuantity(const QuantityValue& q);
+		virtual void addQuantity(QuantityValuePtr q);
 
 		// Copy quantity values of another configurwtion to this configuration
 		virtual void addQuantitiesOf(ConfigurationPtr c);
 
 		/// retrieve quantity value of quantity with index number 'n'
-		virtual const QuantityValue& getQuantity(const unsigned int n) const;
+		virtual QuantityValuePtr getQuantity(const unsigned int n) const;
 
 		/// retrieve quantity value of quantity with name 'n'
-		virtual const QuantityValue& getQuantity(const QuantityName& n) const;
+		virtual QuantityValuePtr getQuantity(const QuantityName& n) const;
 
 		/// set quantity value of quantity with index number 'n'
-		virtual void setQuantity(int n, QuantityValue& v);
+		virtual void setQuantity(int n, QuantityValuePtr v);
 
 		/// stream a string representation of the configuration to 'os'
 		virtual void streamOn(std::ostream& os) const;
@@ -245,7 +245,7 @@ namespace Pareto {
 	};
 
 
-    std::ostream& operator<<(std::ostream& os, const Configuration* c);
+    std::ostream& operator<<(std::ostream& os, ConfigurationPtr c);
 
 	bool operator<=(const Configuration& c1, const Configuration& c2);
 	bool operator==(const Configuration& c1, const Configuration& c2);
@@ -265,7 +265,7 @@ namespace Pareto {
 		IndexOnConfigurationSet& index;
 		ConfigurationIndexReference(ConfigurationPtr c, IndexOnConfigurationSet& i): conf(c), index(i){}
 		virtual ~ConfigurationIndexReference(){}
-		const QuantityValue& value(void) const;
+		QuantityValuePtr value(void) const;
 		bool operator==(const ConfigurationIndexReference& right) const;
 		bool operator>(const ConfigurationIndexReference& right) const ;
 		virtual bool operator<(const ConfigurationIndexReference& right) const;

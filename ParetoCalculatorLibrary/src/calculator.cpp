@@ -349,7 +349,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_unordered(Configuration
 		for (j = mcxa->confs.begin(); j != mcxa->confs.end(); j++) {
 			ConfigurationPtr c = std::make_shared<Configuration>(*(cs->confspace));
 			ConfigurationPtr c_mcxa = *j;
-			const QuantityValue& x = (*cx->confs.begin())->getQuantity(p);
+			QuantityValuePtr x = (*cx->confs.begin())->getQuantity(p);
 			//c-> add quantities with x at the right place ....
 			for (unsigned int k = 0; k < mcxa->confspace->quantities.size(); k++) {
 				if (k == p) c->addQuantity(x);
@@ -374,7 +374,7 @@ ListOfConfSetPtr ParetoCalculator::splitClasses(ConfigurationSetPtr cs, const Qu
 		std::shared_ptr<ConfigurationIndexReference> r = i.at(k);
 		l = i.lower(*r);
 		u = i.upper(*r);
-		ConfigurationSetPtr ncs = std::make_shared<ConfigurationSet>(cs->confspace, "class " + r->value().asString());
+		ConfigurationSetPtr ncs = std::make_shared<ConfigurationSet>(cs->confspace, "class " + r->value()->asString());
 		for (unsigned int n = l; n <= u; n++) {
 			ncs->addConfiguration(i.at(n)->conf);
 		}
@@ -408,7 +408,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_filter1(ConfigurationSe
 	return res;
 }
 
-const QuantityValue& ParetoCalculator::efficient_minimize_getPivot(ConfigurationSetPtr cs, const QuantityName& qn) {
+QuantityValuePtr ParetoCalculator::efficient_minimize_getPivot(ConfigurationSetPtr cs, const QuantityName& qn) {
 	IndexOnTotalOrderConfigurationSet i = IndexOnTotalOrderConfigurationSet(qn, cs);
 	return i.at(i.size() / 2)->conf->getQuantity(qn);
 }
@@ -416,7 +416,7 @@ const QuantityValue& ParetoCalculator::efficient_minimize_getPivot(Configuration
 // split the configuration set cs into two new configuration sets csl (low) and csh (high) based
 // on the pivot quantity value pivot for quantity qn
 // returns the 
-void ParetoCalculator::efficient_minimize_filter_split(ConfigurationSetPtr cs, const QuantityName& qn, const QuantityValue& pivot, ConfigurationSetPtr* csl, ConfigurationSetPtr* csh) {
+void ParetoCalculator::efficient_minimize_filter_split(ConfigurationSetPtr cs, const QuantityName& qn, QuantityValuePtr pivot, ConfigurationSetPtr* csl, ConfigurationSetPtr* csh) {
 	IndexOnTotalOrderConfigurationSet i = IndexOnTotalOrderConfigurationSet(qn, cs);
 	*csl = std::make_shared<ConfigurationSet>(cs->confspace, "temp");
 	*csh = std::make_shared <ConfigurationSet>(cs->confspace, "temp");
@@ -425,7 +425,7 @@ void ParetoCalculator::efficient_minimize_filter_split(ConfigurationSetPtr cs, c
 	for (j = i.begin(); j != i.end(); j++) {
 		ConfigurationPtr c = (*j)->conf;
 		// TODO: isn't it slow to lookup quantity by name? Use index?
-		if (c->getQuantity(qn) < pivot) {
+		if (*(c->getQuantity(qn)) < *pivot) {
 			(*csl)->addConfiguration(c); 
 		}
 		else break;
@@ -460,7 +460,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_filter2(ConfigurationSe
 			return ParetoCalculator::efficient_minimize_filter4(csa, csb);
 		}
 		ConfigurationSetPtr total = ParetoCalculator::alternative(csa, csb);
-		const QuantityValue& pivot = ParetoCalculator::efficient_minimize_getPivot(total, *qn);
+		QuantityValuePtr pivot = ParetoCalculator::efficient_minimize_getPivot(total, *qn);
 		ConfigurationSetPtr csal;
 		ConfigurationSetPtr csah;
 		ConfigurationSetPtr csbl;
@@ -516,17 +516,28 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_filter4(ConfigurationSe
 	if (csa->confs.size() == 0) { return csb; }
 	if (csb->confs.size() == 0) { return csb; }
 
-	const QuantityValue* v = nullptr, * w;
-	if (csa->confs.size() == 0) return csb;
+	QuantityValuePtr v = nullptr, w;
+
+	// find a quantity that is not hidden
 	unsigned int n = csa->confspace->firstVisibleQuantity();
+
 	SetOfConfigurations::iterator i;
+	// for all configurations in set A
 	for (i = csa->confs.begin(); i != csa->confs.end(); i++) {
-		if (!v) { v = &(*i)->getQuantity(n); }
-		else if ((*(w = &(*i)->getQuantity(n))) <= *v) { v = w; }
+		// for the first configuration set v to quantity n
+		if (!v) {
+			v = (*i)->getQuantity(n); 
+		}
+		// keep track of the minimum 
+		else if (*(w = (*i)->getQuantity(n)) <= *v) 
+		{ 
+			v = w; 
+		}
 	}
 	//	return all confs of b which are smaller than a.
 	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(csb->confspace, "temp");
 	for (i = csb->confs.begin(); i != csb->confs.end(); i++) {
+		// TODO: is this correct? Seems all configuraitons are being added!
 		res->addConfiguration(*i);
 	}
 	return res;
@@ -569,7 +580,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_totally_ordered_recursi
 
 
 ConfigurationSetPtr ParetoCalculator::efficient_minimize_totally_ordered(ConfigurationSetPtr cs, const QuantityName& qn) {
-	const QuantityValue* v;
+	QuantityValuePtr v;
 	// split the set in two; v will be the value used for splitting
 	ListOfConfSetPtr l = ParetoCalculator::splitLowHigh(cs, qn, &v);
 	ListOfConfSet::iterator p = l->begin();
@@ -584,7 +595,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_totally_ordered(Configu
 	return res;
 }
 
-ListOfConfSetPtr ParetoCalculator::splitLowHigh(ConfigurationSetPtr cs, const QuantityName& qn, const QuantityValue** v) {
+ListOfConfSetPtr ParetoCalculator::splitLowHigh(ConfigurationSetPtr cs, const QuantityName& qn, QuantityValuePtr* v) {
 	// pre: size of cs is at least two.
 
 	ListOfConfSetPtr lcs = std::make_shared<ListOfConfSet>();
@@ -594,7 +605,7 @@ ListOfConfSetPtr ParetoCalculator::splitLowHigh(ConfigurationSetPtr cs, const Qu
 
 	unsigned int mid = i.size() / 2;
 //	*v = & const_cast<QuantityValue&>((i.at(mid).conf->getQuantity(qn)));  // try to get rid of the embarrasing const_casts...
-	*v = &(i.at(mid)->conf->getQuantity(qn)); 
+	*v = i.at(mid)->conf->getQuantity(qn); 
 
 	lcs->push_back(i.copyFromTo(0, mid - 1));
 	lcs->push_back(i.copyFromTo(mid, i.size() - 1));
@@ -704,8 +715,8 @@ ConfigurationSetPtr ParetoCalculator::popConfigurationSet() //throw(EParetoCalcu
 StorableStringPtr ParetoCalculator::popStorableString() //throw(EParetoCalculatorError)
 {
 	StorableObjectPtr so = this->pop();
-	if (!so->isConfigurationSet()) {
-		throw EParetoCalculatorError("Configuration set expected in ParetoCalculator::popConfigurationSet()");
+	if (!so->isString()) {
+		throw EParetoCalculatorError("String expected in ParetoCalculator::popStorableString()");
 	}
 	return std::dynamic_pointer_cast<const StorableString>(so);
 }

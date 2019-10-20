@@ -208,7 +208,7 @@ void ParetoParser::LoadConfigurationSets() {
 						for (int k = 0; k < nodeset_value->nodeNr; k++) {
 							// for each value node pValueNode ...
 							xmlNodePtr pValueNode = nodeset_value->nodeTab[k];
-							const QuantityValue& qv = (qts)[k]->valueFromString(getNodeText(pXMLDoc, pValueNode));
+							QuantityValuePtr qv = (qts)[k]->valueFromString(getNodeText(pXMLDoc, pValueNode));
 							cf->addQuantity(qv);
 						}
 					}

@@ -48,6 +48,7 @@ namespace Pareto {
 	typedef std::shared_ptr<QuantityName> QuantityNamePtr;
 
 	class QuantityValue;
+	typedef std::shared_ptr<QuantityValue> QuantityValuePtr;
 
 	/// abstract super class of all quantity types
 	class QuantityType: public StorableObject {
@@ -68,10 +69,10 @@ namespace Pareto {
 		virtual void streamOn(std::ostream& os) const;
 
 		/// returns a default value for this quantity type
-		virtual QuantityValue& defaultValue(void) const;
+		virtual QuantityValuePtr defaultValue(void) const;
 
 		/// converts a string into a value of this quantity type.
-		virtual QuantityValue& valueFromString(const std::string s) const;
+		virtual QuantityValuePtr valueFromString(const std::string s) const;
 
 		/// returns a string representation of this quantity type.
 		virtual const std::string& asString(){return this->name;}
@@ -123,9 +124,12 @@ namespace Pareto {
 		}
 	};
 
-	class QuantityValue_Enum;
 
-	class ListOfQuantityValueEnum : public std::vector<QuantityValue_Enum*> {};
+	class QuantityValue_Enum;
+	typedef std::shared_ptr<QuantityValue_Enum> QuantityValue_EnumPtr;
+
+
+	class ListOfQuantityValueEnum : public std::vector<QuantityValue_EnumPtr> {};
 
 	/// Enumerated quantity type. The values in this type are assumed to be totally ordered.
 	class QuantityType_Enum: public QuantityType {
@@ -145,10 +149,10 @@ namespace Pareto {
 		virtual void streamOn(std::ostream& os) const;
 
 		/// return a default value for this type
-		virtual QuantityValue& defaultValue(void) const;
+		virtual QuantityValuePtr defaultValue(void) const;
 
 		/// create a value object from a string representation
-		virtual QuantityValue& valueFromString(const std::string s) const;
+		virtual QuantityValuePtr valueFromString(const std::string s) const;
 
 		/// compare two values of this type (<=)
 		virtual bool compare(const QuantityValue& q1, const QuantityValue& q2) const;
@@ -219,7 +223,7 @@ namespace Pareto {
 		virtual QuantityValue& defaultValue(void);
 
 		/// create a value of this type from a string
-		virtual QuantityValue& valueFromString(const std::string s) const;
+		virtual QuantityValuePtr valueFromString(const std::string s) const;
 
 		virtual bool compare(const QuantityValue& q1, const QuantityValue& q2) const;
 		virtual bool equal(const QuantityValue& q1, const QuantityValue& q2) const;
@@ -265,7 +269,7 @@ namespace Pareto {
 		virtual QuantityValue& defaultValue(void);
 
 		/// create a value of this type from a string
-		virtual QuantityValue& valueFromString(const std::string s) const;
+		virtual QuantityValuePtr valueFromString(const std::string s) const;
 
 		virtual bool compare(const QuantityValue& q1, const QuantityValue& q2) const;
 		virtual bool equal(const QuantityValue& q1, const QuantityValue& q2) const;
@@ -298,9 +302,10 @@ namespace Pareto {
 		double value;
 	};
 
+	typedef std::shared_ptr<QuantityValue_Real> QuantityValue_RealPtr;
 
-
-    std::ostream& operator<<(std::ostream& os, QuantityValue& v);
+    std::ostream& operator<<(std::ostream& os, const QuantityValue& v);
+	std::ostream& operator<<(std::ostream& os, const QuantityValuePtr v);
 
 	bool operator<=(const QuantityValue& q1, const QuantityValue& q2);
 	bool operator==(const QuantityValue& q1, const QuantityValue& q2);
