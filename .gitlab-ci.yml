@@ -1,4 +1,3 @@
-image: Ubuntu1404-64bit
 before_script:
  - apt-get update --yes
  - apt-get install --yes cmake
@@ -9,6 +8,8 @@ stages:
 
 build:
   stage: build
+  tags:
+    - Ubuntu1404-64bit
   script:
     - cmake .
     - make 
@@ -17,6 +18,8 @@ build:
 
 test:
   stage: test
+  tags:
+    - Ubuntu1404-64bit
   script:
     - make test
   dependencies:
