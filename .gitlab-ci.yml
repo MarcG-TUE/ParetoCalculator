@@ -1,4 +1,4 @@
-image: co20
+image: Ubuntu1404-64bit
 before_script:
  - apt-get update --yes
  - apt-get install --yes cmake
