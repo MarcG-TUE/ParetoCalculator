@@ -20,7 +20,7 @@ build:
 test:
   stage: test
   tags:
-    - Ubuntu1404-64bit
+    - Ubuntu1804-64bit
   script:
     - make test
   dependencies:
