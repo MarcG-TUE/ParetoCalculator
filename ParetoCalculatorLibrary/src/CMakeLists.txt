@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
+use_cxx11()
+
 set(CMAKE_C_STANDARD 11)
 
 find_package(LibXml2 REQUIRED)
