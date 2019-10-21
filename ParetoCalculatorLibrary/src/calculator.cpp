@@ -493,7 +493,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_filter3(ConfigurationSe
 		// check each element of csb for being dominated
 		for (j = res->confs.begin(); j != res->confs.end();) {
 			ConfigurationPtr c = *j;
-			if ((*i) <= c) { // remove c as it is dominated and continue
+			if (*(*i) <= *c) { // remove c as it is dominated and continue
 				// port to linux/gcc, set erase does not return a new iterator here
 				// some people on the internet say the following is safe...
 				SetOfConfigurations::iterator k;

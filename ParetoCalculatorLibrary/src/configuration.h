@@ -246,6 +246,7 @@ namespace Pareto {
 
 
     std::ostream& operator<<(std::ostream& os, ConfigurationPtr c);
+	std::ostream& operator<<(std::ostream& os, const Configuration& c);
 
 	bool operator<=(const Configuration& c1, const Configuration& c2);
 	bool operator==(const Configuration& c1, const Configuration& c2);

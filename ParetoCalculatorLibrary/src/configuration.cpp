@@ -150,15 +150,20 @@ namespace Pareto {
 
 	bool ConfigurationSpace::compare(const Configuration& c1, const Configuration& c2) const {
 		unsigned int i = 0;
-		for (ListOfQuantityTypes::const_iterator j = this->quantities.begin(); j != this->quantities.end(); i++, j++) {
-			if (this->quantityVisibility[i] && !(c1.getQuantity(i) <= c2.getQuantity(i))) { return false; }
+
+		for (ListOfQuantityTypes::const_iterator j = this->quantities.begin(); j != this->quantities.end(); i++, j++) 
+		{
+			if (this->quantityVisibility[i] && !((*c1.getQuantity(i)) <= (*c2.getQuantity(i)))) 
+			{ 
+				return false;
+			}
 		}
 		return true;
 	}
 
 	bool ConfigurationSpace::equal(const Configuration& c1, const Configuration& c2) const {
 		for (unsigned int i = 0; i < this->quantities.size(); i++) {
-			if (this->quantityVisibility[i] && !(c1.getQuantity(i) == c2.getQuantity(i))) { return false; }
+			if (this->quantityVisibility[i] && !((*c1.getQuantity(i)) == (*c2.getQuantity(i)))) { return false; }
 		}
 		return true;
 	}
@@ -458,7 +463,7 @@ namespace Pareto {
 
 
 	bool ConfigurationIndexReference::operator==(const ConfigurationIndexReference& right) const {
-		return this->value() == right.value();
+		return *(this->value()) == *(right.value());
 	}
 
 	bool ConfigurationIndexOnTotalOrderReference::operator<(const ConfigurationIndexReference& right) const {
@@ -593,6 +598,11 @@ namespace Pareto {
 
 	std::ostream& operator<<(std::ostream& os, ConfigurationPtr c) {
 		c->streamOn(os);
+		return os;
+	}
+
+	std::ostream& operator<<(std::ostream& os, const Configuration& c) {
+		c.streamOn(os);
 		return os;
 	}
 

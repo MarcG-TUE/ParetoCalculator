@@ -70,6 +70,7 @@ int main(int argc, char* argv[])
 	} 
 	catch (EParetoCalculatorError& e) {
 		std::cout << "An exception occured: " << e.errorMsg << std::endl;
+		return -1;
 	}
 
 	return 0;

@@ -194,17 +194,17 @@ ArrayList^ ParetoCalculatorW::getScattterPoints(String^ qxs, String^ qys)
 	unsigned int i = 0;
 	for (k = cs->confs.begin(); k != cs->confs.end(); k++, i++) {
 		const Pareto::Configuration& c = *k;
-		const QuantityValue& vx = c.getQuantity(qix);
-		const QuantityValue& vy = c.getQuantity(qiy);
+		QuantityValuePtr vx = c.getQuantity(qix);
+		QuantityValuePtr vy = c.getQuantity(qiy);
 
 		ArrayList^ point = gcnew ArrayList();
 		std::ostrstream vxString;
-		vx.streamOn(vxString);
+		vx->streamOn(vxString);
 		vxString << std::ends;
 		point->Add(std_to_system_string(std::string(vxString.str())));
 
 		std::ostrstream vyString;
-		vy.streamOn(vyString);
+		vy->streamOn(vyString);
 		vyString << std::ends;
 		point->Add(std_to_system_string(std::string(vyString.str())));
 
