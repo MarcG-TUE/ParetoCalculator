@@ -11,6 +11,7 @@ build:
   tags:
     - Ubuntu1404-64bit
   script:
+    - apt-get update && apt-get install -qy libxml2-utils
     - cmake .
     - make 
   artifacts:
