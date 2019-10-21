@@ -12,7 +12,7 @@ the calculator at <http://www.es.ele.tue.nl/pareto>
 
 ### Dependencies
 
-_Which software dependencies does SDF3 have?_
+_Which software dependencies does the Pareto Calculator have?_
 
 The ParetoCalculator needs the `libxml2` library to access XML files. This library is available in most Linux distributions and Windows and Linux versions can be downloaded from [www.libxml2.org](www.libxml2.org).
 
