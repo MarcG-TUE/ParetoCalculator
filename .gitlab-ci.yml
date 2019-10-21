@@ -2,3 +2,22 @@ image: gcc
 before_script:
  - apt-get update --yes
  - apt-get install --yes cmake
+
+stages:
+ - build
+ - test
+
+build:
+  stage: build
+  script:
+    - cmake .
+    - make 
+  artifacts:
+    untracked: true
+
+test:
+  stage: test
+  script:
+    - make test
+  dependencies:
+    - build
