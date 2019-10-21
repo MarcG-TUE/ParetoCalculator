@@ -132,13 +132,8 @@ void POperation_ProdCons::executeOn(ParetoCalculator& c) {
 }
 
 bool POperation_ProdCons::testConstraint(const Pareto::Configuration& c) {
-#ifdef _DEBUG
 	QuantityValue_RealPtr pq = std::dynamic_pointer_cast<QuantityValue_Real>(c.getQuantity(*p_test));
 	QuantityValue_RealPtr cq = std::dynamic_pointer_cast<QuantityValue_Real>(c.getQuantity(*c_test));
-#else
-	QuantityValue_RealPtr pq = (QuantityValue_RealPtr)(c.getQuantity(*p_test));
-	QuantityValue_RealPtr cq = (QuantityValue_RealPtr)(c.getQuantity(*c_test));
-#endif
 	return cq->value <= (1.0 / pq->value);
 }
 
@@ -175,13 +170,9 @@ void POperation_Derived::executeOn(ParetoCalculator& c) {
 		ConfigurationPtr scf = std::make_shared<Configuration>(*scs);
 		scf->addQuantitiesOf(c);
 
-#ifdef _DEBUG
 		double va = (*(std::dynamic_pointer_cast<QuantityValue_RealPtr>(c->getQuantity(a_quant))))->value;
 		double vb = (*(std::dynamic_pointer_cast<QuantityValue_RealPtr>(c->getQuantity(b_quant))))->value;
-#else
-		double va = (*((QuantityValue_RealPtr)(c->getQuantity(a_quant))))->value;
-		double vb = (*((QuantityValue_RealPtr)(c->getQuantity(b_quant))))->value;
-#endif
+
 		QuantityValue_RealPtr sqv = std::make_shared<QuantityValue_Real>(*sqt, this->derive(va, +vb));
 		scf->addQuantity(sqv);
 		sconfs->addUniqueConfiguration(scf);
@@ -233,11 +224,7 @@ void POperation_Aggregate::executeOn(ParetoCalculator& c)
 		std::vector<unsigned int>::iterator j;
 		for (j = idx.begin(); j != idx.end(); j++) {
 			unsigned int k = *j;
-#ifdef _DEBUG
 			QuantityValue_RealPtr qvr = std::dynamic_pointer_cast<QuantityValue_Real>(cf->getQuantity(k));
-#else
-			const QuantityValue_Real& qvr = (const QuantityValue_Real&)(cf->getQuantity(k));
-#endif
 			sum = sum + qvr->value;
 
 		}
