@@ -305,23 +305,27 @@ namespace Pareto {
 
 	/////////////////// Configuration //////////////////////
 
+	/// constructor Configuration
 	Configuration::Configuration(const ConfigurationSpace& cs) :confspace(cs) {
 	}
 
-	// 'copy constructor' from pointer
+	/// 'copy constructor' from pointer
 	Configuration::Configuration(ConfigurationPtr c) :
 		confspace(c->confspace)
 	{
+		// copy quantity values
 		ListOfQuantityValues::iterator i;
 		for (i = c->quantities.begin(); i != c->quantities.end(); i++) {
 			this->quantities.push_back(*i);
 		}
 	}
 
+	// add a quantitu value to the end of the configuration
 	void Configuration::addQuantity(QuantityValuePtr q) {
 		quantities.push_back(q);
 	}
 
+	// add all quantity values from configuration c to this configuration
 	void Configuration::addQuantitiesOf(ConfigurationPtr c) {
 		ListOfQuantityValues::iterator i;
 		for (i = c->quantities.begin(); i != c->quantities.end(); i++) {
@@ -329,7 +333,7 @@ namespace Pareto {
 		}
 	}
 
-
+	// produce a textual representaiton of the configuration on the output stream
 	void Configuration::streamOn(std::ostream& os) const {
 		os << "(";
 		ListOfQuantityValues::const_iterator i;
@@ -347,11 +351,12 @@ namespace Pareto {
 		os << ")";
 	}
 
+	/// set the value of quantity n to v
 	void Configuration::setQuantity(int n, QuantityValuePtr v) {
 		quantities[n] = v;
 	}
 
-
+	/// retrieve quantity with index n
 	QuantityValuePtr Configuration::getQuantity(const unsigned int n) const {
 #ifdef _DEBUG
 		if (n > quantities.size()) {
@@ -362,12 +367,15 @@ namespace Pareto {
 		return quantities[n];
 	}
 
+	// retrieve a quantity by its name in the configuration space
 	QuantityValuePtr Configuration::getQuantity(const QuantityName& n) const {
+		// find the index
 		unsigned int k = this->confspace.indexOfQuantity(n);
+		// return the value
 		return this->quantities[k];
 	}
 
-
+	/// check Pareto dominance on two configurations, returns true if c1 domaintes c2
 	bool operator<=(const Configuration& c1, const Configuration& c2) {
 #ifdef _DEBUG
 		// convenient for debugging, too slow for real
@@ -379,6 +387,7 @@ namespace Pareto {
 		return c1.confspace.compare(c1, c2);
 	}
 
+	/// check equality of two configurations
 	bool operator==(const Configuration& c1, const Configuration& c2) {
 #ifdef _DEBUG
 		if (&(c1.confspace) != &(c2.confspace)) {
@@ -389,14 +398,20 @@ namespace Pareto {
 		return c1.confspace.equal(c1, c2);
 	}
 
+	/// a strict (non-reflexive) Pareto domaince check
 	bool operator<(const Configuration& c1, const Configuration& c2) { return (c1 <= c2) && !(c1 == c2); };
 
 
 	///////////////// ConfigurationSet ///////////
 
-	ConfigurationSet::ConfigurationSet(ConfigurationSpacePtr cs, const std::string n) : StorableObject(n), confspace(cs) {
+	/// constructor of ConfigurationSet, given a configuration space and a name
+	ConfigurationSet::ConfigurationSet(ConfigurationSpacePtr cs, const std::string n) : 
+		StorableObject(n), 
+		confspace(cs) 
+	{
 	}
 
+	/// copy constructor for ConfigurationSet 
 	ConfigurationSet::ConfigurationSet(ConfigurationSetPtr cs) :
 		StorableObject(cs->name),
 		confspace(cs->confspace)
@@ -411,7 +426,7 @@ namespace Pareto {
 	}
 
 
-
+	/// add configuration c to the configuration set
 	void ConfigurationSet::addConfiguration(ConfigurationPtr c) {
 #ifdef _DEBUG
 		if (&(c->confspace) != &(*(this->confspace))) {
@@ -421,8 +436,9 @@ namespace Pareto {
 		confs.insert(c);
 	}
 
+	/// Add a new configuration to the configuration set.
+	/// Important: Use this method only if you are sure that the configuration does not already occur in the set!
 	void ConfigurationSet::addUniqueConfiguration(ConfigurationPtr c) {
-		// Note: Use this method only if you are sure that the configuration does not already occur in the set!
 #ifdef _DEBUG
 		if (&(c->confspace) != &(*(this->confspace))) {
 			throw EParetoCalculatorError("Error: configuration is of wrong type in ConfigurationSet::addConfiguration");
@@ -431,6 +447,10 @@ namespace Pareto {
 		confs.insert(c);
 	}
 
+	/// insert a new configuration while maintaining Pareto minimality
+	/// assumes the configuraiton set is Pareto minimal to start from
+	/// after the funciton completes the configuration set is again Pareto minimal and
+	/// equivalen to the original set extended with the new configuration c
 	void ConfigurationSet::addConfigurationAndFilter(ConfigurationPtr c) {
 		// assumes the configurations set is minimal
 		// post: set is minimal version of set plus new configuration
