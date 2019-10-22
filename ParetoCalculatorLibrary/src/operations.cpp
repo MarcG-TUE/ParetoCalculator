@@ -41,8 +41,9 @@ using namespace Pareto;
 
 
 // Some C++ thing, making me initialise the static members in POperation_ProdCons here...
-std::string* POperation_ProdCons::p_test = nullptr;
-std::string* POperation_ProdCons::c_test = nullptr;
+//std::string* POperation_ProdCons::p_test = nullptr;
+//std::string* POperation_ProdCons::c_test = nullptr;
+// TODO: remove these statics like p_test, c_test above
 std::vector<int> POperation_Join::qan;
 std::vector<int> POperation_Join::qbn;
 
@@ -124,16 +125,21 @@ POperation_ProdCons::POperation_ProdCons(const std::string& pqname, const std::s
 
 
 void POperation_ProdCons::executeOn(ParetoCalculator& c) {
-	p_test = &p_quant;
-	c_test = &c_quant;
+	//p_test = &p_quant;
+	//c_test = &c_quant;
 	ConfigurationSetPtr cs = c.popConfigurationSet();
-	ConfigurationSetPtr ncs = c.constraint(cs, &POperation_ProdCons::testConstraint);
+	//ConfigurationSetPtr ncs = c.constraint(cs, &POperation_ProdCons::testConstraint);
+	ConfigurationSetPtr ncs = c.constraint(cs, 
+		[this](const Pareto::Configuration& c) {
+			return POperation_ProdCons::testConstraint(c, this->p_quant, this->c_quant);
+		}
+		);
 	c.push(ncs);
 }
 
-bool POperation_ProdCons::testConstraint(const Pareto::Configuration& c) {
-	QuantityValue_RealPtr pq = std::dynamic_pointer_cast<QuantityValue_Real>(c.getQuantity(*p_test));
-	QuantityValue_RealPtr cq = std::dynamic_pointer_cast<QuantityValue_Real>(c.getQuantity(*c_test));
+bool POperation_ProdCons::testConstraint(const Pareto::Configuration& c, const std::string& p_quant, const std::string& q_quant) {
+	QuantityValue_RealPtr pq = std::dynamic_pointer_cast<QuantityValue_Real>(c.getQuantity(p_quant));
+	QuantityValue_RealPtr cq = std::dynamic_pointer_cast<QuantityValue_Real>(c.getQuantity(q_quant));
 	return cq->value <= (1.0 / pq->value);
 }
 

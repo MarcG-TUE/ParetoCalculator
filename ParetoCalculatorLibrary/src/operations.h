@@ -136,11 +136,12 @@ namespace Pareto {
 	/// The (naive implementation of) producer-consumer constraint operation between two quantities.
 	class POperation_ProdCons: public ParetoCalculatorOperation {
 	public:
-		static std::string* p_test;
-		static std::string* c_test;
+		//static std::string* p_test;
+		//static std::string* c_test;
 		std::string p_quant, c_quant;
 		POperation_ProdCons(const std::string& pqname, const std::string& cqname);
-		static bool testConstraint(const Configuration& c);
+		//static bool testConstraint(const Configuration& c);
+		static bool testConstraint(const Configuration& c, const std::string& p_quant, const std::string& c_quant);
 		virtual void executeOn(ParetoCalculator& c);
 	};
 

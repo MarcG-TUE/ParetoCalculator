@@ -35,6 +35,7 @@
 #define PARETO_CALCULATOR_H
 
 #include <functional>
+#include <string>
 #include "operations.h"
 
 
@@ -169,7 +170,9 @@ namespace Pareto {
 
 		// compute the constraint (intersection) of two configuration sets
 		static ConfigurationSetPtr constraint(ConfigurationSetPtr cs1, ConfigurationSetPtr cs2);
-		static ConfigurationSetPtr constraint(ConfigurationSetPtr cs1, bool (*testConstraint)(const Pareto::Configuration&));
+		//static ConfigurationSetPtr constraint(ConfigurationSetPtr cs1, bool (*testConstraint)(const Pareto::Configuration&));
+		static ConfigurationSetPtr constraint(ConfigurationSetPtr cs, std::function <bool(const Configuration&)> testConstraint);
+
 		static ConfigurationSetPtr alternative(ConfigurationSetPtr cs1, ConfigurationSetPtr cs2);
 		static ConfigurationSetPtr minimize(ConfigurationSetPtr cs);
 		static ConfigurationSetPtr minimize_SC(ConfigurationSetPtr cs);

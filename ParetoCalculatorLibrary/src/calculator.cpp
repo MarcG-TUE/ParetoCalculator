@@ -118,7 +118,8 @@ ConfigurationSetPtr ParetoCalculator::constraint(ConfigurationSetPtr cs1, Config
 }
 
 // apply constraint given as a characteristing function of the configuration set of the constraint
-ConfigurationSetPtr ParetoCalculator::constraint(ConfigurationSetPtr cs, bool (*testConstraint)(const Pareto::Configuration&)) {
+//ConfigurationSetPtr ParetoCalculator::constraint(ConfigurationSetPtr cs, bool (*testConstraint)(const Pareto::Configuration&)) {
+ConfigurationSetPtr ParetoCalculator::constraint(ConfigurationSetPtr cs, std::function <bool(const Configuration&)> testConstraint) {
 
 	// construct result configuration set
 	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(cs->confspace, "Constraint");
@@ -126,7 +127,7 @@ ConfigurationSetPtr ParetoCalculator::constraint(ConfigurationSetPtr cs, bool (*
 	for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
 		ConfigurationPtr c = *i;
 		// add those configurations that pass the test
-		if ((*testConstraint)(*c)) { res->addUniqueConfiguration(c); }
+		if (testConstraint(*c)) { res->addUniqueConfiguration(c); }
 	}
 	// return the result
 	return res;
