@@ -55,8 +55,7 @@ namespace Pareto {
 	class Configuration;
 
 	// An STL vector of pointers to quantity types
-	// 
-	class ListOfQuantityTypes : public std::vector<const QuantityType*> {};
+	class ListOfQuantityTypes : public std::vector<QuantityTypePtr> {};
 
 	/// An STL vector of quantity names
 	/// 
@@ -96,9 +95,9 @@ namespace Pareto {
 	class ConfigurationSet;
 
 	/// Pointer definitions
-	typedef std::shared_ptr<ConfigurationSpace> ConfigurationSpacePtr;
-	typedef std::shared_ptr<Configuration> ConfigurationPtr;
-	typedef std::shared_ptr<ConfigurationSet> ConfigurationSetPtr;
+	using ConfigurationSpacePtr = std::shared_ptr<ConfigurationSpace>;
+	using ConfigurationPtr = std::shared_ptr<Configuration>;
+	using ConfigurationSetPtr = std::shared_ptr<ConfigurationSet>;
 
 	class ConfigurationSpace: public StorableObject {
 	public:
@@ -119,14 +118,14 @@ namespace Pareto {
 		static bool LexicographicCompare(const Configuration& c1, const Configuration& c2);
 
 		/// add a single quantity to the space, with the default name
-		void addQuantity(const QuantityType& q);
+		void addQuantity(QuantityTypePtr q);
 
 		/// add a quantity to the space using the name 'qname'
-		void addQuantityAs(const QuantityType& q, const QuantityName qname);
+		void addQuantityAs(QuantityTypePtr q, const QuantityName qname);
 
 		/// add a quantity to the space using the name 'qname' and explicitly
 		/// specify visibility.
-		void addQuantityAsVisibility(const QuantityType& q, const QuantityName qname, bool vis);
+		void addQuantityAsVisibility(QuantityTypePtr q, const QuantityName qname, bool vis);
 		
 		/// copy quantities of another configuration space to this configuration space
 		void addQuantitiesOf(const ConfigurationSpace& cs);
@@ -138,7 +137,7 @@ namespace Pareto {
 		bool includesQuantityNamed(const QuantityName& qn) const;
 
 		/// retrieve a quantity of the configuration space by its name
-		const QuantityType& getQuantity(const QuantityName& qn) const; 
+		QuantityTypePtr getQuantity(const QuantityName& qn) const; 
 
 		/// create a new configuration in this configuration space
 		ConfigurationPtr newConfiguration(void);
@@ -280,7 +279,7 @@ namespace Pareto {
 		//ConfigurationIndexOnTotalOrderReference& operator= (ConfigurationIndexOnTotalOrderReference& right);
 	};
 
-	typedef std::shared_ptr<ConfigurationIndexReference> ConfigurationIndexReferencePtr;
+	using ConfigurationIndexReferencePtr = std::shared_ptr<ConfigurationIndexReference>;
 
 	class ConfigurationIndexOnUnorderedReference : public ConfigurationIndexReference {
 	public:

@@ -44,11 +44,14 @@
 namespace Pareto {
 
 	/// name of a quantity type
-	typedef std::string QuantityName ;
-	typedef std::shared_ptr<QuantityName> QuantityNamePtr;
+	using QuantityName = std::string;
+	using QuantityNamePtr = std::shared_ptr<QuantityName>;
 
 	class QuantityValue;
-	typedef std::shared_ptr<QuantityValue> QuantityValuePtr;
+	using QuantityValuePtr = std::shared_ptr<QuantityValue>;
+
+	class QuantityType;
+	using QuantityValuePtr = std::shared_ptr<QuantityValue> ;
 
 	/// abstract super class of all quantity types
 	class QuantityType: public StorableObject {
@@ -95,7 +98,7 @@ namespace Pareto {
 	};
 
 	/// Pointer to QuantityType
-	typedef std::shared_ptr<const QuantityType> QuantityTypePtr;
+	using QuantityTypePtr = std::shared_ptr<const QuantityType>;
 
 	/// QuantityValues represent the data in individual quantities of configurations
 	///
@@ -126,7 +129,7 @@ namespace Pareto {
 
 
 	class QuantityValue_Enum;
-	typedef std::shared_ptr<QuantityValue_Enum> QuantityValue_EnumPtr;
+	using QuantityValue_EnumPtr = std::shared_ptr<QuantityValue_Enum>;
 
 
 	class ListOfQuantityValueEnum : public std::vector<QuantityValue_EnumPtr> {};
@@ -302,7 +305,7 @@ namespace Pareto {
 		double value;
 	};
 
-	typedef std::shared_ptr<QuantityValue_Real> QuantityValue_RealPtr;
+	using QuantityValue_RealPtr = std::shared_ptr<QuantityValue_Real>;
 
     std::ostream& operator<<(std::ostream& os, const QuantityValue& v);
 	std::ostream& operator<<(std::ostream& os, const QuantityValuePtr v);

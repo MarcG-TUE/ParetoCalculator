@@ -165,7 +165,7 @@ void ParetoParser::LoadConfigurationSpaces() {
 					else {
 						qn = qu->name;
 					}
-					cs->addQuantityAs(*qu, qn);
+					cs->addQuantityAs(qu, qn);
 				}
 			}
 			pc.store(cs);

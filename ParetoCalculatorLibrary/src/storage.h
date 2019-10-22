@@ -51,7 +51,7 @@ namespace Pareto {
 	class StorableObject;
 
 	// define a shared pointer to a storable object
-	typedef std::shared_ptr<StorableObject> StorableObjectPtr;
+	using StorableObjectPtr = std::shared_ptr<StorableObject>;
 
 	/// StorableObject is an abstract superclass of anything we want to 
 	/// put on a stack or in the memory of the calculator.
@@ -104,7 +104,7 @@ namespace Pareto {
 		virtual StorableObjectPtr copy(void) const;
 	};
 
-	typedef std::shared_ptr<const StorableString> StorableStringPtr;
+	using StorableStringPtr = std::shared_ptr<const StorableString>;
 
 	// stream an object
     std::ostream& operator<<(std::ostream& os, const StorableObject& o);

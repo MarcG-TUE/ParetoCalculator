@@ -40,26 +40,32 @@
 
 namespace Pareto {
 
+	/// ConfigurationSpace constructor
 	ConfigurationSpace::ConfigurationSpace(std::string n) : StorableObject(n) {
 	}
 
-	void ConfigurationSpace::addQuantity(const QuantityType& q) {
-		this->addQuantityAsVisibility(q, q.name, true);
+	/// add a quantity type to the configuration space under its own name
+	/// it will be visible
+	void ConfigurationSpace::addQuantity(QuantityTypePtr q) {
+		this->addQuantityAsVisibility(q, q->name, true);
 	}
 
-	void ConfigurationSpace::addQuantityAs(const QuantityType& q, const QuantityName qname) {
+	/// add a quantity type to the configuration space under a specified name
+	/// it will be visible
+	void ConfigurationSpace::addQuantityAs(QuantityTypePtr q, const QuantityName qname) {
 		this->addQuantityAsVisibility(q, qname, true);
 	}
 
-	void ConfigurationSpace::addQuantityAsVisibility(const QuantityType& q, const QuantityName qname, bool vis) {
-		quantities.push_back(&q);
+	/// add a quantity type to the configuration space under a specified name and with specified visibility
+	void ConfigurationSpace::addQuantityAsVisibility(QuantityTypePtr q, const QuantityName qname, bool vis) {
+		quantities.push_back(q);
 		quantityNames[qname] = quantities.size() - 1;
 		this->quantityVisibility.push_back(vis);
 	}
 
 	void ConfigurationSpace::addQuantitiesOf(const ConfigurationSpace& cs) {
 		for (unsigned int i = 0; i < cs.quantities.size(); i++) {
-			this->addQuantityAsVisibility(*cs.quantities[i], cs.nameOfQuantityNr(i), cs.quantityVisibility[i]);
+			this->addQuantityAsVisibility(cs.quantities[i], cs.nameOfQuantityNr(i), cs.quantityVisibility[i]);
 		}
 	}
 
@@ -73,17 +79,18 @@ namespace Pareto {
 	}
 
 
-
-	const QuantityType& ConfigurationSpace::getQuantity(const QuantityName& qn) const //throw(EParetoCalculatorError)
+	/// get quantity type by name
+	QuantityTypePtr ConfigurationSpace::getQuantity(const QuantityName& qn) const
 	{
-		if (quantityNames.find(qn) != quantityNames.end()) return *quantities.at(quantityNames.at(qn));
+		if (quantityNames.find(qn) != quantityNames.end()) return quantities.at(quantityNames.at(qn));
 		ListOfQuantityTypes::const_iterator i;
 		for (i = quantities.begin(); i != quantities.end(); i++) {
-			if ((*i)->name == qn) return *(*i);
+			if ((*i)->name == qn) return *i;
 		}
 		throw EParetoCalculatorError("quantity " + qn + " not found in ConfigurationSpace::getQuantity");
 	}
 
+	/// count the number of visible quantities in the space
 	unsigned int ConfigurationSpace::nrOfVisibleQuantities(void) const {
 		unsigned int count = 0;
 		BoolVector::const_iterator i;
@@ -93,8 +100,8 @@ namespace Pareto {
 		return count;
 	}
 
-
-	unsigned int ConfigurationSpace::indexOfQuantity(const QuantityName& qn) const  //throw(EParetoCalculatorError)
+	/// get the index of the quantity type with the given name
+	unsigned int ConfigurationSpace::indexOfQuantity(const QuantityName& qn) const
 	{
 		if (quantityNames.find(qn) == quantityNames.end()) {
 			throw EParetoCalculatorError("quantity " + qn + " not found in ConfigurationSpace::indexOfQuantity");
@@ -102,11 +109,13 @@ namespace Pareto {
 		return quantityNames.at(qn);
 	}
 
+	/// get the first unordered quantity type in the space that is visible
+	/// return nullptr if no such quantity type is found.
 	QuantityNamePtr ConfigurationSpace::getUnorderedQuantity() const {
 		QuantityIntMap::const_iterator i;
 		unsigned int k;
 		for (k = 0, i = this->quantityNames.begin(); i != this->quantityNames.end(); i++, k++) {
-			const QuantityType* t = this->quantities[(*i).second];
+			QuantityTypePtr t = this->quantities[(*i).second];
 			if ((this->quantityVisibility[k]) && (t->isUnordered())) {
 				QuantityNamePtr qn = std::make_shared<QuantityName>((*i).first);
 				return qn;
@@ -115,11 +124,13 @@ namespace Pareto {
 		return nullptr;
 	}
 
+	/// get the first totally ordered quantity type in the space that is visible
+	/// return nullptr if no such quantity type is found.
 	QuantityNamePtr ConfigurationSpace::getTotallyOrderedQuantity() const {
 		QuantityIntMap::const_iterator i;
 		unsigned int k;
 		for (k = 0, i = this->quantityNames.begin(); i != this->quantityNames.end(); i++, k++) {
-			const QuantityType* t = this->quantities[(*i).second];
+			QuantityTypePtr t = this->quantities[(*i).second];
 			if ((this->quantityVisibility[k]) && (t->isTotallyOrdered())) {
 				QuantityNamePtr qn = std::make_shared<QuantityName>((*i).first);
 				return qn;
@@ -128,7 +139,7 @@ namespace Pareto {
 		return nullptr;
 	}
 
-
+	/// check if the space has a quantity type with the given name
 	bool ConfigurationSpace::includesQuantityNamed(const QuantityName& qn) const {
 		QuantityIntMap::const_iterator i;
 		for (i = quantityNames.begin(); i != quantityNames.end(); i++) {
@@ -137,6 +148,8 @@ namespace Pareto {
 		return false;
 	}
 
+	/// get the index of the first visible quantity in the space
+	/// throws an exception if there is no visible quantity
 	const unsigned int ConfigurationSpace::firstVisibleQuantity() const {
 		BoolVector::const_iterator i;
 		unsigned int k;
@@ -147,7 +160,8 @@ namespace Pareto {
 		return 0;
 	}
 
-
+	/// compare two configurations according to Pareto dominance in this configuration space
+	/// Note that invisible quantities are not compared
 	bool ConfigurationSpace::compare(const Configuration& c1, const Configuration& c2) const {
 		unsigned int i = 0;
 
@@ -161,6 +175,8 @@ namespace Pareto {
 		return true;
 	}
 
+	/// compare two configurations for equality in this configuration space
+	/// Note that invisible quantities are not compared
 	bool ConfigurationSpace::equal(const Configuration& c1, const Configuration& c2) const {
 		for (unsigned int i = 0; i < this->quantities.size(); i++) {
 			if (this->quantityVisibility[i] && !((*c1.getQuantity(i)) == (*c2.getQuantity(i)))) { return false; }
@@ -168,6 +184,8 @@ namespace Pareto {
 		return true;
 	}
 
+	/// compare two configurations according to lexicograhical total order in this configuration space
+	/// Note that invisible quantities are included in the comparisson
 	bool ConfigurationSpace::LexicographicCompare(const Configuration& c1, const Configuration& c2)
 		// provides strict ordering for sorted storage of configurationset, hence ignores visibility
 	{
@@ -181,8 +199,7 @@ namespace Pareto {
 		return false;
 	}
 
-
-
+	/// represent the configuraiton space as text on a stream 
 	void ConfigurationSpace::streamOn(std::ostream& os) const {
 		os << name << " = ";
 		unsigned int n;
@@ -197,39 +214,46 @@ namespace Pareto {
 		}
 	}
 
+	/// create a copy of the configuration space
 	StorableObjectPtr ConfigurationSpace::copy(void) const
 	{
 		return std::make_shared<ConfigurationSpace>(*this);
 	}
 
+	// return a string representation of the configuration space
 	std::unique_ptr<std::string> Configuration::asString(void) {
 		std::ostringstream myString;
 		this->streamOn(myString);
-		//requirs C++14: return std::make_unique<std::string>(myString.str());
+		//to avoid C++14 requirement: return std::make_unique<std::string>(myString.str());
 		return std::unique_ptr<std::string>(new std::string(myString.str()));
 	}
 
-
+	/// perform hiding of the given list of quantity types by making them invisible in the resulting new configuration space
 	ConfigurationSpacePtr ConfigurationSpace::hide(const ListOfQuantityNames& lqn) const {
+		// name for the new configuration space
 		std::string n = "Hide of " + this->name;
+		// make the new configuration space
 		ConfigurationSpacePtr cs = std::make_shared<ConfigurationSpace>(n);
+		// add the quantity types according to visibility
 		for (unsigned int i = 0; i < this->quantities.size(); i++) {
 			bool v = this->quantityVisibility[i];
 			if (lqn.includes(this->nameOfQuantityNr(i))) {
 				v = false;
 			}
-			cs->addQuantityAsVisibility(*this->quantities[i], this->nameOfQuantityNr(i), v);
+			cs->addQuantityAsVisibility(this->quantities[i], this->nameOfQuantityNr(i), v);
 		}
+		// return the result
 		return cs;
 	}
 
+	/// returns a new configuration space in which single quantity from the space is hidden.
 	ConfigurationSpacePtr ConfigurationSpace::hide(const QuantityName& qn) {
 		ListOfQuantityNames l;
 		l.push_back(qn);
 		return this->hide(l);
 	}
 
-
+	/// perform unhiding of the given list of quantity types by making them invisible in the resulting new configuration space
 	ConfigurationSpacePtr ConfigurationSpace::unhide(const ListOfQuantityNames& lqn) const {
 		std::string n = "Unhide of " + this->name;
 		ConfigurationSpacePtr cs = std::make_shared<ConfigurationSpace>(n);
@@ -238,19 +262,19 @@ namespace Pareto {
 			if (lqn.includes(this->nameOfQuantityNr(i))) {
 				v = true;
 			}
-			cs->addQuantityAsVisibility(*this->quantities[i], this->nameOfQuantityNr(i), v);
+			cs->addQuantityAsVisibility(this->quantities[i], this->nameOfQuantityNr(i), v);
 		}
 		return cs;
 	}
 
+	/// returns a new configuration space in which single quantity from the space is unhidden.
 	ConfigurationSpacePtr ConfigurationSpace::unhide(const QuantityName& qn) const {
 		ListOfQuantityNames l;
 		l.push_back(qn);
 		return this->unhide(l);
 	}
 
-
-
+	/// get the name of the quantity type with the given index
 	const QuantityName ConfigurationSpace::nameOfQuantityNr(const unsigned int n) const {
 		QuantityIntMap::const_iterator i;
 		for (i = this->quantityNames.begin(); i != this->quantityNames.end(); i++) {
@@ -259,11 +283,12 @@ namespace Pareto {
 		throw EParetoCalculatorError("Error: quantity not found in function nameOfQuantitynr.");
 	}
 
-
+	/// create a new configuration in this configuration space with default values for the quantities
 	ConfigurationPtr ConfigurationSpace::newConfiguration(void) {
 
 		ConfigurationPtr c = std::make_shared<Configuration>(*this);
 
+		// add default values
 		ListOfQuantityTypes::iterator i;
 		for (i = quantities.begin(); i != quantities.end(); i++) {
 			QuantityValuePtr v = (*i)->defaultValue();

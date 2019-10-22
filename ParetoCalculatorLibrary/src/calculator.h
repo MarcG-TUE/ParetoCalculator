@@ -55,8 +55,8 @@ namespace Pareto {
 	};
 
 	/// Type for a list of configuration sets
-	typedef std::list<ConfigurationSetPtr> ListOfConfSet;
-	typedef std::shared_ptr<ListOfConfSet> ListOfConfSetPtr;
+	using ListOfConfSet = std::list<ConfigurationSetPtr>;
+	using ListOfConfSetPtr = std::shared_ptr<ListOfConfSet>;
 
 	/// The Pareto Calculator object
 	///

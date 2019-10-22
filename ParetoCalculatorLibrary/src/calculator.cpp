@@ -181,7 +181,7 @@ ConfigurationSetPtr ParetoCalculator::abstraction(ConfigurationSetPtr cs, unsign
 	unsigned int k = 0;
 	for (ListOfQuantityTypes::const_iterator i = cs->confspace->quantities.begin(); i != cs->confspace->quantities.end(); i++, k++) {
 		if (k != n) {
-			cspace->addQuantityAsVisibility(*(*i), cs->confspace->nameOfQuantityNr(k), cs->confspace->quantityVisibility[k]);
+			cspace->addQuantityAsVisibility((*i), cs->confspace->nameOfQuantityNr(k), cs->confspace->quantityVisibility[k]);
 		}
 	}
 

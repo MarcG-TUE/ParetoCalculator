@@ -158,14 +158,14 @@ void POperation_Derived::executeOn(ParetoCalculator& c) {
 	// define new sum quantity type
 	std::ostringstream sqn;
 	sqn << this->description() << " of " << a_quant << " and " << b_quant;
-	std::shared_ptr<QuantityType_Real> sqt = std::make_shared<QuantityType_Real>(sqn.str());
+	QuantityTypePtr sqt = std::make_shared<QuantityType_Real>(sqn.str());
 
 	// build new configuration space
 	std::ostringstream sqsn;
 	sqsn << this->description() << " (" << cs->confspace->name << ")";
 	ConfigurationSpacePtr scs = std::make_shared<ConfigurationSpace>(sqsn.str());
 	scs->addQuantitiesOf(*(cs->confspace));
-	scs->addQuantity(*sqt);
+	scs->addQuantity(sqt);
 
 	// build new set of configurations
 	std::ostringstream sconfsn;
@@ -203,14 +203,14 @@ void POperation_Aggregate::executeOn(ParetoCalculator& c)
 	ConfigurationSetPtr cs = c.popConfigurationSet();
 
 	// define new aggregate quantity type
-	std::shared_ptr<QuantityType_Real> sqt = std::make_shared<QuantityType_Real>(this->newName);
+	QuantityTypePtr sqt = std::make_shared<QuantityType_Real>(this->newName);
 
 	// build new configuration space
 	std::ostringstream sqsn;
 	sqsn << "Aggregation" << " (" << cs->confspace->name << ")";
 	ConfigurationSpacePtr scs = std::make_shared<ConfigurationSpace>(sqsn.str());
 	scs->addQuantitiesOf(*(cs->confspace));
-	scs->addQuantity(*sqt);
+	scs->addQuantity(sqt);
 
 	// build new set of configurations
 	std::ostringstream sconfsn;
@@ -421,7 +421,7 @@ ConfigurationSetPtr recursiveEfficientJoin(ParetoCalculator& c, JoinMap& jqnamem
 		QuantityName qb = jqnamemap.begin()->second;
 		std::shared_ptr<IndexOnConfigurationSet> ia, ib;
 		// check if the quantity to be joined is totally ordered 
-		if (A->confspace->getQuantity(qa).isTotallyOrdered()) {
+		if (A->confspace->getQuantity(qa)->isTotallyOrdered()) {
 			// make an index on the ordered quantity qa
 			ia = std::make_shared<IndexOnTotalOrderConfigurationSet>(qa, A);
 		}
@@ -429,7 +429,7 @@ ConfigurationSetPtr recursiveEfficientJoin(ParetoCalculator& c, JoinMap& jqnamem
 			// make an index on the unordered quantity qa
 			ia = std::make_shared<IndexOnUnorderedConfigurationSet>(qa, A);
 		}
-		if (B->confspace->getQuantity(qb).isTotallyOrdered()) {
+		if (B->confspace->getQuantity(qb)->isTotallyOrdered()) {
 			// make an index on the ordered quantity qb
 			ib = std::make_shared<IndexOnTotalOrderConfigurationSet>(qb, B);
 		}
@@ -522,7 +522,7 @@ void POperation_EfficientProdCons::executeOn(ParetoCalculator& c) {
 	const ConfigurationSetPtr csp = c.popConfigurationSet();
 
 	// check if the quantities are totally ordered
-	if (!(csp->confspace->getQuantity(p_quant).isTotallyOrdered() && csc->confspace->getQuantity(c_quant).isTotallyOrdered())) {
+	if (!(csp->confspace->getQuantity(p_quant)->isTotallyOrdered() && csc->confspace->getQuantity(c_quant)->isTotallyOrdered())) {
 		throw EParetoCalculatorError("Dimensions must be totally ordered for efficient producer-consumer");
 	}
 
