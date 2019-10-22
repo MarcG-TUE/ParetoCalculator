@@ -205,7 +205,8 @@ namespace Pareto {
 	std::unique_ptr<std::string> Configuration::asString(void) {
 		std::ostringstream myString;
 		this->streamOn(myString);
-		return std::make_unique<std::string>(myString.str());
+		//requirs C++14: return std::make_unique<std::string>(myString.str());
+		return std::unique_ptr<std::string>(new std::string(myString.str()));
 	}
 
 
