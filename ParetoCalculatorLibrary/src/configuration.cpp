@@ -488,13 +488,6 @@ namespace Pareto {
 	}
 
 
-	//ConfigurationIndexOnTotalOrderReference& ConfigurationIndexOnTotalOrderReference::operator= (ConfigurationIndexOnTotalOrderReference& right) {
-	//	this->conf = right.conf;
-	//	this->index = right.index;
-	//	return *this;
-	//}
-
-
 	IndexOnConfigurationSet::IndexOnConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs) : quantity(qn), confset(cs) {
 	}
 

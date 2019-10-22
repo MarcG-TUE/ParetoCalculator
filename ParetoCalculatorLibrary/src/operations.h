@@ -49,12 +49,9 @@ namespace Pareto {
 
 	/// An operation to be executed on a Pareto Calculator
 	class ParetoCalculatorOperation {
-	public:
-		ParetoCalculatorOperation(void);
-		virtual ~ParetoCalculatorOperation(){};
-		
+	public:		
 		/// executes the operation on calculator 'c'
-		virtual void executeOn(ParetoCalculator& c);
+		virtual void executeOn(ParetoCalculator& c) = 0;
 	};
 
 	/// The block-based minimization operator
@@ -136,11 +133,8 @@ namespace Pareto {
 	/// The (naive implementation of) producer-consumer constraint operation between two quantities.
 	class POperation_ProdCons: public ParetoCalculatorOperation {
 	public:
-		//static std::string* p_test;
-		//static std::string* c_test;
 		std::string p_quant, c_quant;
 		POperation_ProdCons(const std::string& pqname, const std::string& cqname);
-		//static bool testConstraint(const Configuration& c);
 		static bool testConstraint(const Configuration& c, const std::string& p_quant, const std::string& c_quant);
 		virtual void executeOn(ParetoCalculator& c);
 	};
@@ -221,10 +215,8 @@ namespace Pareto {
 	/// Consider using EfficientJoin
 	class POperation_Join: public ParetoCalculatorOperation {
 	public:
-		JoinMap& j_quants;
-		//static std::vector<int> qan;
-		//static std::vector<int> qbn;
-		POperation_Join(JoinMap& jqnamemap);
+		const JoinMap& j_quants;
+		POperation_Join(const JoinMap& jqnamemap);
 		static bool testConstraint(const Configuration& c, const std::vector<int>& qan, const std::vector<int>& qbn);
 		virtual void executeOn(ParetoCalculator& c);
 	};
