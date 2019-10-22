@@ -222,10 +222,10 @@ namespace Pareto {
 	class POperation_Join: public ParetoCalculatorOperation {
 	public:
 		JoinMap& j_quants;
-		static std::vector<int> qan;
-		static std::vector<int> qbn;
+		//static std::vector<int> qan;
+		//static std::vector<int> qbn;
 		POperation_Join(JoinMap& jqnamemap);
-		static bool testConstraint(const Configuration& c);
+		static bool testConstraint(const Configuration& c, const std::vector<int>& qan, const std::vector<int>& qbn);
 		virtual void executeOn(ParetoCalculator& c);
 	};
 

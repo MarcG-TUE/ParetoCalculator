@@ -43,9 +43,8 @@ using namespace Pareto;
 // Some C++ thing, making me initialise the static members in POperation_ProdCons here...
 //std::string* POperation_ProdCons::p_test = nullptr;
 //std::string* POperation_ProdCons::c_test = nullptr;
-// TODO: remove these statics like p_test, c_test above
-std::vector<int> POperation_Join::qan;
-std::vector<int> POperation_Join::qbn;
+//std::vector<int> POperation_Join::qan;
+//std::vector<int> POperation_Join::qbn;
 
 
 
@@ -324,20 +323,16 @@ POperation_Join::POperation_Join(JoinMap& jqnamemap) :
 {
 }
 
-bool POperation_Join::testConstraint(const Pareto::Configuration& c) {
+bool POperation_Join::testConstraint(const Pareto::Configuration& c, const std::vector<int>& qan, const std::vector<int>& qbn) {
 	bool diff = false;
-	std::vector<int>::iterator i = qan.begin();
-	std::vector<int>::iterator j = qbn.begin();
+	std::vector<int>::const_iterator i = qan.begin();
+	std::vector<int>::const_iterator j = qbn.begin();
 	for (; !diff && i != qan.end(); i++, j++) {
 		unsigned int k = *i;
 		unsigned int m = *j;
-#ifdef _DEBUG
 		QuantityValuePtr qva = c.getQuantity(k);
 		QuantityValuePtr qvb = c.getQuantity(m);
-#else
-		QuantityValuePtr qva = c.getQuantity(k);
-		QuantityValuePtr qvb = c.getQuantity(m);
-#endif
+
 		diff = diff || !(*qva == *qvb);
 	}
 	return !diff;;
@@ -350,8 +345,7 @@ void POperation_Join::executeOn(ParetoCalculator& c) {
 	ConfigurationSetPtr csa = c.popConfigurationSet();
 	ConfigurationSetPtr csb = c.popConfigurationSet();
 
-	qan.clear();
-	qbn.clear();
+	std::vector<int> qan, qbn;
 
 	JoinMap::iterator i;
 
@@ -365,7 +359,12 @@ void POperation_Join::executeOn(ParetoCalculator& c) {
 	c.product();
 
 	ConfigurationSetPtr cs = c.popConfigurationSet();
-	ConfigurationSetPtr ncs = c.constraint(cs, &POperation_Join::testConstraint);
+	ConfigurationSetPtr ncs = c.constraint(cs, 
+		[qan,qbn](const Configuration& c) {
+			return POperation_Join::testConstraint(c, qan, qbn);
+		}
+	);
+
 	c.push(ncs);
 };
 
