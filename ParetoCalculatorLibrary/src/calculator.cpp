@@ -34,6 +34,7 @@
 #include "calculator.h"
 
 #include <memory>
+#include <functional>
 #include <sstream>
 #include <math.h>
 
@@ -673,7 +674,7 @@ StorableObjectPtr ParetoCalculator::retrieve(const std::string& oname)
 	}
 }
 
-QuantityTypePtr ParetoCalculator::retrieveQuantityType(const std::string& oname) //throw (EParetoCalculatorError)
+QuantityTypePtr ParetoCalculator::retrieveQuantityType(const std::string& oname)
 {
 	return std::dynamic_pointer_cast<const QuantityType>(this->retrieve(oname));
 }
@@ -683,7 +684,7 @@ void ParetoCalculator::push(const StorableObjectPtr o) {
 	stack.push(o);
 }
 
-void ParetoCalculator::push(const std::string& oname) //throw(EParetoCalculatorError)
+void ParetoCalculator::push(const std::string& oname)
 {
 	try {
 		StorableObjectPtr o = this->retrieve(oname);
@@ -694,7 +695,7 @@ void ParetoCalculator::push(const std::string& oname) //throw(EParetoCalculatorE
 	}
 }
 
-StorableObjectPtr ParetoCalculator::pop() //throw(EParetoCalculatorError)
+StorableObjectPtr ParetoCalculator::pop()
 {
 	if (stack.size() > 0) {
 		return stack.pop();
@@ -704,7 +705,7 @@ StorableObjectPtr ParetoCalculator::pop() //throw(EParetoCalculatorError)
 	}
 }
 
-ConfigurationSetPtr ParetoCalculator::popConfigurationSet() //throw(EParetoCalculatorError)
+ConfigurationSetPtr ParetoCalculator::popConfigurationSet()
 {
 	StorableObjectPtr so = this->pop();
 	if (!so->isConfigurationSet()) {
@@ -713,7 +714,7 @@ ConfigurationSetPtr ParetoCalculator::popConfigurationSet() //throw(EParetoCalcu
 	return std::dynamic_pointer_cast<ConfigurationSet>(so);
 }
 
-StorableStringPtr ParetoCalculator::popStorableString() //throw(EParetoCalculatorError)
+StorableStringPtr ParetoCalculator::popStorableString()
 {
 	StorableObjectPtr so = this->pop();
 	if (!so->isString()) {
@@ -722,7 +723,7 @@ StorableStringPtr ParetoCalculator::popStorableString() //throw(EParetoCalculato
 	return std::dynamic_pointer_cast<const StorableString>(so);
 }
 
-StorableObjectPtr ParetoCalculator::peek() //throw(EParetoCalculatorError)
+StorableObjectPtr ParetoCalculator::peek()
 {
 	if (stack.size() > 0) {
 		return stack.peek();
@@ -798,7 +799,7 @@ void ParetoCalculator::print() {
 }
 
 
-void ParetoCalculator::constraint(bool (*testConstraint)(const Pareto::Configuration&)) {
+void ParetoCalculator::constraint(std::function <bool(const Configuration&)> testConstraint) {
 	// operate on the stack
 	StorableObjectPtr so = this->pop();
 	if (!so->isConfigurationSet()) {
@@ -878,7 +879,6 @@ void ParetoCalculator::LoadOperations() {
 	this->verbose("Operations from input executed\n");
 }
 
-//#ifdef _MSC_VER
 void ParetoCalculator::SaveAllFile(const std::string& fn) {
 	this->setStatus("Saving XML file");
 	this->verbose("Saving XML file...");
@@ -894,7 +894,6 @@ void ParetoCalculator::SaveItemFile(const std::string& itemToSave, const std::st
 	this->setStatus("XML item saved");
 	this->verbose("saved\n");
 }
-//#endif
 
 long int testComplexity(long int N, long int d) {
 	if (N <= 1) return 1;

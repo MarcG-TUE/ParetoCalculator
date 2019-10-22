@@ -170,7 +170,6 @@ namespace Pareto {
 
 		// compute the constraint (intersection) of two configuration sets
 		static ConfigurationSetPtr constraint(ConfigurationSetPtr cs1, ConfigurationSetPtr cs2);
-		//static ConfigurationSetPtr constraint(ConfigurationSetPtr cs1, bool (*testConstraint)(const Pareto::Configuration&));
 		static ConfigurationSetPtr constraint(ConfigurationSetPtr cs, std::function <bool(const Configuration&)> testConstraint);
 
 		static ConfigurationSetPtr alternative(ConfigurationSetPtr cs1, ConfigurationSetPtr cs2);
@@ -195,7 +194,7 @@ namespace Pareto {
 		///
 		/// The constraint is implemented as the characteristic function testConstraint
 		/// which returns true when a configuration satisfies the constraint.
-		void constraint(bool (*testConstraint)(const Configuration&));
+		void constraint(std::function<bool (const Configuration&)> testConstraint);
 
 		// parsing
 		ParetoParser* parser = nullptr;
