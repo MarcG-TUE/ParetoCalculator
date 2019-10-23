@@ -268,7 +268,7 @@ namespace Pareto {
 		QuantityValuePtr value(void) const;
 		bool operator==(const ConfigurationIndexReference& right) const;
 		bool operator>(const ConfigurationIndexReference& right) const ;
-		virtual bool operator<(const ConfigurationIndexReference& right) const;
+		virtual bool operator<(const ConfigurationIndexReference& right) const = 0;
 	};
 
 	class ConfigurationIndexOnTotalOrderReference : public ConfigurationIndexReference {
@@ -295,10 +295,10 @@ namespace Pareto {
 		ConfigurationSetPtr confset;
 		IndexOnConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs);
 		virtual ~IndexOnConfigurationSet(){}
-		virtual ConfigurationSetPtr copyFromTo(int f, int t);
+		virtual ConfigurationSetPtr copyFromTo(int f, int t) = 0;
 		int lower(const ConfigurationIndexReference& v);
 		int upper(const ConfigurationIndexReference& v);
-		virtual ConfigurationIndexReferencePtr get(int n);
+		virtual ConfigurationIndexReferencePtr get(int n) = 0;
 	};
 
 	// implements an index on the configurations of a configurationset

@@ -474,6 +474,8 @@ namespace Pareto {
 		this->confs.insert(c);
 	}
 
+	/// add all configurations from configuration set cs as unique (non-existing configurations
+	/// Note: assumes that the new configurations do not yet exist in the set
 	void ConfigurationSet::addUniqueConfigurationsOf(ConfigurationSetPtr cs) {
 		for (SetOfConfigurations::iterator i = cs->confs.begin(); i != cs->confs.end(); i++) {
 			ConfigurationPtr c = (*i);
@@ -481,11 +483,12 @@ namespace Pareto {
 		}
 	}
 
-
+	/// check if the set contains configuration c
 	bool ConfigurationSet::containsConfiguration(ConfigurationPtr c) {
 		return confs.find(c) != confs.end();
 	}
 
+	/// produce a textual representation of the configuration set on the stream os
 	void ConfigurationSet::streamOn(std::ostream& os) const {
 		os << "{";
 		SetOfConfigurations::iterator i;
@@ -498,46 +501,45 @@ namespace Pareto {
 		os << "}";
 	}
 
+	/// make a copy of the configuration set
 	StorableObjectPtr ConfigurationSet::copy(void) const
 	{
 		return std::make_shared<ConfigurationSet>(*this);
 	}
 
+	/// return the quantity value the index reference points to
 	QuantityValuePtr ConfigurationIndexReference::value(void) const {
 		return (this->conf)->getQuantity(index.quantity);
 	}
 
-
+	/// compare two index references for equality by the values they refer to
 	bool ConfigurationIndexReference::operator==(const ConfigurationIndexReference& right) const {
 		return *(this->value()) == *(right.value());
 	}
 
+	/// compare two index references of the totally ordered reference for strict inequality by the values they refer to
 	bool ConfigurationIndexOnTotalOrderReference::operator<(const ConfigurationIndexReference& right) const {
-		return this->value() < right.value();
+		return *(this->value()) < *(right.value());
 	}
 
+	/// compare two index references for strict greater inequality by the values they refer to
 	bool ConfigurationIndexReference::operator>(const ConfigurationIndexReference& right) const {
+		// delegate to smaller than relation
 		return right < *this;
 	}
 
-	bool ConfigurationIndexReference::operator<(const ConfigurationIndexReference& right) const {
-		throw EParetoCalculatorError("Error: < should not be called on abstract ConfigurationIndexReference");
+	/// constructor of IndexOnConfigurationSet
+	IndexOnConfigurationSet::IndexOnConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs) : 
+		quantity(qn), 
+		confset(cs)
+	{
 	}
 
-	ConfigurationIndexReferencePtr IndexOnConfigurationSet::get(int n) {
-		throw EParetoCalculatorError("Error: 'get' should not be called on abstract ConfigurationIndexReference");
-	}
-
-	ConfigurationSetPtr IndexOnConfigurationSet::copyFromTo(int f, int t) {
-		throw EParetoCalculatorError("Error: 'copyFromTo' should not be called on abstract ConfigurationIndexReference");
-	}
-
-
-	IndexOnConfigurationSet::IndexOnConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs) : quantity(qn), confset(cs) {
-	}
-
-
-	IndexOnTotalOrderConfigurationSet::IndexOnTotalOrderConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs) : IndexOnConfigurationSet(qn, cs) {
+	/// constructor of IndexOnTotalOrderConfigurationSet from quantity name and configuraton set 
+	IndexOnTotalOrderConfigurationSet::IndexOnTotalOrderConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs) : 
+		IndexOnConfigurationSet(qn, cs) 
+	{
+		// make a list of references for the index
 		SetOfConfigurations::iterator i;
 		for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
 			std::shared_ptr<ConfigurationIndexOnTotalOrderReference> r = std::make_shared<ConfigurationIndexOnTotalOrderReference>(*i, *this);
@@ -546,9 +548,10 @@ namespace Pareto {
 		std::sort(this->begin(), this->end());
 	}
 
-	// lower returns the smallest index such that S[i,Q]>=v
+	/// lower returns the smallest index such that S[i,Q]>=v
 	int IndexOnConfigurationSet::lower(const ConfigurationIndexReference& v) {
 		int a, b, m;
+		// use a binary search
 		a = -1; // S[a,Q]<v
 		b = this->confset->confs.size(); // S[b,Q]>=v;
 		while (b - a > 1) {
@@ -563,10 +566,10 @@ namespace Pareto {
 		return b;
 	}
 
-
-	// upper returns the largest index such that S[i,Q]<=v
+	/// upper returns the largest index such that S[i,Q]<=v
 	int IndexOnConfigurationSet::upper(const ConfigurationIndexReference& v) {
 		int a, b, m;
+		// use a binary search
 		a = -1; // S[a,Q]<=v
 		b = this->confset->confs.size(); // S[b,Q]>v;
 		while (b - a > 1) {
@@ -581,65 +584,70 @@ namespace Pareto {
 		return a;
 	}
 
-
+	/// copy a range from f to t from the index as a new configuration set
 	ConfigurationSetPtr IndexOnTotalOrderConfigurationSet::copyFromTo(int f, int t) {
+		// make the resulting configuration set in the same configuration space
 		ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(this->confset->confspace, this->confset->name + " range");
+		// advance the index to position f
+		// TODO: linearly? can we make this more efficient?
 		IndexOnTotalOrderConfigurationSet::iterator i = this->begin();
 		for (int j = 0; j < f; j++, i++);
+		// copy the configurations in the range to the result set
 		for (int j = f; j <= t; j++, i++) {
 			res->addConfiguration((*i)->conf);
 		}
 		return res;
 	}
 
-
+	/// copy a range from f to t from the index as a new configuration set
 	ConfigurationSetPtr IndexOnUnorderedConfigurationSet::copyFromTo(int f, int t) {
+		// make the resulting configuration set in the same configuration space
 		ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(this->confset->confspace, this->confset->name + " range");
+		// advance the index to position f
+		// TODO: linearly? can we make this more efficient?
 		IndexOnUnorderedConfigurationSet::iterator i = this->begin();
 		for (int j = 0; j < f; j++, i++);
+		// copy the configurations in the range to the result set
 		for (int j = f; j <= t; j++, i++) {
 			res->addConfiguration((*i)->conf);
 		}
 		return res;
 	}
 
-
+	/// a total order to organize the unordered quantities
 	bool ConfigurationIndexOnUnorderedReference::operator<(const ConfigurationIndexReference& right) const {
 		QuantityValuePtr addrA = this->value();
 		QuantityValuePtr addrB = right.value();
+		// compare the pointers instead
 		return addrA < addrB;
 		// TODO: check, it this always safe. maybe replace by efficient direct comparison of strings without making too many copies.
 		// was:	return this->value().asString()<right.value().asString();
 	}
 
 
-	//ConfigurationIndexOnUnorderedReference& ConfigurationIndexOnUnorderedReference::operator= (ConfigurationIndexOnUnorderedReference& right) {
-	//	this->conf = right.conf;
-	//	this->index = right.index;
-	//	return *this;
-	//}
-
-
+	/// constructor of IndexOnUnorderedConfigurationSet, given a name of the quantity and a configuration set to index
 	IndexOnUnorderedConfigurationSet::IndexOnUnorderedConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs) : IndexOnConfigurationSet(qn, cs) {
+		// create the references
 		SetOfConfigurations::iterator i;
 		for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
 			std::shared_ptr<ConfigurationIndexOnUnorderedReference> r = std::make_shared<ConfigurationIndexOnUnorderedReference>(*i, *this);
 			this->push_back(r);
 		}
+		// sort the index
 		std::sort(this->begin(), this->end());
 	}
-
 
 
 	///////////////// functions /////////////////
 
 
-
+	/// stream a configuration through a pointer
 	std::ostream& operator<<(std::ostream& os, ConfigurationPtr c) {
 		c->streamOn(os);
 		return os;
 	}
 
+	/// stream a configuration
 	std::ostream& operator<<(std::ostream& os, const Configuration& c) {
 		c.streamOn(os);
 		return os;
