@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParetoCalculatorConsole", "
 		{769B27CD-8B54-4D2A-A1BB-8C07EB07C653} = {769B27CD-8B54-4D2A-A1BB-8C07EB07C653}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParetoCalculatorTest", "ParetoCalculatorTest\ParetoCalculatorTest.vcxproj", "{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Static Lib|Any CPU = Debug Static Lib|Any CPU
@@ -183,6 +185,40 @@ Global
 		{6E08DDA2-A0CE-4BBE-983D-703DFE0F6F32}.Release|Win32.Build.0 = Release|Win32
 		{6E08DDA2-A0CE-4BBE-983D-703DFE0F6F32}.Release|x64.ActiveCfg = Release|x64
 		{6E08DDA2-A0CE-4BBE-983D-703DFE0F6F32}.Release|x64.Build.0 = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug Static Lib|Any CPU.ActiveCfg = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug Static Lib|Any CPU.Build.0 = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug Static Lib|ARM.ActiveCfg = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug Static Lib|ARM.Build.0 = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug Static Lib|ARM64.ActiveCfg = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug Static Lib|ARM64.Build.0 = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug Static Lib|Win32.ActiveCfg = Debug|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug Static Lib|Win32.Build.0 = Debug|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug Static Lib|x64.ActiveCfg = Debug|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug Static Lib|x64.Build.0 = Debug|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug|ARM.ActiveCfg = Debug|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug|Win32.Build.0 = Debug|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug|x64.ActiveCfg = Debug|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Debug|x64.Build.0 = Debug|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release Static Lib|Any CPU.ActiveCfg = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release Static Lib|Any CPU.Build.0 = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release Static Lib|ARM.ActiveCfg = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release Static Lib|ARM.Build.0 = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release Static Lib|ARM64.ActiveCfg = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release Static Lib|ARM64.Build.0 = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release Static Lib|Win32.ActiveCfg = Release|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release Static Lib|Win32.Build.0 = Release|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release Static Lib|x64.ActiveCfg = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release Static Lib|x64.Build.0 = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release|Any CPU.ActiveCfg = Release|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release|ARM.ActiveCfg = Release|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release|ARM64.ActiveCfg = Release|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release|Win32.ActiveCfg = Release|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release|Win32.Build.0 = Release|Win32
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release|x64.ActiveCfg = Release|x64
+		{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
