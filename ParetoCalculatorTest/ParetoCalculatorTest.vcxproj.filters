@@ -30,5 +30,13 @@
     <ClCompile Include="..\tests\unittest\src\unittest.cpp">
       <Filter>Source Files\unittest\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\tests\unittest\src\unittester.cpp">
+      <Filter>Source Files\unittest\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\tests\unittest\src\unittester.h">
+      <Filter>Header Files\unittest\src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -31,6 +31,8 @@
 // Implementation of the ParetoCalculator class, implementing the Pareto Algebra operations
 //
 
+#pragma once
+
 #ifndef PARETO_CALCULATOR_H
 #define PARETO_CALCULATOR_H
 

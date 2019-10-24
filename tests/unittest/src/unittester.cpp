@@ -29,25 +29,14 @@
 // Eindhoven University of Technology
 //
 // Description:
-// Unit Testing Application
+// UnitTester class
 //
 
-#include <calculator.h>
 
 #include "unittester.h"
 
 using namespace Pareto;
 
-int main()
-{
-
-	UnitTester* x;
-	x->test_all();
-
-    UnitTester UT();
-
-    if (!(UT.test_all())) {
-        return -1;
-    }
-	return 0;
+bool UnitTester::test_all(void) {
+	return true;
 }
