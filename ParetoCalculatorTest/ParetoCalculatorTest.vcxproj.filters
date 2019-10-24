@@ -13,5 +13,22 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\unittest">
+      <UniqueIdentifier>{f6126430-aa60-458f-b023-2793b06346bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\unittest\src">
+      <UniqueIdentifier>{82399037-cb16-4251-835b-0a12cd013d47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\unittest">
+      <UniqueIdentifier>{5c89e1ea-4c7c-4801-9f02-c4ccdf0ce5d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\unittest\src">
+      <UniqueIdentifier>{b3ce9191-969c-4c36-b3c4-e9cd9a54b8b1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\tests\unittest\src\unittest.cpp">
+      <Filter>Source Files\unittest\src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

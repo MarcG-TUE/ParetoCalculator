@@ -18,6 +18,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParetoCalculatorConsole", "
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParetoCalculatorTest", "ParetoCalculatorTest\ParetoCalculatorTest.vcxproj", "{C45D6840-2A30-4A5F-BF63-37A1D0325C9B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{769B27CD-8B54-4D2A-A1BB-8C07EB07C653} = {769B27CD-8B54-4D2A-A1BB-8C07EB07C653}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

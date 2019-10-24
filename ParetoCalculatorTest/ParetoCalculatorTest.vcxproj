@@ -123,6 +123,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\tests\unittest\src\unittest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ParetoCalculatorLibrary\ParetoCalculatorLibrary.vcxproj">
+      <Project>{769b27cd-8b54-4d2a-a1bb-8c07eb07c653}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
