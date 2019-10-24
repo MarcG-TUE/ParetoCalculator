@@ -43,6 +43,9 @@
 
 using namespace Pareto;
 
+// initialize static members of ParetoCalculator class
+unsigned int ParetoCalculator::_filter_threshold = DEFAULT_FILTER_THRESHOLD;
+unsigned int ParetoCalculator::_minimize_threshold = DEFAULT_MINIMIZE_THRESHOLD;
 
 
 ParetoCalculator::ParetoCalculator() {
@@ -261,22 +264,27 @@ ConfigurationSetPtr ParetoCalculator::hiding(ConfigurationSetPtr cs, const Quant
 }
 
 
-
+/// The Simple Cull minimization algorithm
 ConfigurationSetPtr ParetoCalculator::minimize(ConfigurationSetPtr cs) {
 	// The naive way
 
+	// make the result configuration set
 	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(cs->confspace, "min(" + cs->name + ")");
 
 	// Note that the following gives a copy of the set of configurations
-	SetOfConfigurations confs = cs->confs;
+	//SetOfConfigurations confs = cs->confs;
+	SetOfConfigurations confs(cs->confs);
 
 	// invariants of the loop: 
 	// - the union of confs and res is Pareto equivalent to the original set cs.confs
-	// - res in Pareto minimal
+	// - res is Pareto minimal
 	while (!confs.empty()) {
-		// remove arbitrary element from the set
+		// remove an arbitrary element from the set
 		SetOfConfigurations::const_iterator cfp = confs.begin();
-		ConfigurationPtr c = std::make_shared<Configuration>(*cfp);
+		//ConfigurationPtr c = std::make_shared<Configuration>(*cfp);
+		ConfigurationPtr c = *cfp;
+
+		// remove the configuration from the set confs
 		confs.erase(cfp);
 
 		// walk throught the other configurations
@@ -285,7 +293,7 @@ ConfigurationSetPtr ParetoCalculator::minimize(ConfigurationSetPtr cs) {
 		// set that c dominates.
 		SetOfConfigurations::iterator i = confs.begin();
 		while (i != confs.end()) {
-			ConfigurationPtr cc = *i;
+			const ConfigurationPtr& cc = *i;
 			if (*c <= *cc) { // remove cc as it is dominated and continue
 				// for port to linux, which does not support (apparently) the erase returning a new iterator
 				// some people on the internet claim the following code is safe.
@@ -299,22 +307,22 @@ ConfigurationSetPtr ParetoCalculator::minimize(ConfigurationSetPtr cs) {
 				if (*cc <= *c) {
 					// forget about c, it is dominated by cc. Continue with cc, but 
 					// start from the beginning to make sure all points it dominates will be removed.
-					ConfigurationPtr nc = std::make_shared<Configuration>(cc);
-					//delete c;
-					c = nc;
+					c = cc;
 					confs.erase(i);
 					i = confs.begin();
 				}
 				else { i++; }
 			}
 		}
+		// add the configuration c to the result
 		res->addUniqueConfiguration(c);
 	}
 	return res;
 }
 
+/// Simple Cull minimization
 ConfigurationSetPtr ParetoCalculator::minimize_SC(ConfigurationSetPtr cs) {
-	// Simple Cull
+	// TOD: how does this method relate to the minimize function above?
 
 	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(cs->confspace, "min(" + cs->name + ")");
 
@@ -451,7 +459,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_filter2(ConfigurationSe
 	if (csb->confs.size() == 0) { return csb; }
 
 	// check if it is better to switch to a simple cull
-	if (csa->confs.size() < FILTER_THRESHOLD) {
+	if (csa->confs.size() < ParetoCalculator::_filter_threshold) {
 		return ParetoCalculator::efficient_minimize_filter3(csa, csb);
 	}
 
@@ -547,9 +555,14 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_filter4(ConfigurationSe
 
 
 
-ConfigurationSetPtr ParetoCalculator::efficient_minimize_dcmerge(ConfigurationSetPtr csl, ConfigurationSetPtr csh, const QuantityName& qn, const QuantityValue& v) {
+ConfigurationSetPtr ParetoCalculator::efficient_minimize_dcmerge(ConfigurationSetPtr csl, ConfigurationSetPtr csh, const QuantityName& qn, const QuantityValue& v,
+	unsigned int filter_threshold, unsigned int minimize_threshold) 
+{
 	// csl and csh are minimized and sorted on qn, such that for any cl in csl and ch in csh, cl(qn)<=ch(qn)
 	// project on cut plane "hide qn"
+
+	ParetoCalculator::_filter_threshold = filter_threshold;
+	ParetoCalculator::_minimize_threshold = minimize_threshold;
 
 	if (csl->confspace->nrOfVisibleQuantities() == 1) {
 		// csl should contain only one element which dominates the element of csh
@@ -573,7 +586,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_totally_ordered_recursi
 
 	// Base case of recursion, when problem size small enough use
 	// ordinary minimization
-	if (cs->confs.size() < MINIMIZE_THRESHOLD) {
+	if (cs->confs.size() < ParetoCalculator::_minimize_threshold) {
 		return ParetoCalculator::minimize(cs);
 	}
 
@@ -621,7 +634,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize(ConfigurationSetPtr cs)
 
 	// Base case of recursion, when problem size small enough use
 	// ordinary minimization
-	if (cs->confs.size() < MINIMIZE_THRESHOLD) {
+	if (cs->confs.size() < ParetoCalculator::_minimize_threshold) {
 		return ParetoCalculator::minimize(cs);
 	}
 

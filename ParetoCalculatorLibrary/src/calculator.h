@@ -39,6 +39,10 @@
 #include "operations.h"
 
 
+#define DEFAULT_MINIMIZE_THRESHOLD 2048
+#define DEFAULT_FILTER_THRESHOLD 2048
+
+
 namespace Pareto {
 
 	class ParetoParser;
@@ -175,8 +179,6 @@ namespace Pareto {
 		static ConfigurationSetPtr alternative(ConfigurationSetPtr cs1, ConfigurationSetPtr cs2);
 		static ConfigurationSetPtr minimize(ConfigurationSetPtr cs);
 		static ConfigurationSetPtr minimize_SC(ConfigurationSetPtr cs);
-		static const unsigned int MINIMIZE_THRESHOLD = 2048; // determine optimal value!
-		static const unsigned int FILTER_THRESHOLD = 2048; // determine optimal value!
 		static ConfigurationSetPtr efficient_minimize(ConfigurationSetPtr cs);
 
 		/// execute block-based minimization
@@ -226,7 +228,8 @@ namespace Pareto {
 		static ConfigurationSetPtr efficient_minimize_totally_ordered(ConfigurationSetPtr cs, const QuantityName& qn);
 		static ConfigurationSetPtr efficient_minimize_totally_ordered_recursive(ConfigurationSetPtr cs, const QuantityName& qn);
 		static ListOfConfSetPtr splitLowHigh(ConfigurationSetPtr cs, const QuantityName& qn, QuantityValuePtr *v);
-		static ConfigurationSetPtr efficient_minimize_dcmerge(ConfigurationSetPtr csl, ConfigurationSetPtr csh, const QuantityName& qn, const QuantityValue& v);
+		static ConfigurationSetPtr efficient_minimize_dcmerge(ConfigurationSetPtr csl, ConfigurationSetPtr csh, const QuantityName& qn, const QuantityValue& v,
+			unsigned int filter_threshold = DEFAULT_FILTER_THRESHOLD, unsigned int minimize_threshold = DEFAULT_MINIMIZE_THRESHOLD);
 		static ConfigurationSetPtr efficient_minimize_filter1(ConfigurationSetPtr csl, ConfigurationSetPtr csh, const QuantityName& qn);
 		static ConfigurationSetPtr efficient_minimize_filter2(ConfigurationSetPtr csa, ConfigurationSetPtr csb);
 		static ConfigurationSetPtr efficient_minimize_filter3(ConfigurationSetPtr csa, ConfigurationSetPtr csb);
@@ -234,6 +237,9 @@ namespace Pareto {
 		static QuantityValuePtr efficient_minimize_getPivot(ConfigurationSetPtr cs, const QuantityName& qn);
 		static void efficient_minimize_filter_split(ConfigurationSetPtr cs, const QuantityName& qn, QuantityValuePtr pivot, ConfigurationSetPtr *csl, ConfigurationSetPtr *csh);
 
+	private:
+		static unsigned int _filter_threshold;
+		static unsigned int _minimize_threshold;
 
 	};
 
