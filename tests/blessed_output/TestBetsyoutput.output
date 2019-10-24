@@ -1,0 +1,95 @@
+Loading file: examples/betsy.xml
+[Status] Creating XML Parser
+Creating XML Parser
+
+[Status] Loading XML input
+Loading XML input...
+[Status] XML input loaded
+loaded
+
+[Status] Loading quantity types from input
+Loading quantity types from input...
+[Status] Quantity types loaded
+loaded
+
+[Status] Loading configuration spaces from input
+Loading configuration spaces from input...
+[Status] Configuration spaces loaded
+loaded
+
+[Status] Loading configuration sets from input
+Loading configuration sets from input...
+[Status] Configuration sets loaded
+loaded
+
+[Status] Executing operations from input
+Executing operations from input
+
+pushing object onto the stack
+
+pushing object onto the stack
+
+computing product of sets of configurations
+
+applying producer consumer constraint
+
+abstraction of quantities
+
+hiding quantities
+
+minimizing set of configurations
+
+storing object from the stack
+
+pushing object onto the stack
+
+pushing object onto the stack
+
+computing product of sets of configurations
+
+applying producer consumer constraint
+
+abstraction of quantities
+
+minimizing set of configurations
+
+storing object from the stack
+
+pushing object onto the stack
+
+pushing object onto the stack
+
+join on multiple attributes
+
+hiding quantities
+
+abstraction of quantities
+
+minimizing set of configurations
+
+aggregating attributes
+
+abstraction of quantities
+
+duplicating element on top of the stack
+
+storing object from the stack
+
+duplicating element on top of the stack
+
+printing element from the stack:
+
+{([mp_s1], -38, 0.025, 12500, [pr_M3], 1.23), 
+([mp_s1], -38, 0.07, 35000, [pr_M3], 1.12), 
+([mp_s1], -38, 0.125, 12500, [pr_M3], 0.97), 
+([mp_s2], -45, 0.025, 12500, [pr_M2], 1.93), 
+([mp_s2], -45, 0.07, 35000, [pr_M2], 1.82), 
+([mp_s2], -45, 0.16, 80000, [pr_M2], 1.76), 
+([mp_s3], -41, 0.125, 12500, [pr_M2], 1.67), 
+([mp_s4], -48, 0.025, 12500, [pr_M1], 3.13), 
+([mp_s4], -48, 0.07, 35000, [pr_M1], 3.02), 
+([mp_s4], -48, 0.16, 80000, [pr_M1], 2.96), 
+([mp_s5], -46.5, 0.125, 12500, [pr_M1], 2.87)}
+[Status] Operations from input executed
+Operations from input executed
+

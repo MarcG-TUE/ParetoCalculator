@@ -5,7 +5,6 @@ enable_testing()
 add_subdirectory(ParetoCalculatorLibrary/src)
 add_subdirectory(ParetoCalculatorConsole)
 add_subdirectory(doc)
+add_subdirectory(tests)
 
-# does the console application run
-add_test(RunParetoCalculatorConsoleBetsy ParetoCalculatorConsole/ParetoCalculatorConsole test/betsy.xml)
 
