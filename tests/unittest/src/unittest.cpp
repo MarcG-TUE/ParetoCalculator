@@ -32,22 +32,25 @@
 // Unit Testing Application
 //
 
-#include <calculator.h>
+//#include <calculator.h>
 
 #include "unittester.h"
+#include <stdexcept>
+#include <iostream>
 
 using namespace Pareto;
 
-int main()
+int main(void)
 {
-
-	UnitTester* x;
-	x->test_all();
-
-    UnitTester UT();
-
-    if (!(UT.test_all())) {
-        return -1;
-    }
-	return 0;
+	UnitTester UT;
+	try {
+		if (!(UT.test_all())) {
+			return -1;
+		}
+		return 0;
+	}
+	catch (std::runtime_error & e) {
+		std::cout << e.what();
+		return -1;
+	}
 }

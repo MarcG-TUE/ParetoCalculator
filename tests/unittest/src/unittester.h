@@ -37,14 +37,37 @@
 #ifndef TESTS_UNITTESTER_H
 #define TESTS_UNITTESTER_H
 
+#include <string>
+#include <random>
+
+
 
 namespace Pareto {
+
+	class UnitTesterException {
+	public:
+		// Constructor
+		UnitTesterException(const std::string s);
+
+		/// the error message of the exception
+		std::string errorMsg;
+	};
 
 	class UnitTester
 	{
 	public:
-		UnitTester() {}
+		UnitTester();
+
 		bool test_all(void);
+
+		bool test_calculator(void);
+
+		bool test_DCMinimization(void);
+
+	private:
+		// for reproducable pseudo random input
+		std::default_random_engine generator;
+
 	};
 
 }

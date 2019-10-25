@@ -35,8 +35,73 @@
 
 #include "unittester.h"
 
+#include <stdexcept>
+
+
+#define ASSERT_THROW( condition, msg )                              \
+{                                                                   \
+  if( !( condition ) )                                              \
+  {                                                                 \
+    throw std::runtime_error(   std::string( msg )                  \
+                              + std::string( "\nIn:" )              \
+                              + std::string( __FILE__ )             \
+                              + std::string( ":" )                  \
+                              + std::to_string( __LINE__ )          \
+                              + std::string( " in " )               \
+                              + std::string( __FUNCTION__ )         \
+    );                                                              \
+  }                                                                 \
+}
+
+#define ASSERT_EQUAL( x, y, msg )                                        \
+{                                                                   \
+  if( ( x ) != ( y ) )                                              \
+  {                                                                 \
+    throw std::runtime_error(   std::string( msg )             \
+                              + std::string( "\nIn:" )              \
+                              + std::string( __FILE__ )              \
+                              + std::string( ":" )                  \
+                              + std::to_string( __LINE__ )          \
+                              + std::string( " in " )               \
+                              + std::string( __FUNCTION__ )  \
+                              + std::string( ": " )                 \
+                              + std::to_string( ( x ) )             \
+                              + std::string( " != " )               \
+                              + std::to_string( ( y ) )             \
+    );                                                              \
+  }                                                                 \
+}
+
+
+
 using namespace Pareto;
 
+UnitTesterException::UnitTesterException(const std::string s) {
+	errorMsg = s;
+}
+
+UnitTester::UnitTester(){
+	this->generator.seed(1234);
+}
+
+
 bool UnitTester::test_all(void) {
+
+	// checking if the asserts work
+	ASSERT_THROW(true, "ASSERT failed!");
+	ASSERT_EQUAL(0, 0, "Zero is not zero!");
+
+	ASSERT_THROW(this->test_calculator(), "Calculator tests failed.");
+	return true;
+}
+
+bool UnitTester::test_calculator(void) {
+	ASSERT_THROW(this->test_DCMinimization(), "Divide and Conquer minimization failed.");
+	return true;
+}
+
+bool UnitTester::test_DCMinimization(void) {
+
+
 	return true;
 }
