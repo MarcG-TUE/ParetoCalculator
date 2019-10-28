@@ -5,9 +5,9 @@ add_test(RunParetoCalculatorConsoleBetsy ../ParetoCalculatorConsole/ParetoCalcul
 # does the console application gie the expected output for the betsy example
 add_test(NAME TestBetsyOutput
 	COMMAND ${CMAKE_COMMAND}
-#        -Dtest_cmd=${CMAKE_SOURCE_DIR}/ParetoCalculatorConsole/ParetoCalculatorConsole\ ${CMAKE_SOURCE_DIR}/examples/betsy.xml\ >\ ${CMAKE_SOURCE_DIR}/tests/output/TestBetsyOutput.output
-        -Dtest_cmd=${CMAKE_SOURCE_DIR}/ParetoCalculatorConsole/ParetoCalculatorConsole\ ${CMAKE_SOURCE_DIR}/examples/betsy.xml
-        -Doutput_blessed=${CMAKE_SOURCE_DIR}/tests/blessed_output/TestBetsyOutput.output
-        -Doutput_test=${CMAKE_SOURCE_DIR}/tests/output/TestBetsyOutput.output
+        -Dtest_cmd=${CMAKE_SOURCE_DIR}/ParetoCalculatorConsole/ParetoCalculatorConsole
+	-Dtest_cmd_arg1=${CMAKE_SOURCE_DIR}/examples/betsy.xml
+        -Doutput_blessed=${CMAKE_SOURCE_DIR}/tests/blessed_output/TestBetsyoutput.output
+        -Doutput_test=${CMAKE_SOURCE_DIR}/tests/output/TestBetsyoutput.output
         -P ${CMAKE_SOURCE_DIR}/tests/run_test.cmake
 )

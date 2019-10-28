@@ -16,13 +16,16 @@ if( NOT output_test )
 endif()
 
 execute_process(
-    COMMAND ${test_cmd}
-    COMMAND ${CMAKE_COMMAND} -E compare_files ${output_blessed} ${output_test}
+    COMMAND ${test_cmd} ${test_cmd_arg1} ${test_cmd_arg2}
+    OUTPUT_FILE ${output_test}
+)
+
+execute_process(
+    COMMAND ${CMAKE_SOURCE_DIR}/scripts/compareoutput ${output_blessed} ${output_test}
     RESULT_VARIABLE test_not_successful
-#    OUTPUT_QUIET
-#    ERROR_QUIET
+    OUTPUT_VARIABLE OUTVAR
 )
 
 if( test_not_successful )
-    message( SEND_ERROR "${output_test} does not match ${output_blessed}!" )
+    message( SEND_ERROR "${output_test} does not match ${output_blessed}!\n${OUTVAR}" )
 endif( test_not_successful )

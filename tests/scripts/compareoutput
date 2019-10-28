@@ -1,0 +1,12 @@
+#!/bin/bash
+
+TESTRESULT=$(diff $1 $2 | paste -d " " - - - - | sed '/####/d')
+if [ -z "$TESTRESULT" ]
+then
+	exit 0
+else
+	echo "Test failed."
+	echo "${TESTRESULT}"
+	exit 1
+fi
+
