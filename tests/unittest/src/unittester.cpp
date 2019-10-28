@@ -34,8 +34,9 @@
 
 
 #include "unittester.h"
-
 #include <stdexcept>
+
+#include "quantity.h"
 
 
 #define ASSERT_THROW( condition, msg )                              \
@@ -53,17 +54,17 @@
   }                                                                 \
 }
 
-#define ASSERT_EQUAL( x, y, msg )                                        \
+#define ASSERT_EQUAL( x, y, msg )                                   \
 {                                                                   \
   if( ( x ) != ( y ) )                                              \
   {                                                                 \
-    throw std::runtime_error(   std::string( msg )             \
+    throw std::runtime_error(   std::string( msg )                  \
                               + std::string( "\nIn:" )              \
-                              + std::string( __FILE__ )              \
+                              + std::string( __FILE__ )             \
                               + std::string( ":" )                  \
                               + std::to_string( __LINE__ )          \
                               + std::string( " in " )               \
-                              + std::string( __FUNCTION__ )  \
+                              + std::string( __FUNCTION__ )         \
                               + std::string( ": " )                 \
                               + std::to_string( ( x ) )             \
                               + std::string( " != " )               \
@@ -101,6 +102,46 @@ bool UnitTester::test_calculator(void) {
 }
 
 bool UnitTester::test_DCMinimization(void) {
+
+	// create a configuration space
+	ConfigurationSpacePtr CS = std::make_shared< ConfigurationSpace>("TestDC");
+	QuantityTypePtr TA = std::make_shared<QuantityType_Integer>("QuantityA");
+	QuantityTypePtr TB = std::make_shared<QuantityType_Real>("QuantityB");
+	QuantityTypePtr TC = std::make_shared<QuantityType_Integer>("QuantityC");
+	QuantityTypePtr TD = std::make_shared<QuantityType_Real>("QuantityD");
+	QuantityTypePtr TE = std::make_shared<QuantityType_Enum>("QuantityE_Unordered");
+	QuantityTypePtr TF = std::make_shared<QuantityType_Enum>("QuantityF_Ordered");
+	CS->addQuantity(TA);
+	CS->addQuantity(TB);
+	CS->addQuantity(TC);
+	CS->addQuantity(TD);
+	CS->addQuantity(TE);
+	CS->addQuantity(TF);
+
+	// create random configuratoin set
+	ConfigurationSetPtr C = std::make_shared<ConfigurationSet>(CS, "TestConfigurationSet");
+	std::uniform_int_distribution<> dis_int(1, 1000);
+	std::uniform_int_distribution<> dis_enum(0, 3);
+	std::uniform_real_distribution<> dis_real(1.0, 2.0);
+	for (unsigned int i = 0; i < 1000; i++) {
+		ConfigurationPtr c = std::make_shared<Configuration>(*CS);
+		QuantityValuePtr qA = std::make_shared<QuantityValue_Integer>(dis_int(this->generator));
+		c->addQuantity(qA);
+		QuantityValuePtr qB = std::make_shared<QuantityValue_Real>(dis_real(this->generator));
+		c->addQuantity(qB);
+		QuantityValuePtr qC = std::make_shared<QuantityValue_Integer>(dis_int(this->generator));
+		c->addQuantity(qC);
+		QuantityValuePtr qD = std::make_shared<QuantityValue_Real>(dis_real(this->generator));
+		c->addQuantity(qD);
+		QuantityValuePtr qE = std::make_shared<QuantityValue_Enum>(dis_enum(this->generator));
+		c->addQuantity(qE);
+		QuantityValuePtr qF = std::make_shared<QuantityValue_Enum>(dis_enum(this->generator));
+		c->addQuantity(qF);
+		C->addConfiguration(c);
+	}
+
+	ConfigurationSetPtr CM = PC.efficient_minimize(C);
+
 
 
 	return true;

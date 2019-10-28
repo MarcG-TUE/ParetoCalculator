@@ -39,7 +39,7 @@
 
 #include <string>
 #include <random>
-
+#include "calculator.h"	
 
 
 namespace Pareto {
@@ -67,6 +67,9 @@ namespace Pareto {
 	private:
 		// for reproducable pseudo random input
 		std::default_random_engine generator;
+
+		// calculator to use
+		ParetoCalculator PC;
 
 	};
 
