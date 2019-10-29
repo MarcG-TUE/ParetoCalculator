@@ -579,7 +579,7 @@ namespace Pareto {
 		// make a list of references for the index
 		SetOfConfigurations::iterator i;
 		for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
-			std::shared_ptr<ConfigurationIndexOnTotalOrderReference> r = std::make_shared<ConfigurationIndexOnTotalOrderReference>(*i, *this);
+			ConfigurationIndexOnTotalOrderReferencePtr r = std::make_shared<ConfigurationIndexOnTotalOrderReference>(*i, *this);
 			this->push_back(r);
 		}
 		std::sort(this->begin(), this->end());
@@ -634,6 +634,11 @@ namespace Pareto {
 			res->addConfiguration((*i)->conf);
 		}
 		return res;
+	}
+
+	bool operator<(const ConfigurationIndexOnTotalOrderReferencePtr pa, const ConfigurationIndexOnTotalOrderReferencePtr pb)
+	{
+		return *pa < *pb;
 	}
 
 	/// copy a range from f to t from the index as a new configuration set

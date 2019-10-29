@@ -286,6 +286,8 @@ namespace Pareto {
 	};
 
 	using ConfigurationIndexReferencePtr = std::shared_ptr<ConfigurationIndexReference>;
+	using ConfigurationIndexOnTotalOrderReferencePtr = std::shared_ptr<ConfigurationIndexOnTotalOrderReference>;
+	bool operator<(const ConfigurationIndexOnTotalOrderReferencePtr pa, const ConfigurationIndexOnTotalOrderReferencePtr pb);
 
 	class ConfigurationIndexOnUnorderedReference : public ConfigurationIndexReference {
 	public:
@@ -309,7 +311,7 @@ namespace Pareto {
 
 	// implements an index on the configurations of a configurationset
 	// used for sorting the configurations w.r.t. different quantities.
-	class IndexOnTotalOrderConfigurationSet: public std::vector<std::shared_ptr<ConfigurationIndexOnTotalOrderReference>>, public IndexOnConfigurationSet {
+	class IndexOnTotalOrderConfigurationSet: public std::vector<ConfigurationIndexOnTotalOrderReferencePtr>, public IndexOnConfigurationSet {
 	public:
 		IndexOnTotalOrderConfigurationSet(const QuantityName& qn, ConfigurationSetPtr cs);
 		virtual ConfigurationIndexReferencePtr get(int n) {return (this->at(n));}

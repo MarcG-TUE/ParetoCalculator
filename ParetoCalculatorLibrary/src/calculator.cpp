@@ -617,6 +617,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_totally_ordered(Configu
 	// split the set in two; v will be the value used for splitting
 	ListOfConfSetPtr l = ParetoCalculator::splitLowHigh(cs, qn, &v);
 	ListOfConfSet::iterator p = l->begin();
+
 	// recursively minimize the lower set
 	ConfigurationSetPtr mcsl = ParetoCalculator::efficient_minimize_totally_ordered_recursive(*p, qn);
 	p++;

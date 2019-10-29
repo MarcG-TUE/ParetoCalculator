@@ -82,7 +82,7 @@ UnitTesterException::UnitTesterException(const std::string s) {
 }
 
 UnitTester::UnitTester(){
-	this->generator.seed(1234);
+	this->generator.seed(4321);
 }
 
 
@@ -151,6 +151,9 @@ bool UnitTester::test_DCMinimization(void) {
 
 	ConfigurationSetPtr CM1 = PC.efficient_minimize(C, 10, 10);
 	ConfigurationSetPtr CM2 = PC.minimize(C);
+
+	//std::cout << CM1 << std::endl;
+	//std::cout << CM2 << std::endl;
 
 	ASSERT_EQUAL(CM1->confs.size(), CM2->confs.size(), "DC and SC minimization give different results.")
 
