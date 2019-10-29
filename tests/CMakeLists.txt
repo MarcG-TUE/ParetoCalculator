@@ -1,3 +1,20 @@
+# build the unit test executable
+
+set(CMAKE_C_STANDARD 11)
+
+include_directories(../ParetoCalculatorLibrary/src)
+
+find_package(LibXml2 REQUIRED)
+
+add_executable(ParetoCalculatorTest
+	unittest/src/unittest.cpp
+	unittest/src/unittester.cpp
+)
+
+target_link_libraries(ParetoCalculatorTest
+	ParetoCalculator
+	${LIBXML2_LIBRARIES}
+)
 
 # does the console application run
 add_test(
@@ -7,7 +24,7 @@ add_test(
 # run the unit test application
 add_test(
         NAME PCUnitTest
-        COMMAND ../ParetoCalculatorTest/ParetoCalculatorTest
+        COMMAND ./ParetoCalculatorTest
 )
 
 # does the console application give the expected output for the betsy example
