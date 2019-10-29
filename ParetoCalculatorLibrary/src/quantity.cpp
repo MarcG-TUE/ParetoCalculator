@@ -221,6 +221,14 @@ namespace Pareto {
 		value = v;
 	}
 
+	QuantityValue_Enum::QuantityValue_Enum(QuantityType& t, const unsigned int n) :
+		QuantityValue(t)
+	{
+		QuantityType_Enum& et = dynamic_cast<QuantityType_Enum&>(t);
+		value = et.quantities[n]->value;
+	}
+
+
 	void QuantityValue_Enum::streamOn(std::ostream& os) const {
 		os << value;
 	}

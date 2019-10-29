@@ -178,12 +178,14 @@ namespace Pareto {
 		virtual std::string* xmlTypeString(void) {return new std::string("enum");}
 	};
 
+	using QuantityType_EnumPtr = std::shared_ptr< QuantityType_Enum>;
 
 	/// An enumerated quantity value from any (ordered or unordered) enumerated type
 	class QuantityValue_Enum: public QuantityValue{
 	public:
 		/// Constructor, provide enumerated type and string representation of the desired value
 		QuantityValue_Enum(QuantityType& t, std::string v);
+		QuantityValue_Enum(QuantityType& t, const unsigned int n);
 
 		/// stream a string representation of the value to 'os'
 		virtual void streamOn(std::ostream& os) const;

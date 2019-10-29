@@ -176,7 +176,7 @@ void POperation_Derived::executeOn(ParetoCalculator& c) {
 	SetOfConfigurations::iterator i;
 	for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
 		ConfigurationPtr c = *i;
-		ConfigurationPtr scf = std::make_shared<Configuration>(*scs);
+		ConfigurationPtr scf = std::make_shared<Configuration>(scs);
 		scf->addQuantitiesOf(c);
 
 		double va = (*(std::dynamic_pointer_cast<QuantityValue_RealPtr>(c->getQuantity(a_quant))))->value;
@@ -230,7 +230,7 @@ void POperation_Aggregate::executeOn(ParetoCalculator& c)
 		ConfigurationPtr cf = *i;
 
 		// create new configuration with all values of cf
-		ConfigurationPtr scf = std::make_shared<Configuration>(*scs);
+		ConfigurationPtr scf = std::make_shared<Configuration>(scs);
 		scf->addQuantitiesOf(cf);
 
 		// compute the aggregated value
@@ -551,7 +551,7 @@ void POperation_EfficientProdCons::executeOn(ParetoCalculator& c) {
 		// check if the current pair (i,j) of configurations match the producer-consumer constraint
 		if (default_match(*(ip.at(j)->value()), *(ic.at(i)->value()))) {
 			// they match, so create a resulting configuration
-			ConfigurationPtr c = std::make_shared<Configuration>(*nspace);
+			ConfigurationPtr c = std::make_shared<Configuration>(nspace);
 			c->addQuantitiesOf(ic.at(i)->conf);
 			c->addQuantitiesOf(ip.at(j)->conf);
 			// and add it to the result set
@@ -568,7 +568,7 @@ void POperation_EfficientProdCons::executeOn(ParetoCalculator& c) {
 				// because (i-1, j+1) is matching
 				for (unsigned int k = 0; k < i; k++) {
 					// make a configuration for the pair (k,j)
-					ConfigurationPtr c = std::make_shared<Configuration>(*nspace);
+					ConfigurationPtr c = std::make_shared<Configuration>(nspace);
 					c->addQuantitiesOf(ic.at(k)->conf);
 					c->addQuantitiesOf(ip.at(j)->conf);
 					// add the configuration to the result set
@@ -593,7 +593,7 @@ void POperation_EfficientProdCons::executeOn(ParetoCalculator& c) {
 			// for all consuming configurations k
 			for (unsigned int k = 0; k < ic.size(); k++) {
 				// create resulting configuration (k,l)
-				ConfigurationPtr c = std::make_shared<Configuration>(*nspace);
+				ConfigurationPtr c = std::make_shared<Configuration>(nspace);
 				c->addQuantitiesOf(ic.at(k)->conf);
 				c->addQuantitiesOf(ip.at(l)->conf);
 				// add it to the result set

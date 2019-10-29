@@ -66,7 +66,7 @@ ConfigurationSetPtr ParetoCalculator::productInSpace(ConfigurationSetPtr cs1, co
 			ConfigurationPtr c2 = *j;
 			
 			// create the new configuration
-			ConfigurationPtr c = std::make_shared<Configuration>(*cspace);
+			ConfigurationPtr c = std::make_shared<Configuration>(cspace);
 			c->addQuantitiesOf(c1);
 			c->addQuantitiesOf(c2);
 			prod->addUniqueConfiguration(c);
@@ -151,7 +151,7 @@ ConfigurationSetPtr ParetoCalculator::alternative(ConfigurationSetPtr cs1, Confi
 	}
 	// add all configurations of cs2
 	for (i = cs2->confs.begin(); i != cs2->confs.end(); i++) {
-		ConfigurationPtr nc = std::make_shared<Configuration>(*(res->confspace));
+		ConfigurationPtr nc = std::make_shared<Configuration>(res->confspace);
 		nc->addQuantitiesOf(*i);
 		res->addConfiguration(nc);
 	}
@@ -162,7 +162,7 @@ ConfigurationSetPtr ParetoCalculator::alternative(ConfigurationSetPtr cs1, Confi
 // compute abstraction of configuration c in configuration space cs by abstracting quantity nr. n
 ConfigurationPtr conf_abstraction(ConfigurationSpacePtr cs, ConfigurationPtr c, unsigned int n) {
 
-	ConfigurationPtr nc = std::make_shared<Configuration>(*cs);
+	ConfigurationPtr nc = std::make_shared<Configuration>(cs);
 
 	// copy all quantities, except n
 	ListOfQuantityValues::const_iterator i;
@@ -246,16 +246,22 @@ void ParetoCalculator::hide(ListOfQuantityNames& lqn) {
 
 ConfigurationSetPtr ParetoCalculator::hiding(ConfigurationSetPtr cs, const ListOfQuantityNames& lqn) {
 	ConfigurationSpacePtr csp = cs->confspace->hide(lqn);
+	return ParetoCalculator::hiding(cs, lqn, csp);
+}
+
+ConfigurationSetPtr ParetoCalculator::hiding(ConfigurationSetPtr cs, const ListOfQuantityNames& lqn, ConfigurationSpacePtr targetSpace)
+{
 	std::string nm = "Hide of " + cs->name;
-	ConfigurationSetPtr ncs = std::make_shared<ConfigurationSet>(csp, nm);
+	ConfigurationSetPtr ncs = std::make_shared<ConfigurationSet>(targetSpace, nm);
 	SetOfConfigurations::iterator i;
 	for (i = cs->confs.begin(); i != cs->confs.end(); i++) {
-		ConfigurationPtr cf = std::make_shared<Configuration>(*csp);
+		ConfigurationPtr cf = std::make_shared<Configuration>(targetSpace);
 		cf->addQuantitiesOf(*i);
 		ncs->addConfiguration(cf);
 	}
 	return ncs;
 }
+
 
 ConfigurationSetPtr ParetoCalculator::hiding(ConfigurationSetPtr cs, const QuantityName& qn) {
 	ListOfQuantityNames lqn;
@@ -263,9 +269,19 @@ ConfigurationSetPtr ParetoCalculator::hiding(ConfigurationSetPtr cs, const Quant
 	return ParetoCalculator::hiding(cs, lqn);
 }
 
+ConfigurationSetPtr ParetoCalculator::hiding(const ConfigurationSetPtr cs, const QuantityName& qn, ConfigurationSpacePtr targetSpace)
+{
+	ListOfQuantityNames lqn;
+	lqn.push_back(qn);
+	return ParetoCalculator::hiding(cs, lqn, targetSpace);
+}
+
+
+
 
 /// The Simple Cull minimization algorithm
 ConfigurationSetPtr ParetoCalculator::minimize(ConfigurationSetPtr cs) {
+
 	// The naive way
 
 	// make the result configuration set
@@ -334,7 +350,9 @@ ConfigurationSetPtr ParetoCalculator::minimize_SC(ConfigurationSetPtr cs) {
 	return res;
 }
 
-ConfigurationSetPtr ParetoCalculator::efficient_minimize_unordered(ConfigurationSetPtr cs, const QuantityName& qn) {
+ConfigurationSetPtr ParetoCalculator::efficient_minimize_unordered(ConfigurationSetPtr cs, const QuantityName& qn) 
+{
+
 	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(cs->confspace, "min(" + cs->name + ")");
 
 	// split confset into classes with same value for qn
@@ -349,7 +367,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_unordered(Configuration
 		ConfigurationSetPtr cxa = ParetoCalculator::abstraction(cx, qn);
 
 		//minimize *i after abstraction of qn
-		ConfigurationSetPtr mcxa = ParetoCalculator::efficient_minimize(cxa);
+		ConfigurationSetPtr mcxa = ParetoCalculator::efficient_minimize_recursive(cxa);
 
 		//add configurations of the result after adding qn again
 
@@ -357,7 +375,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_unordered(Configuration
 		unsigned int p = cs->confspace->indexOfQuantity(qn);
 		SetOfConfigurations::iterator j;
 		for (j = mcxa->confs.begin(); j != mcxa->confs.end(); j++) {
-			ConfigurationPtr c = std::make_shared<Configuration>(*(cs->confspace));
+			ConfigurationPtr c = std::make_shared<Configuration>(cs->confspace);
 			ConfigurationPtr c_mcxa = *j;
 			QuantityValuePtr x = (*cx->confs.begin())->getQuantity(p);
 			//c-> add quantities with x at the right place ....
@@ -405,12 +423,12 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_filter1(ConfigurationSe
 	if (csh->confs.size() == 0) { return csh; }
 
 	ConfigurationSetPtr csla = ParetoCalculator::hiding(csl, qn);
-	ConfigurationSetPtr csha = ParetoCalculator::hiding(csh, qn);
+	ConfigurationSetPtr csha = ParetoCalculator::hiding(csh, qn, csla->confspace);
 	ConfigurationSetPtr filtered = ParetoCalculator::efficient_minimize_filter2(csla, csha);
 	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(csl->confspace, "temp");
 	SetOfConfigurations::iterator i;
 	for (i = filtered->confs.begin(); i != filtered->confs.end(); i++) {
-		ConfigurationPtr c = std::make_shared<Configuration>(*(res->confspace));
+		ConfigurationPtr c = std::make_shared<Configuration>(res->confspace);
 		c->addQuantitiesOf(*i);
 		res->addConfiguration(c);
 	}
@@ -453,7 +471,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_filter2(ConfigurationSe
 	// assume: csl is minimal set of configurations and csh is minimal set of configurations. Return 
 	// set of configurations with configurations from csh removed that are strictly dominated by configurations
 	// of csl.
-		// note: there cannot be any unordered quantities
+	// note: there cannot be any unordered quantities
 
 	if (csa->confs.size() == 0) { return csb; }
 	if (csb->confs.size() == 0) { return csb; }
@@ -494,7 +512,7 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_filter3(ConfigurationSe
 	if (csb->confs.size() == 0) { return csb; }
 
 	// create a copy of the set csb as the initial result
-	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(*csb);
+	ConfigurationSetPtr res = std::make_shared<ConfigurationSet>(csb);
 	
 	// then remove dominated points
 	SetOfConfigurations::iterator i, j;
@@ -555,14 +573,10 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_filter4(ConfigurationSe
 
 
 
-ConfigurationSetPtr ParetoCalculator::efficient_minimize_dcmerge(ConfigurationSetPtr csl, ConfigurationSetPtr csh, const QuantityName& qn, const QuantityValue& v,
-	unsigned int filter_threshold, unsigned int minimize_threshold) 
+ConfigurationSetPtr ParetoCalculator::efficient_minimize_dcmerge(ConfigurationSetPtr csl, ConfigurationSetPtr csh, const QuantityName& qn, const QuantityValue& v) 
 {
 	// csl and csh are minimized and sorted on qn, such that for any cl in csl and ch in csh, cl(qn)<=ch(qn)
 	// project on cut plane "hide qn"
-
-	ParetoCalculator::_filter_threshold = filter_threshold;
-	ParetoCalculator::_minimize_threshold = minimize_threshold;
 
 	if (csl->confspace->nrOfVisibleQuantities() == 1) {
 		// csl should contain only one element which dominates the element of csh
@@ -573,6 +587,9 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_dcmerge(ConfigurationSe
 #endif
 		return csl;
 	}
+
+	// unify the configuration spaces before merge
+	csl->adoptConfigurationSpaceOf(csh);
 
 	ConfigurationSetPtr cshf = ParetoCalculator::efficient_minimize_filter1(csl, csh, qn);
 	ConfigurationSetPtr csp = ParetoCalculator::alternative(csl, cshf);
@@ -594,7 +611,8 @@ ConfigurationSetPtr ParetoCalculator::efficient_minimize_totally_ordered_recursi
 }
 
 
-ConfigurationSetPtr ParetoCalculator::efficient_minimize_totally_ordered(ConfigurationSetPtr cs, const QuantityName& qn) {
+ConfigurationSetPtr ParetoCalculator::efficient_minimize_totally_ordered(ConfigurationSetPtr cs, const QuantityName& qn) 
+{
 	QuantityValuePtr v;
 	// split the set in two; v will be the value used for splitting
 	ListOfConfSetPtr l = ParetoCalculator::splitLowHigh(cs, qn, &v);
@@ -627,8 +645,18 @@ ListOfConfSetPtr ParetoCalculator::splitLowHigh(ConfigurationSetPtr cs, const Qu
 	return lcs;
 }
 
+
+ConfigurationSetPtr ParetoCalculator::efficient_minimize(ConfigurationSetPtr cs, unsigned int filter_threshold,
+	unsigned int minimize_threshold)
+{
+	ParetoCalculator::_filter_threshold = filter_threshold;
+	ParetoCalculator::_minimize_threshold = minimize_threshold;
+	return ParetoCalculator::efficient_minimize_recursive(cs);
+}
+
+
 //
-ConfigurationSetPtr ParetoCalculator::efficient_minimize(ConfigurationSetPtr cs) {
+ConfigurationSetPtr ParetoCalculator::efficient_minimize_recursive(ConfigurationSetPtr cs) {
 
 	// The efficient way
 
@@ -775,7 +803,7 @@ void ParetoCalculator::efficient_minimize(void) {
 		return;
 	}
 	ConfigurationSetPtr cs = std::dynamic_pointer_cast<ConfigurationSet>(so);
-	ConfigurationSetPtr csn = this->efficient_minimize(cs);
+	ConfigurationSetPtr csn = this->efficient_minimize_recursive(cs);
 	this->push(csn);
 }
 

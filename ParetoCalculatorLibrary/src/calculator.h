@@ -181,12 +181,13 @@ namespace Pareto {
 		static ConfigurationSetPtr alternative(ConfigurationSetPtr cs1, ConfigurationSetPtr cs2);
 		static ConfigurationSetPtr minimize(ConfigurationSetPtr cs);
 		static ConfigurationSetPtr minimize_SC(ConfigurationSetPtr cs);
-		static ConfigurationSetPtr efficient_minimize(ConfigurationSetPtr cs);
+		static ConfigurationSetPtr efficient_minimize(ConfigurationSetPtr cs, unsigned int filter_threshold=DEFAULT_FILTER_THRESHOLD, 
+			unsigned int minimize_threshold=DEFAULT_MINIMIZE_THRESHOLD);
 
 		/// execute block-based minimization
 		void minimize(void);
 		/// execute generalized multi-dimensional Divide-and-Conquer minimization
-		void efficient_minimize(void);
+		void efficient_minimize();
 		/// compute product
 		void product(void);
 		/// compute abstraction
@@ -230,14 +231,16 @@ namespace Pareto {
 		static ConfigurationSetPtr efficient_minimize_totally_ordered(ConfigurationSetPtr cs, const QuantityName& qn);
 		static ConfigurationSetPtr efficient_minimize_totally_ordered_recursive(ConfigurationSetPtr cs, const QuantityName& qn);
 		static ListOfConfSetPtr splitLowHigh(ConfigurationSetPtr cs, const QuantityName& qn, QuantityValuePtr *v);
-		static ConfigurationSetPtr efficient_minimize_dcmerge(ConfigurationSetPtr csl, ConfigurationSetPtr csh, const QuantityName& qn, const QuantityValue& v,
-			unsigned int filter_threshold = DEFAULT_FILTER_THRESHOLD, unsigned int minimize_threshold = DEFAULT_MINIMIZE_THRESHOLD);
+		static ConfigurationSetPtr efficient_minimize_dcmerge(ConfigurationSetPtr csl, ConfigurationSetPtr csh, const QuantityName& qn, const QuantityValue& v);
 		static ConfigurationSetPtr efficient_minimize_filter1(ConfigurationSetPtr csl, ConfigurationSetPtr csh, const QuantityName& qn);
 		static ConfigurationSetPtr efficient_minimize_filter2(ConfigurationSetPtr csa, ConfigurationSetPtr csb);
 		static ConfigurationSetPtr efficient_minimize_filter3(ConfigurationSetPtr csa, ConfigurationSetPtr csb);
 		static ConfigurationSetPtr efficient_minimize_filter4(ConfigurationSetPtr csa, ConfigurationSetPtr csb);
 		static QuantityValuePtr efficient_minimize_getPivot(ConfigurationSetPtr cs, const QuantityName& qn);
 		static void efficient_minimize_filter_split(ConfigurationSetPtr cs, const QuantityName& qn, QuantityValuePtr pivot, ConfigurationSetPtr *csl, ConfigurationSetPtr *csh);
+		static ConfigurationSetPtr efficient_minimize_recursive(ConfigurationSetPtr cs);
+		static ConfigurationSetPtr hiding(const ConfigurationSetPtr cs, const QuantityName& qn, ConfigurationSpacePtr targetSpace);
+		static ConfigurationSetPtr hiding(ConfigurationSetPtr cs, const ListOfQuantityNames& lqn, ConfigurationSpacePtr targetSpace);
 
 	private:
 		static unsigned int _filter_threshold;

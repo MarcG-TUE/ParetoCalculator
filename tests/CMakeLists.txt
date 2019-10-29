@@ -1,8 +1,16 @@
 
 # does the console application run
-add_test(RunParetoCalculatorConsoleBetsy ../ParetoCalculatorConsole/ParetoCalculatorConsole ../examples/betsy.xml)
+add_test(
+        NAME RunParetoCalculatorConsoleBetsy 
+        COMMAND ../ParetoCalculatorConsole/ParetoCalculatorConsole ../examples/betsy.xml)
 
-# does the console application gie the expected output for the betsy example
+# run the unit test application
+add_test(
+        NAME PCUnitTest
+        COMMAND ../ParetoCalculatorTest/ParetoCalculatorTest
+)
+
+# does the console application give the expected output for the betsy example
 add_test(NAME TestBetsyOutput
 	COMMAND ${CMAKE_COMMAND}
         -Dtest_cmd=${CMAKE_SOURCE_DIR}/ParetoCalculatorConsole/ParetoCalculatorConsole

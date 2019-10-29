@@ -199,7 +199,7 @@ void ParetoParser::LoadConfigurationSets() {
 				for (int j = 0; j < nodeset_confs->nodeNr; j++) {
 					// for each configuration node pConfNode ...
 					xmlNodePtr pConfNode = nodeset_confs->nodeTab[j];
-					ConfigurationPtr cf = std::make_shared<Configuration>(*sp);
+					ConfigurationPtr cf = std::make_shared<Configuration>(sp);
 
 					// get all the values and add them to the configuration
 					xmlXPathObjectPtr result_value = getNodeSetXPathNode(pXMLDoc, pConfNode, (xmlChar*)"pa:value", xpathCtx);

@@ -99,7 +99,7 @@ namespace Pareto {
 	using ConfigurationPtr = std::shared_ptr<Configuration>;
 	using ConfigurationSetPtr = std::shared_ptr<ConfigurationSet>;
 
-	class ConfigurationSpace: public StorableObject {
+	class ConfigurationSpace: public StorableObject, public std::enable_shared_from_this<ConfigurationSpace> {
 	public:
 		ListOfQuantityTypes quantities;
 		QuantityIntMap quantityNames;
@@ -191,6 +191,7 @@ namespace Pareto {
 		// copying
 		virtual StorableObjectPtr copy(void) const;
 
+		bool isIdenticalTo(ConfigurationSpacePtr cs) const;
 	};
 
 
@@ -209,13 +210,13 @@ namespace Pareto {
 	// public member variables
 	public:
 		/// The member 'confspace' refers to this space
-		const ConfigurationSpace& confspace;
+		ConfigurationSpacePtr confspace;
 		/// 'quantities' is a list of quantity values that defines the configuration.
 		ListOfQuantityValues quantities;
 
 	public:
 		/// Use ConfigurationSpace::newConfiguration() to create configurations!
-		Configuration(const ConfigurationSpace& cs);
+		Configuration(ConfigurationSpacePtr cs);
 		// 'copy constructor' from pointer
 		Configuration(ConfigurationPtr c);
 
@@ -241,11 +242,16 @@ namespace Pareto {
 
 		/// returns a string representation of the configuration
         std::unique_ptr<std::string> asString();
+
+		// adopt a different configuration space
+		void adoptConfigurationSpace(ConfigurationSpacePtr cs);
 	};
 
 
     std::ostream& operator<<(std::ostream& os, ConfigurationPtr c);
 	std::ostream& operator<<(std::ostream& os, const Configuration& c);
+	std::ostream& operator<<(std::ostream& os, ConfigurationSetPtr cs);
+	std::ostream& operator<<(std::ostream& os, const ConfigurationSet& cs);
 
 	bool operator<=(const Configuration& c1, const Configuration& c2);
 	bool operator==(const Configuration& c1, const Configuration& c2);
@@ -340,7 +346,7 @@ namespace Pareto {
 	public:
 		/// constructor of a set of configurations on configuration space 'cs' and with name 'n'
 		ConfigurationSet(ConfigurationSpacePtr cs, const std::string n);
-		
+
 		/// copy constructor of a set of configurations on configuration space 'cs' and with name 'n'
 		ConfigurationSet(ConfigurationSetPtr cs);
 
@@ -381,6 +387,9 @@ namespace Pareto {
 		
 		/// reference to the configuration space of the configurations in this set.
 		ConfigurationSpacePtr confspace;
+
+		bool checkConfSpaceConsistency(void) const;
+		void adoptConfigurationSpaceOf(ConfigurationSetPtr cs);
 	};
 
 

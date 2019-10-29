@@ -37,7 +37,7 @@
 #include <stdexcept>
 
 #include "quantity.h"
-
+#include "configuration.h"
 
 #define ASSERT_THROW( condition, msg )                              \
 {                                                                   \
@@ -109,8 +109,17 @@ bool UnitTester::test_DCMinimization(void) {
 	QuantityTypePtr TB = std::make_shared<QuantityType_Real>("QuantityB");
 	QuantityTypePtr TC = std::make_shared<QuantityType_Integer>("QuantityC");
 	QuantityTypePtr TD = std::make_shared<QuantityType_Real>("QuantityD");
-	QuantityTypePtr TE = std::make_shared<QuantityType_Enum>("QuantityE_Unordered");
-	QuantityTypePtr TF = std::make_shared<QuantityType_Enum>("QuantityF_Ordered");
+	QuantityType_EnumPtr TE = std::make_shared<QuantityType_Enum>("QuantityE_Unordered");
+	TE->addQuantity("U1");
+	TE->addQuantity("U2");
+	TE->addQuantity("U3");
+	TE->addQuantity("U4");
+	QuantityType_EnumPtr TF = std::make_shared<QuantityType_Enum>("QuantityF_Ordered");
+	TF->addQuantity("O1");
+	TF->addQuantity("O2");
+	TF->addQuantity("O3");
+	TF->addQuantity("O4");
+
 	CS->addQuantity(TA);
 	CS->addQuantity(TB);
 	CS->addQuantity(TC);
@@ -124,25 +133,26 @@ bool UnitTester::test_DCMinimization(void) {
 	std::uniform_int_distribution<> dis_enum(0, 3);
 	std::uniform_real_distribution<> dis_real(1.0, 2.0);
 	for (unsigned int i = 0; i < 1000; i++) {
-		ConfigurationPtr c = std::make_shared<Configuration>(*CS);
-		QuantityValuePtr qA = std::make_shared<QuantityValue_Integer>(dis_int(this->generator));
+		ConfigurationPtr c = std::make_shared<Configuration>(CS);
+		QuantityValuePtr qA = std::make_shared<QuantityValue_Integer>(*TA, dis_int(this->generator));
 		c->addQuantity(qA);
-		QuantityValuePtr qB = std::make_shared<QuantityValue_Real>(dis_real(this->generator));
+		QuantityValuePtr qB = std::make_shared<QuantityValue_Real>(*TB, dis_real(this->generator));
 		c->addQuantity(qB);
-		QuantityValuePtr qC = std::make_shared<QuantityValue_Integer>(dis_int(this->generator));
+		QuantityValuePtr qC = std::make_shared<QuantityValue_Integer>(*TC, dis_int(this->generator));
 		c->addQuantity(qC);
-		QuantityValuePtr qD = std::make_shared<QuantityValue_Real>(dis_real(this->generator));
+		QuantityValuePtr qD = std::make_shared<QuantityValue_Real>(*TD, dis_real(this->generator));
 		c->addQuantity(qD);
-		QuantityValuePtr qE = std::make_shared<QuantityValue_Enum>(dis_enum(this->generator));
+		QuantityValuePtr qE = std::make_shared<QuantityValue_Enum>(*TE, dis_enum(this->generator));
 		c->addQuantity(qE);
-		QuantityValuePtr qF = std::make_shared<QuantityValue_Enum>(dis_enum(this->generator));
+		QuantityValuePtr qF = std::make_shared<QuantityValue_Enum>(*TF, dis_enum(this->generator));
 		c->addQuantity(qF);
 		C->addConfiguration(c);
 	}
 
-	ConfigurationSetPtr CM = PC.efficient_minimize(C);
+	ConfigurationSetPtr CM1 = PC.efficient_minimize(C, 10, 10);
+	ConfigurationSetPtr CM2 = PC.minimize(C);
 
-
+	ASSERT_EQUAL(CM1->confs.size(), CM2->confs.size(), "DC and SC minimization give different results.")
 
 	return true;
 }

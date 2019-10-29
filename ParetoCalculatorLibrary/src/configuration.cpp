@@ -189,7 +189,7 @@ namespace Pareto {
 	bool ConfigurationSpace::LexicographicCompare(const Configuration& c1, const Configuration& c2)
 		// provides strict ordering for sorted storage of configurationset, hence ignores visibility
 	{
-		unsigned int k = c1.confspace.quantities.size();
+		unsigned int k = c1.confspace->quantities.size();
 		for (unsigned int i = 0; i < k; i++) {
 			QuantityValuePtr v1 = c1.getQuantity(i);
 			QuantityValuePtr v2 = c2.getQuantity(i);
@@ -220,6 +220,12 @@ namespace Pareto {
 		return std::make_shared<ConfigurationSpace>(*this);
 	}
 
+	bool ConfigurationSpace::isIdenticalTo(ConfigurationSpacePtr cs) const
+	{
+		return this == &(*cs);
+	}
+
+
 	// return a string representation of the configuration space
 	std::unique_ptr<std::string> Configuration::asString(void) {
 		std::ostringstream myString;
@@ -227,6 +233,12 @@ namespace Pareto {
 		//to avoid C++14 requirement: return std::make_unique<std::string>(myString.str());
 		return std::unique_ptr<std::string>(new std::string(myString.str()));
 	}
+
+	void Configuration::adoptConfigurationSpace(ConfigurationSpacePtr cs)
+	{
+		this->confspace = cs;
+	}
+
 
 	/// perform hiding of the given list of quantity types by making them invisible in the resulting new configuration space
 	ConfigurationSpacePtr ConfigurationSpace::hide(const ListOfQuantityNames& lqn) const {
@@ -286,7 +298,7 @@ namespace Pareto {
 	/// create a new configuration in this configuration space with default values for the quantities
 	ConfigurationPtr ConfigurationSpace::newConfiguration(void) {
 
-		ConfigurationPtr c = std::make_shared<Configuration>(*this);
+		ConfigurationPtr c = std::make_shared<Configuration>(this->shared_from_this());
 
 		// add default values
 		ListOfQuantityTypes::iterator i;
@@ -306,7 +318,7 @@ namespace Pareto {
 	/////////////////// Configuration //////////////////////
 
 	/// constructor Configuration
-	Configuration::Configuration(const ConfigurationSpace& cs) :confspace(cs) {
+	Configuration::Configuration(ConfigurationSpacePtr cs) :confspace(cs) {
 	}
 
 	/// 'copy constructor' from pointer
@@ -339,7 +351,7 @@ namespace Pareto {
 		ListOfQuantityValues::const_iterator i;
 		unsigned int n = 0;
 		for (i = quantities.begin(); i != quantities.end(); i++, n++) {
-			if (this->confspace.quantityVisibility[n]) {
+			if (this->confspace->quantityVisibility[n]) {
 				QuantityValuePtr v = (*i);
 				os << v;
 			}
@@ -370,7 +382,7 @@ namespace Pareto {
 	// retrieve a quantity by its name in the configuration space
 	QuantityValuePtr Configuration::getQuantity(const QuantityName& n) const {
 		// find the index
-		unsigned int k = this->confspace.indexOfQuantity(n);
+		unsigned int k = this->confspace->indexOfQuantity(n);
 		// return the value
 		return this->quantities[k];
 	}
@@ -379,23 +391,23 @@ namespace Pareto {
 	bool operator<=(const Configuration& c1, const Configuration& c2) {
 #ifdef _DEBUG
 		// convenient for debugging, too slow for real
-		if (&(c1.confspace) != &(c2.confspace)) {
+		if (c1.confspace != c2.confspace) {
 			throw EParetoCalculatorError("Error: cannot compare configurations of different configuration spaces.");
 			return 0;
 		}
 #endif
-		return c1.confspace.compare(c1, c2);
+		return c1.confspace->compare(c1, c2);
 	}
 
 	/// check equality of two configurations
 	bool operator==(const Configuration& c1, const Configuration& c2) {
 #ifdef _DEBUG
-		if (&(c1.confspace) != &(c2.confspace)) {
+		if (c1.confspace != c2.confspace) {
 			throw EParetoCalculatorError("Error: cannot compare configurations of different configuration spaces.");
 			return 0;
 		}
 #endif
-		return c1.confspace.equal(c1, c2);
+		return c1.confspace->equal(c1, c2);
 	}
 
 	/// a strict (non-reflexive) Pareto domaince check
@@ -410,6 +422,7 @@ namespace Pareto {
 		confspace(cs) 
 	{
 	}
+
 
 	/// copy constructor for ConfigurationSet 
 	ConfigurationSet::ConfigurationSet(ConfigurationSetPtr cs) :
@@ -429,7 +442,7 @@ namespace Pareto {
 	/// add configuration c to the configuration set
 	void ConfigurationSet::addConfiguration(ConfigurationPtr c) {
 #ifdef _DEBUG
-		if (&(c->confspace) != &(*(this->confspace))) {
+		if ((c->confspace) != (this->confspace)) {
 			throw EParetoCalculatorError("Error: configuration is of wrong type in ConfigurationSet::addConfiguration");
 		}
 #endif
@@ -440,7 +453,7 @@ namespace Pareto {
 	/// Important: Use this method only if you are sure that the configuration does not already occur in the set!
 	void ConfigurationSet::addUniqueConfiguration(ConfigurationPtr c) {
 #ifdef _DEBUG
-		if (&(c->confspace) != &(*(this->confspace))) {
+		if ((c->confspace) != (this->confspace)) {
 			throw EParetoCalculatorError("Error: configuration is of wrong type in ConfigurationSet::addConfiguration");
 		}
 #endif
@@ -500,6 +513,30 @@ namespace Pareto {
 		}
 		os << "}";
 	}
+
+	bool ConfigurationSet::checkConfSpaceConsistency(void) const
+	{
+		SetOfConfigurations::const_iterator i;
+		for (i = this->confs.begin(); i != this->confs.end(); i++)
+		{
+			if (!(*i)->confspace->isIdenticalTo(this->confspace)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	void ConfigurationSet::adoptConfigurationSpaceOf(ConfigurationSetPtr cs)
+	{
+		this->confspace = cs->confspace;
+		SetOfConfigurations::iterator i = this->confs.begin();
+		while (i != this->confs.end())
+		{
+			(*i)->adoptConfigurationSpace(this->confspace);
+			i++;
+		}
+	}
+
 
 	/// make a copy of the configuration set
 	StorableObjectPtr ConfigurationSet::copy(void) const
@@ -652,5 +689,16 @@ namespace Pareto {
 		c.streamOn(os);
 		return os;
 	}
+
+	std::ostream& operator<<(std::ostream& os, ConfigurationSetPtr cs) {
+		cs->streamOn(os);
+		return os;
+	}
+
+	std::ostream& operator<<(std::ostream& os, const ConfigurationSet& cs) {
+		cs.streamOn(os);
+		return os;
+	}
+
 
 }

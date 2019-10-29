@@ -44,13 +44,19 @@ int main(void)
 {
 	UnitTester UT;
 	try {
-		if (!(UT.test_all())) {
-			return -1;
+		try {
+			if (!(UT.test_all())) {
+				return -1;
+			}
+			return 0;
+		} catch (EParetoCalculatorError& e) {
+			std::cout << e.errorMsg;
+			throw std::runtime_error("An error occurred. Closing.");
 		}
-		return 0;
 	}
 	catch (std::runtime_error & e) {
 		std::cout << e.what();
+
 		return -1;
 	}
 }
