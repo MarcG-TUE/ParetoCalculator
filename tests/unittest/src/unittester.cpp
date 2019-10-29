@@ -149,12 +149,13 @@ bool UnitTester::test_DCMinimization(void) {
 		C->addConfiguration(c);
 	}
 
+	// compute Pareto points with simple cull and with DC approach and see of the results are the same
+	// use low thresholds in DC minimize to ensure it tests the rescursive approach.
 	ConfigurationSetPtr CM1 = PC.efficient_minimize(C, 10, 10);
 	ConfigurationSetPtr CM2 = PC.minimize(C);
 
-	//std::cout << CM1 << std::endl;
-	//std::cout << CM2 << std::endl;
 
+	// check that the number of Pareto points are equal
 	ASSERT_EQUAL(CM1->confs.size(), CM2->confs.size(), "DC and SC minimization give different results.")
 
 	return true;
