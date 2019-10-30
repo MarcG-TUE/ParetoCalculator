@@ -86,7 +86,6 @@ ConfigurationSetPtr ParetoCalculator::product(ConfigurationSetPtr cs1, Configura
 
 // apply constraint to a configuration set, i.e., compute the intersection of the sets
 ConfigurationSetPtr ParetoCalculator::constraint(ConfigurationSetPtr cs1, ConfigurationSetPtr cs2) {
-	// TODO: this is not yet tested!!!
 	// the following assumptions are made: 
 	// - ConfigurationSet is a sorted collection according to the order defined as ConfigurationSpace::LexicographicCompare
 	// - iterating over SetOfConfigurations provides the configurations in sorted order.
@@ -718,7 +717,43 @@ StorableObjectPtr ParetoCalculator::retrieve(const std::string& oname)
 
 QuantityTypePtr ParetoCalculator::retrieveQuantityType(const std::string& oname)
 {
-	return std::dynamic_pointer_cast<const QuantityType>(this->retrieve(oname));
+	StorableObjectPtr p = this->retrieve(oname);
+	if (!p->isQuantityType()) {
+		throw EParetoCalculatorError("QuantityType expected in ParetoCalculator::retrieveQuantityType()");
+	}
+	return std::dynamic_pointer_cast<const QuantityType>(p);
+}
+
+StorableStringPtr ParetoCalculator::retrieveStorableString(const std::string& oname)
+{
+	StorableObjectPtr p = this->retrieve(oname);
+	if (!p->isString()) {
+		throw EParetoCalculatorError("StorableString expected in ParetoCalculator::retrieveStorableString()");
+	}
+	return std::dynamic_pointer_cast<StorableString>(p);
+}
+
+ConfigurationSetPtr ParetoCalculator::retrieveConfigurationSet(const std::string& oname)
+{
+	StorableObjectPtr p = this->retrieve(oname);
+	if (!p->isConfigurationSet()) {
+		throw EParetoCalculatorError("ConfigurationSet expected in ParetoCalculator::retrieveConfigurationSet()");
+	}
+	return std::dynamic_pointer_cast<ConfigurationSet>(p);
+}
+
+ConfigurationSpacePtr ParetoCalculator::retrieveConfigurationSpace(const std::string& oname)
+{
+	StorableObjectPtr p = this->retrieve(oname);
+	if (!p->isConfigurationSpace()) {
+		throw EParetoCalculatorError("ConfigurationSpace expected in ParetoCalculator::retrieveConfigurationSpace()");
+	}
+	return std::dynamic_pointer_cast<ConfigurationSpace>(p);
+}
+
+void ParetoCalculator::eraseMemory(void)
+{
+	this->memory.clear();
 }
 
 
@@ -756,13 +791,22 @@ ConfigurationSetPtr ParetoCalculator::popConfigurationSet()
 	return std::dynamic_pointer_cast<ConfigurationSet>(so);
 }
 
+ConfigurationSpacePtr ParetoCalculator::popConfigurationSpace()
+{
+	StorableObjectPtr so = this->pop();
+	if (!so->isConfigurationSpace()) {
+		throw EParetoCalculatorError("Configuration space expected in ParetoCalculator::popConfigurationSpace()");
+	}
+	return std::dynamic_pointer_cast<ConfigurationSpace>(so);
+}
+
 StorableStringPtr ParetoCalculator::popStorableString()
 {
 	StorableObjectPtr so = this->pop();
 	if (!so->isString()) {
 		throw EParetoCalculatorError("String expected in ParetoCalculator::popStorableString()");
 	}
-	return std::dynamic_pointer_cast<const StorableString>(so);
+	return std::dynamic_pointer_cast<StorableString>(so);
 }
 
 StorableObjectPtr ParetoCalculator::peek()

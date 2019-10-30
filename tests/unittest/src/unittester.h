@@ -62,6 +62,7 @@ namespace Pareto {
 
 		bool test_calculator(void);
 
+		bool test_PCStore(void);
 		bool test_DCMinimization(void);
 
 	private:

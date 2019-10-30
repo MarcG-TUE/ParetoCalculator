@@ -104,7 +104,7 @@ namespace Pareto {
 		virtual StorableObjectPtr copy(void) const;
 	};
 
-	using StorableStringPtr = std::shared_ptr<const StorableString>;
+	using StorableStringPtr = std::shared_ptr<StorableString>;
 
 	// stream an object
     std::ostream& operator<<(std::ostream& os, const StorableObject& o);
