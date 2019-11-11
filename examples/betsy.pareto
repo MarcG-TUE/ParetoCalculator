@@ -1,0 +1,119 @@
+pareto specification Betsy
+
+description 
+<
+Case-Study, An Algebra of Pareto Points, Fundamenta Informaticae
+Model of a video stream delivered from a server via a wireless connection to a hand-held device. 
+The case-study is described in the paper "An Algebra of Pareto Points", in Fundamenta Informaticae, vol. 78, no. 1, pp. 35-74, 2007
+>
+
+quantity types
+
+MPEGQuality: real
+MPEGBitRate: real
+MPEGParams: unordered [
+	mp_s1, mp_s2, mp_s3, mp_s4, mp_s5, mp_s6, mp_s7, mp_s8
+]
+
+TransmBitRate_Inv: real
+TransmLatency: real
+TransmBufferCapacity: real
+TransmPower: real
+DecoderCompEffort: real
+DecoderLatency: real
+ProcessorCompEffort_Inv: real
+ProcessorMode: unordered [
+	pr_M1,
+	pr_M2,
+	pr_M3
+]
+ProcessorPower: real
+
+configuration spaces
+
+Encoder:
+	MPEGParams as MPEGParams_Encoder
+	MPEGQuality
+	MPEGBitRate
+
+Transmission:
+	TransmBitRate_Inv
+	TransmLatency
+	TransmBufferCapacity
+	TransmPower
+
+Decoder:
+	MPEGParams as MPEGParams_Decoder
+	DecoderCompEffort
+
+Processor:
+	ProcessorCompEffort_Inv
+	ProcessorMode
+	ProcessorPower
+
+configuration sets
+
+EncoderProfile in Encoder = {
+	(mp_s1, -38, 64),
+	(mp_s2, -45, 384), 
+	(mp_s3, -41, 64), 
+	(mp_s4, -48, 384), 
+	(mp_s5, -46.5, 64), 
+	(mp_s6, -52.5, 384), 
+	(mp_s7, -48.5, 64), 
+	(mp_s8, -56, 384) 	
+}
+
+TransmissionProfile in Transmission = {
+	(0.01, 0.125, 12500, 0.07),
+	(0.002, 0.025, 12500, 0.33),
+	(0.002, 0.07, 35000, 0.22),
+	(0.002, 0.16, 80000, 0.16)	
+}
+
+DecoderProfile in Decoder = {
+	(mp_s1, 97),
+	(mp_s2, 156),
+	(mp_s3, 192),
+	(mp_s4, 303),
+	(mp_s5, 378),
+	(mp_s6, 545),
+	(mp_s7, 749),
+	(mp_s8, 1100)	
+}
+
+ProcessorProfile in Processor = {
+	(0.0025, pr_M1, 2.8),
+	(0.0050, pr_M2, 1.6),
+	(0.0100, pr_M3, 0.9)	
+}
+
+calculation
+
+push ProcessorProfile
+push DecoderProfile
+product
+prodcons prod=ProcessorCompEffort_Inv cons=DecoderCompEffort
+abstract from ProcessorCompEffort_Inv, DecoderCompEffort
+hide ProcessorMode
+minimize
+store as Decoder_Processor_Profile
+push TransmissionProfile
+push EncoderProfile
+product
+prodcons prod=TransmBitRate_Inv cons=MPEGBitRate
+abstract from TransmBitRate_Inv, MPEGBitRate
+minimize
+store as Encoder_Transmission_Profile
+push Decoder_Processor_Profile
+push Encoder_Transmission_Profile
+join MPEGParams_Encoder with MPEGParams_Decoder
+hide MPEGParams_Encoder
+abstract from MPEGParams_Decoder
+minimize
+aggregate TransmPower, ProcessorPower as TotalPower
+abstract from TransmPower, ProcessorPower
+duplicate
+store as Final_Profile
+duplicate
+print
