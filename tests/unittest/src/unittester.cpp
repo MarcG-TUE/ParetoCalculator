@@ -97,7 +97,52 @@ bool UnitTester::test_all(void) {
 }
 
 bool UnitTester::test_calculator(void) {
+	ASSERT_THROW(this->test_PCStore(), "Store test failed.");
 	ASSERT_THROW(this->test_DCMinimization(), "Divide and Conquer minimization failed.");
+	return true;
+}
+
+bool UnitTester::test_PCStore(void)
+{
+
+	StorableStringPtr s1 = std::make_shared<StorableString>("TestString1");
+	StorableStringPtr s2 = std::make_shared<StorableString>("TestString2");
+	
+	// put s1 and s2 on the stack
+	this->PC.push(s1);
+	this->PC.push(s2);
+
+	// store s1 in memory under its proper name
+	this->PC.store(s1);
+
+	// store s2 in memory under the name "key2"
+	this->PC.store(s2, "key2");
+
+	// pop s2 from the stack and store it in memory, filed under its name
+	this->PC.store();
+
+	// pop s1 from the stack and store it in memory, filed under 'key1'
+	this->PC.store("key1");
+
+	// retriev results from memory
+	StorableStringPtr t1 = this->PC.retrieveStorableString("TestString1");
+	StorableStringPtr t2 = this->PC.retrieveStorableString("TestString2");
+	StorableStringPtr t3 = this->PC.retrieveStorableString("key1");
+	StorableStringPtr t4 = this->PC.retrieveStorableString("key2");
+
+	// check results
+	ASSERT_THROW(t1->name == t3->name, "Memory objects are different.")
+	ASSERT_THROW(t2->name == t2->name, "Memory objects are different.")
+
+	// check if stack is empty
+	ASSERT_THROW(this->PC.stack.empty(), "Stack is not empty.")
+
+	// clear memory
+	this->PC.eraseMemory();
+
+	// check if memory is empty
+	ASSERT_THROW(this->PC.memory.empty(), "Memory is not empty.")
+
 	return true;
 }
 
@@ -127,7 +172,7 @@ bool UnitTester::test_DCMinimization(void) {
 	CS->addQuantity(TE);
 	CS->addQuantity(TF);
 
-	// create random configuratoin set
+	// create random configuration set
 	ConfigurationSetPtr C = std::make_shared<ConfigurationSet>(CS, "TestConfigurationSet");
 	std::uniform_int_distribution<> dis_int(1, 1000);
 	std::uniform_int_distribution<> dis_enum(0, 3);
@@ -154,9 +199,11 @@ bool UnitTester::test_DCMinimization(void) {
 	ConfigurationSetPtr CM1 = PC.efficient_minimize(C, 10, 10);
 	ConfigurationSetPtr CM2 = PC.minimize(C);
 
+	// check if both sets are equal by computing their intersection
+	ConfigurationSetPtr CM3 = PC.constraint(CM1, CM2);
 
 	// check that the number of Pareto points are equal
-	ASSERT_EQUAL(CM1->confs.size(), CM2->confs.size(), "DC and SC minimization give different results.")
+	ASSERT_EQUAL(CM1->confs.size(), CM3->confs.size(), "DC and SC minimization give different results.")
 
 	return true;
 }

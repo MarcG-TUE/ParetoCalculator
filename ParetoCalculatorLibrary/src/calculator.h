@@ -94,10 +94,26 @@ namespace Pareto {
 		void store(const std::string& key);
 
 		/// retrieve an object from the memory 
-		StorableObjectPtr retrieve(const std::string& oname); 
+		StorableObjectPtr retrieve(const std::string& oname);
+
+		/// retrieve a configuration set from the memory.
+		/// Throws an exception if the object is not a configuration set
+		ConfigurationSetPtr retrieveConfigurationSet(const std::string& oname);
+
+		/// retrieve a configuration space from the memory.
+		/// Throws an exception if the object is not a configuration space
+		ConfigurationSpacePtr retrieveConfigurationSpace(const std::string& oname);
+
+		/// retrieve a storable string from the memory.
+		/// Throws an exception if the object is not a storable string
+		StorableStringPtr retrieveStorableString(const std::string& oname);
 
 		/// retrieve a quantity type from the memory 
 		QuantityTypePtr retrieveQuantityType(const std::string& oname); 
+
+		/// erase all memory
+		void eraseMemory(void);
+
 
 		/// push an object 'o' onto the calculator stack
 		void push(const StorableObjectPtr o);
@@ -111,6 +127,10 @@ namespace Pareto {
 		/// pop a configuration set from the stack.
 		/// Throws an exception if the object is not a configuration set
 		ConfigurationSetPtr popConfigurationSet(); 
+
+		/// pop a configuration space from the stack.
+		/// Throws an exception if the object is not a configuration space
+		ConfigurationSpacePtr popConfigurationSpace();
 
 		/// pop a storable string from the stack.
 		/// Throws an exception if the object is not a storable string
