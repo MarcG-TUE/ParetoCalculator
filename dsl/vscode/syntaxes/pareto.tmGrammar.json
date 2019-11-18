@@ -1,0 +1,107 @@
+{
+	"scopeName": "source.pareto",
+	"patterns": [
+		{
+			"include": "#paretospecification"
+		}
+	],
+	"repository": {
+		"paretospecification": {
+			"patterns": [
+				{"include": "#paretospecname"},
+				{"include": "#descriptionsection"},
+				{"include": "#quantitytypes"},
+				{"include": "#configurationspaces"},
+				{"include": "#configurationsets"},
+				{"include": "#calculation"}
+			] 
+		},
+		"typekeyword": {
+			"match": "int|ordered|real|unordered",
+			"name": "keyword.other"
+		},
+		"calculationkeyword": {
+			"match": "abstract|aggregate|as|cons|duplicate|from|hide|join|minimize|print|product|prod|push|store|with",
+			"name": "keyword.other"
+		},
+		"paretospecname": {
+			"match": "(pareto\\s+specification)\\s+(.+)",
+			"captures": {
+				"0": {
+					"name": "markup.heading"
+				},
+				"2": {
+					"name": "markup.bold"
+				}
+			}
+		},
+		"description": {
+			"begin": "\\<",
+			"end": "\\>",
+			"name": "comment.block"
+		},
+		"descriptionsection": {
+			"begin": "description",
+			"beginCaptures": {
+				"0": {
+					"name": "markup.heading"
+				}
+			},
+			"while": "^(?!quantity types)",
+			"name": "meta.description",
+			"patterns": [
+				{"include": "#description"}
+			]
+		},
+		"quantitytypes": {
+			"begin": "quantity types",
+			"beginCaptures": {
+				"0": {
+					"name": "markup.heading"
+				}
+			},
+			"while": "^(?!configuration spaces)",
+			"name": "meta.quantitytypes",
+			"patterns": [
+				{"include": "#typekeyword"}
+			]
+		},
+		"configurationspaces": {
+			"begin": "configuration spaces",
+			"beginCaptures": {
+				"0": {
+					"name": "markup.heading"
+				}
+			},
+			"while": "^(?!configuration sets)",
+			"name": "meta.quantityspaces",
+			"patterns": [
+			]
+		},
+		"configurationsets": {
+			"begin": "configuration sets",
+			"beginCaptures": {
+				"0": {
+					"name": "markup.heading"
+				}
+			},
+			"while": "^(?!calculation)",
+			"name": "meta.calculation",
+			"patterns": [
+			]
+		},
+		"calculation": {
+			"begin": "calculation",
+			"beginCaptures": {
+				"0": {
+					"name": "markup.heading"
+				}
+			},
+			"while": "^",
+			"name": "meta.quantityspaces",
+			"patterns": [
+				{"include": "#calculationkeyword"}
+			]
+		}
+	}
+}

@@ -39,60 +39,94 @@ class CalculatorGenerator extends AbstractGenerator {
 	
 
 	def compile(EnumValues en) '''
-	«FOR v: en.values»
-		<value>«v»</value>
-	«ENDFOR»
+	Â«FOR v: en.valuesÂ»
+
+		<value>Â«vÂ»</value>
+
+	Â«ENDFORÂ»
+
 	'''
 
 	def gettype(QuantityType qt) '''
-		«qt.qttype.QTREAL»«qt.qttype.QTINT»
-		«IF qt.qttype.QTORDERED !== null»ordered«ENDIF»
-		«IF qt.qttype.QTUNORDERED !== null»unordered«ENDIF»
+		Â«qt.qttype.QTREALÂ»Â«qt.qttype.QTINTÂ»
+
+
+		Â«IF qt.qttype.QTORDERED !== nullÂ»orderedÂ«ENDIFÂ»
+
+
+		Â«IF qt.qttype.QTUNORDERED !== nullÂ»unorderedÂ«ENDIFÂ»
+
+
 	'''
 
 	def getbody(QuantityType qt) '''
-		«IF qt.qttype.QTORDERED !== null»
+		Â«IF qt.qttype.QTORDERED !== nullÂ»
+
 			<values>
-				«qt.qttype.QTORDERED.values.compile»
+				Â«qt.qttype.QTORDERED.values.compileÂ»
+
 			</values>
-		«ENDIF»
-		«IF qt.qttype.QTUNORDERED !== null»
+		Â«ENDIFÂ»
+
+		Â«IF qt.qttype.QTUNORDERED !== nullÂ»
+
 			<values>
-				«qt.qttype.QTUNORDERED.values.compile»
+				Â«qt.qttype.QTUNORDERED.values.compileÂ»
+
 			</values>
-		«ENDIF»
+		Â«ENDIFÂ»
+
 		'''
 
 
 	def compile(QuantityType qt) '''
-		<quantity_definition name="«qt.qtname»" type="«qt.gettype.toString().trim()»">
-		«qt.getbody»
+		<quantity_definition name="Â«qt.qtnameÂ»" type="Â«qt.gettype.toString().trim()Â»">
+
+
+		Â«qt.getbodyÂ»
+
 	    </quantity_definition>
 	'''
 
 	def getbody(ConfSpace csp) '''
-		«FOR qt: csp.quantities»
-		<quantity name="«qt.quant»"«IF qt.name !== null» referBy="«qt.name»"«ENDIF»>
+		Â«FOR qt: csp.quantitiesÂ»
+
+		<quantity name="Â«qt.quantÂ»"Â«IF qt.name !== nullÂ» referBy="Â«qt.nameÂ»"Â«ENDIFÂ»>
+
+
+
+
 		</quantity>
-		«ENDFOR»
+		Â«ENDFORÂ»
+
 		'''
 
 	def compile(ConfSpace csp) '''
-		<configuration_space name="«csp.name»">
-		«csp.getbody»
+		<configuration_space name="Â«csp.nameÂ»">
+
+		Â«csp.getbodyÂ»
+
 	    </configuration_space>
 	'''
 
 	def compile(ConfSet cs) '''
-		<configuration_set name="«cs.name»" space_id="«cs.space»">
+		<configuration_set name="Â«cs.nameÂ»" space_id="Â«cs.spaceÂ»">
+
+
 		<configurations>
-		«FOR c: cs.set.confs»
+		Â«FOR c: cs.set.confsÂ»
+
 			<configuration>
-			«FOR v: c.values»
-				<value>«v.numeric»«v.id»</value>
-			«ENDFOR»
+			Â«FOR v: c.valuesÂ»
+
+				<value>Â«v.numericÂ»Â«v.idÂ»</value>
+
+
+			Â«ENDFORÂ»
+
 			</configuration>
-		«ENDFOR»
+		Â«ENDFORÂ»
+
 		</configurations>
 	    </configuration_set>
 	'''
@@ -101,84 +135,134 @@ class CalculatorGenerator extends AbstractGenerator {
 	
 	def compileQuantityTypes(ParetoModel m) '''
 		<quantity_definitions>
-	        «FOR qt:m.qtypes»
-	            «qt.compile»
-	        «ENDFOR»
+	        Â«FOR qt:m.qtypesÂ»
+
+	            Â«qt.compileÂ»
+
+	        Â«ENDFORÂ»
+
         </quantity_definitions>
      '''
 
 	def compileConfigurationSets(ParetoModel m) '''
 		<configuration_sets>
-	    «FOR cs:m.confsets»
-	    	«cs.compile»
-	    «ENDFOR»
+	    Â«FOR cs:m.confsetsÂ»
+
+	    	Â«cs.compileÂ»
+
+	    Â«ENDFORÂ»
+
 		</configuration_sets>
      '''
 
 
 	def compileConfigurationSpaces(ParetoModel m) '''
 		<configuration_spaces>
-	        «FOR csp:m.confspaces»
-	            «csp.compile»
-	        «ENDFOR»
+	        Â«FOR csp:m.confspacesÂ»
+
+	            Â«csp.compileÂ»
+
+	        Â«ENDFORÂ»
+
         </configuration_spaces>
      '''
 
 	def compile(COperation o) '''
-		«IF o.op_push !== null»<push name="«o.op_push.quantity»"/>«ENDIF»
-		«IF o.op_prod !== null»<product/>«ENDIF»
-		«IF o.op_prodcons !== null»
+		Â«IF o.op_push !== nullÂ»<push name="Â«o.op_push.quantityÂ»"/>Â«ENDIFÂ»
+
+
+
+		Â«IF o.op_prod !== nullÂ»<product/>Â«ENDIFÂ»
+
+
+		Â«IF o.op_prodcons !== nullÂ»
+
 		<prodcons>
-			<producer_quant>«o.op_prodcons.prodquant»</producer_quant>
-			<consumer_quant>«o.op_prodcons.consquant»</consumer_quant>
+			<producer_quant>Â«o.op_prodcons.prodquantÂ»</producer_quant>
+
+			<consumer_quant>Â«o.op_prodcons.consquantÂ»</consumer_quant>
+
 		</prodcons>
-		«ENDIF»
-		«IF o.op_abstract !== null»
+		Â«ENDIFÂ»
+
+		Â«IF o.op_abstract !== nullÂ»
+
 		<abstract>
-			«FOR q:o.op_abstract.list.qnames»
-				<quant>«q»</quant>
-			«ENDFOR»
+			Â«FOR q:o.op_abstract.list.qnamesÂ»
+
+				<quant>Â«qÂ»</quant>
+
+			Â«ENDFORÂ»
+
 		</abstract>
-		«ENDIF»
-		«IF o.op_hide !== null»
+		Â«ENDIFÂ»
+
+		Â«IF o.op_hide !== nullÂ»
+
 		<hide>
-			«FOR q:o.op_hide.list.qnames»
-				<quant>«q»</quant>
-			«ENDFOR»
+			Â«FOR q:o.op_hide.list.qnamesÂ»
+
+				<quant>Â«qÂ»</quant>
+
+			Â«ENDFORÂ»
+
 		</hide>
-		«ENDIF»
-		«IF o.op_minimize !== null»
+		Â«ENDIFÂ»
+
+		Â«IF o.op_minimize !== nullÂ»
+
 		<minimize/>
-		«ENDIF»
-		«IF o.op_store!== null»
-		<store name="«o.op_store.name»"/>
-		«ENDIF»
-		«IF o.op_join!== null»
+		Â«ENDIFÂ»
+
+		Â«IF o.op_store!== nullÂ»
+
+		<store name="Â«o.op_store.nameÂ»"/>
+
+		Â«ENDIFÂ»
+
+		Â«IF o.op_join!== nullÂ»
+
 		<join>
-		<between quanta="«o.op_join.qa»" quantb="«o.op_join.qb»"/>
+		<between quanta="Â«o.op_join.qaÂ»" quantb="Â«o.op_join.qbÂ»"/>
+
+
 		</join>
-		«ENDIF»
-		«IF o.op_aggregate !== null»
+		Â«ENDIFÂ»
+
+		Â«IF o.op_aggregate !== nullÂ»
+
 		<aggregate>
-			«FOR q:o.op_aggregate.list.qnames»
-			<quant>«q»</quant>
-			«ENDFOR»
-			<name>«o.op_aggregate.aggrname»</name>
+			Â«FOR q:o.op_aggregate.list.qnamesÂ»
+
+			<quant>Â«qÂ»</quant>
+
+			Â«ENDFORÂ»
+
+			<name>Â«o.op_aggregate.aggrnameÂ»</name>
+
 		</aggregate>
-		«ENDIF»
-		«IF o.op_duplicate !== null»
+		Â«ENDIFÂ»
+
+		Â«IF o.op_duplicate !== nullÂ»
+
 		<duplicate/>
-		«ENDIF»
-		«IF o.op_print !== null»
+		Â«ENDIFÂ»
+
+		Â«IF o.op_print !== nullÂ»
+
 		<print/>
-		«ENDIF»
+		Â«ENDIFÂ»
+
 	'''
 
 	def compileCalculation(ParetoModel m) '''
 		<calculation>
-        «FOR c:m.calc.operations»
-            «c.compile»
-        «ENDFOR»
+        Â«FOR c:m.calc.operationsÂ»
+
+            Â«c.compileÂ»
+
+        Â«ENDFORÂ»
+
 		</calculation>
      '''
 
@@ -189,14 +273,20 @@ class CalculatorGenerator extends AbstractGenerator {
 		<?xml version="1.0"?>
 		<?xml-stylesheet type="text/xsl" href="../xml/paretospec.xslt"?>
 		<pareto_specification xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="uri:pareto" xsi:schemaLocation="uri:pareto http://www.es.ele.tue.nl/~mgeilen/paretoalgebra/xml/paretospec.xsd ">
-			<name>«m.name»</name>
+			<name>Â«m.nameÂ»</name>
+
   			<description>
-		    	«m.descr.block.substring(1,m.descr.block.length()-2).trim()» 
+		    	Â«m.descr.block.substring(1,m.descr.block.length()-2).trim()Â» 
+
 			</description>
-    		«this.compileQuantityTypes(m)»
-    		«this.compileConfigurationSpaces(m)»
-    		«this.compileConfigurationSets(m)»
-    		«this.compileCalculation(m)»
+    		Â«this.compileQuantityTypes(m)Â»
+
+    		Â«this.compileConfigurationSpaces(m)Â»
+
+    		Â«this.compileConfigurationSets(m)Â»
+
+    		Â«this.compileCalculation(m)Â»
+
 		</pareto_specification>
     '''
 
