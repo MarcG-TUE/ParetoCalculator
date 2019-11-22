@@ -1,0 +1,9 @@
+.metadata
+.project
+.classpath
+.settings
+build
+src-gen
+xtend-gen
+bin
+generated
