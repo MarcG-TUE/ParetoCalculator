@@ -1,0 +1,2 @@
+include 'org.xtext.paretoalgebra.calculator'
+include 'org.xtext.paretoalgebra.calculator.ide'
