@@ -9,3 +9,6 @@ CMakeFiles/
 *.cmake
 Makefile
 CMakeCache.txt
+*.a
+*.output
+/Testing/
