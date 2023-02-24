@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_policy(VERSION 3.1)
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 17)
 
 include_directories(../ParetoCalculatorLibrary/src)
 
