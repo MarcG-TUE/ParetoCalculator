@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 		PCC.LoadOperations();
 	} 
 	catch (EParetoCalculatorError& e) {
-		std::cout << "An exception occured: " << e.errorMsg << std::endl;
+		std::cout << "An exception occurred: " << e.errorMsg << std::endl;
 		return -1;
 	}
 

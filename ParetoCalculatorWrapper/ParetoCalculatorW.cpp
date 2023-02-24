@@ -3,7 +3,7 @@
 #include "exceptions.h"
 
 #include "utils/utils_vs.h"
-#include <strstream>
+#include <sstream>
 
 using namespace Pareto;
 using namespace System::Collections;
@@ -88,7 +88,7 @@ ArrayList^ ParetoCalculatorW::getMemoryItemStrings()
 
 int ParetoCalculatorW::stackSize()
 {
-	return this->pc->stack.size();
+	return (int) this->pc->stack.size();
 }
 
 String^ ParetoCalculatorW::pop()
@@ -198,12 +198,12 @@ ArrayList^ ParetoCalculatorW::getScattterPoints(String^ qxs, String^ qys)
 		QuantityValuePtr vy = c.getQuantity(qiy);
 
 		ArrayList^ point = gcnew ArrayList();
-		std::ostrstream vxString;
+		std::ostringstream vxString;
 		vx->streamOn(vxString);
 		vxString << std::ends;
 		point->Add(std_to_system_string(std::string(vxString.str())));
 
-		std::ostrstream vyString;
+		std::ostringstream vyString;
 		vy->streamOn(vyString);
 		vyString << std::ends;
 		point->Add(std_to_system_string(std::string(vyString.str())));

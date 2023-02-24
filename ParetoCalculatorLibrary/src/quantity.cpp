@@ -124,7 +124,7 @@ namespace Pareto {
 
 
 	bool QuantityType_Enum::compare(const QuantityValue& q1, const QuantityValue& q2) const {
-		unsigned int s = quantities.size();
+		unsigned int s = (unsigned int) quantities.size();
 		for (unsigned int i = 0; i < s; i++) {
 			if (*quantities[i] == q1) return true;
 			if (*quantities[i] == q2) return false;
@@ -391,7 +391,7 @@ namespace Pareto {
 
 	unsigned int QuantityValue_Enum::index(void) const {
 		const QuantityType_Enum& qt = dynamic_cast<const QuantityType_Enum&>(qtype);
-		unsigned int s = qt.quantities.size();
+		unsigned int s = (unsigned int) qt.quantities.size();
 		for (unsigned int i = 0; i < s; i++) {
 			if (*qt.quantities[i] == *this) { return i; }
 		}

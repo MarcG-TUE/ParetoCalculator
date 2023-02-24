@@ -8,11 +8,11 @@ See [README.md](README.md) for a description.
 
 ## How do I use / install it on Windows using Visual Studio?
 
-1. if you do not have the `libxml2` library installed, follow the instructions [below](#building-libxml).
+1. if you do not have the `libxml2` library installed, first follow the instructions [below](#building-libxml).
 
 2. Open the solution file `ParetoCalculator.sln` in Visual Studio
 
-3. Provide the path to the `libxml2` library for the linker.
+3. Provide the path to the `libxml2` library for the linker as follows.
    Select from the menu: `View -> Property Manager`.
      Under the `ParetoCalculatorLibrary` project, under any of its configurations (it does not matter which one you use), find the property sheet named `ExternalLibraries`
      Double click it and on the properties page go to: `Common Properties -> User Macros`.
@@ -20,11 +20,13 @@ See [README.md](README.md) for a description.
      It should for instance be something like:
      `D:\software\libraries\libxml2-2.9.3\`
 
-5. Build the solution in the desired configuration `Debug` or `Release` and run the `ParetoCalculatorUI` project.
+5. Build the solution in the desired configuration either `Debug` or `Release` and run the `ParetoCalculatorUI` project.
 
-You can then use the calculator to run the examples in the `test` directory.
+You can then use the calculator to run the examples in the `examples` directory.
 
-Note that the project `ParetoCalculatorLibrary` creates a static library with all functionality for your own Pareto Algebra calculations.
+Note that the project `ParetoCalculatorLibrary` project creates a static library in the `lib` directory with all functionality for your own Pareto Algebra calculations.
+
+Note that the `Debug` and `Release` configurations build libraries for the Common-Language Runtime of Windows / .Net. The `Debug Static Lib` and `Release Static Lib` configurations build 'ordinary' libraries to link to.
 
 ## Building LibXml
 

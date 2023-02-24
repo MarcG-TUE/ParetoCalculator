@@ -1,10 +1,6 @@
 .vs
-/Debug/
-/Debug CLR/
-/Release CLR/
-/Win32/
-/x64/
-Release
+/bin/
+/test/
 ParetoCalculator/Interop
 *.user
 inc/*

@@ -636,12 +636,12 @@ ListOfConfSetPtr ParetoCalculator::splitLowHigh(ConfigurationSetPtr cs, const Qu
 	//	create index on cs,qn
 	IndexOnTotalOrderConfigurationSet i(qn, cs);
 
-	unsigned int mid = i.size() / 2;
+	unsigned int mid = (unsigned int) (i.size() / 2);
 //	*v = & const_cast<QuantityValue&>((i.at(mid).conf->getQuantity(qn)));  // try to get rid of the embarrasing const_casts...
 	*v = i.at(mid)->conf->getQuantity(qn); 
 
 	lcs->push_back(i.copyFromTo(0, mid - 1));
-	lcs->push_back(i.copyFromTo(mid, i.size() - 1));
+	lcs->push_back(i.copyFromTo(mid, (int) (i.size() - 1)));
 	return lcs;
 }
 
