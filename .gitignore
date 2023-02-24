@@ -1,7 +1,9 @@
 .vs
-Debug
-CLR\ Debug
-CLR\ Release
+/Debug/
+/Debug CLR/
+/Release CLR/
+/Win32/
+/x64/
 Release
 ParetoCalculator/Interop
 *.user
