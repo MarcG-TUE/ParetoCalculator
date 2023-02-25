@@ -4,7 +4,10 @@
 
 The Pareto Calculator V.1.0 is a library that implements Pareto
 Algebra [1]. You can find more information about Pareto Algebra and
-the calculator at <http://www.es.ele.tue.nl/pareto>
+the calculator at
+
+- <https://computationalmodeling.info/wp/models/pareto-algebra/>
+- <https://computationalmodeling.info/wp/tools/the-pareto-calculator/>
 
 ------------------------------------------------------------------
 
