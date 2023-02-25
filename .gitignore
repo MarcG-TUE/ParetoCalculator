@@ -1,9 +1,14 @@
 .vs
-Debug
-CLR\ Debug
-CLR\ Release
-Release
+/bin/
+/test/
 ParetoCalculator/Interop
 *.user
 inc/*
 lib/*
+CMakeFiles/
+*.cmake
+Makefile
+CMakeCache.txt
+*.a
+*.output
+/Testing/

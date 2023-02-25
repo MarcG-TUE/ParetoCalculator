@@ -540,7 +540,7 @@ void POperation_EfficientProdCons::executeOn(ParetoCalculator& c) {
 	// start from the best (lowest) value in the consuming quantitity...
 	unsigned int i = 0;
 	// and from the worst (also lowest!) value in the producing quantity
-	int j = ip.size() - 1;
+	int j = (int) (ip.size() - 1);
 	// until all configurations from either of the sets have been exhausted...
 	// loop tracing the border between matching and non-matching configurations
 	// loop invariants:

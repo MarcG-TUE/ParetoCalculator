@@ -59,7 +59,7 @@ namespace Pareto {
 	/// add a quantity type to the configuration space under a specified name and with specified visibility
 	void ConfigurationSpace::addQuantityAsVisibility(QuantityTypePtr q, const QuantityName qname, bool vis) {
 		quantities.push_back(q);
-		quantityNames[qname] = quantities.size() - 1;
+		quantityNames[qname] = (unsigned int) (quantities.size() - 1);
 		this->quantityVisibility.push_back(vis);
 	}
 
@@ -189,7 +189,7 @@ namespace Pareto {
 	bool ConfigurationSpace::LexicographicCompare(const Configuration& c1, const Configuration& c2)
 		// provides strict ordering for sorted storage of configurationset, hence ignores visibility
 	{
-		unsigned int k = c1.confspace->quantities.size();
+		unsigned int k = (unsigned int) c1.confspace->quantities.size();
 		for (unsigned int i = 0; i < k; i++) {
 			QuantityValuePtr v1 = c1.getQuantity(i);
 			QuantityValuePtr v2 = c2.getQuantity(i);
@@ -590,7 +590,7 @@ namespace Pareto {
 		int a, b, m;
 		// use a binary search
 		a = -1; // S[a,Q]<v
-		b = this->confset->confs.size(); // S[b,Q]>=v;
+		b = (int)  this->confset->confs.size(); // S[b,Q]>=v;
 		while (b - a > 1) {
 			m = (a + b) / 2;
 			if (*(this->get(m)) < v) {
@@ -608,7 +608,7 @@ namespace Pareto {
 		int a, b, m;
 		// use a binary search
 		a = -1; // S[a,Q]<=v
-		b = this->confset->confs.size(); // S[b,Q]>v;
+		b = (int) this->confset->confs.size(); // S[b,Q]>v;
 		while (b - a > 1) {
 			m = (a + b) / 2;
 			if (*(this->get(m)) > v) {
