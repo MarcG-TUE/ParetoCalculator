@@ -24,7 +24,7 @@ applicationDistribution.into('bin') {
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'Parto Calculator Generator',
+        attributes 'Implementation-Title': 'Pareto Calculator Generator',
                    'Implementation-Version': '1.0',
                    'Main-Class': 'org.xtext.paretoalgebra.calculator.compiler.ParetoCalculatorCompiler'
     }
