@@ -1,0 +1,43 @@
+dependencies {
+	api project(':org.xtext.paretoalgebra.calculator')
+	api project(':org.xtext.paretoalgebra.calculator.ide')
+    api group: 'commons-io', name: 'commons-io', version: '2.0.1'}
+
+apply plugin: 'application'
+mainClassName = "org.xtext.paretoalgebra.calculator.compiler.ParetoCalculatorCompiler"
+
+startScripts {
+	applicationName = 'pareto-calculator-codegen'
+}
+
+task standaloneStartScript(type: CreateStartScripts) {
+	mainClass = 'org.xtext.paretoalgebra.calculator.compiler.ParetoCalculatorCompiler'
+	applicationName = 'pareto-calculator-codegen'
+	outputDir = new File(project.buildDir, 'scripts')
+	classpath = jar.outputs.files + project.configurations.runtimeClasspath
+}
+
+applicationDistribution.into('bin') {
+	from(standaloneStartScript)
+	fileMode = 0755
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Parto Calculator Generator',
+                   'Implementation-Version': '1.0',
+                   'Main-Class': 'org.xtext.paretoalgebra.calculator.compiler.ParetoCalculatorCompiler'
+    }
+}
+
+distZip {
+	duplicatesStrategy DuplicatesStrategy.EXCLUDE
+}
+
+distTar {
+	duplicatesStrategy DuplicatesStrategy.EXCLUDE
+}
+
+installDist {
+	duplicatesStrategy DuplicatesStrategy.EXCLUDE
+}

@@ -18,11 +18,11 @@ dependencies {
 task generateXtextLanguage(type: JavaExec) {
 	mainClass = 'org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher'
 	classpath = configurations.mwe2
-    inputs.file "src/org/xtext/paretoalgebra/calculator/GenerateParetoSpecification.mwe2"
-    inputs.file "src/org/xtext/paretoalgebra/calculator/ParetoSpecification.xtext"
-	outputs.dir "src-gen"
+    inputs.file "src/main/java/org/xtext/paretoalgebra/calculator/GenerateParetoSpecification.mwe2"
+    inputs.file "src/main/java/org/xtext/paretoalgebra/calculator/ParetoSpecification.xtext"
+	outputs.dir "src/main/xtext-gen"
 
-	args += "src/org/xtext/paretoalgebra/calculator/GenerateParetoSpecification.mwe2"
+	args += "src/main/java/org/xtext/paretoalgebra/calculator/GenerateParetoSpecification.mwe2"
 	args += "-p"
 	args += "rootPath=/${projectDir}/.."
 }
