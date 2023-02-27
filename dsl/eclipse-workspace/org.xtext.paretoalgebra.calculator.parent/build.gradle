@@ -26,8 +26,8 @@ subprojects {
 	group = 'org.xtext.paretoalgebra.calculator'
 	version = '1.0.0-SNAPSHOT'
 
-	sourceCompatibility = '17'
-	targetCompatibility = '17'
+	sourceCompatibility = '11'
+	targetCompatibility = '11'
 
 	configurations.all {
 		exclude group: 'asm'
