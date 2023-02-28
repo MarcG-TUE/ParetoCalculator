@@ -20,7 +20,7 @@ target_link_libraries(ParetoCalculatorTest
 
 # does the console application run
 add_test(
-        NAME RunParetoCalculatorConsoleBetsy 
+        NAME RunParetoCalculatorConsoleBetsy
         COMMAND ../ParetoCalculatorConsole/ParetoCalculatorConsole ../../examples/betsy.xml)
 
 # run the unit test application

@@ -1,2 +1,3 @@
 /CMakeFiles/
 ParetoCalculatorTest
+!run_test.cmake
