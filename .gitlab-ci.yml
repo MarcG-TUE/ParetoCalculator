@@ -23,6 +23,8 @@ test:
   tags:
     - Ubuntu1804-64bit
   script:
+    - pwd
+    - cd src
     - make test
   dependencies:
     - build
