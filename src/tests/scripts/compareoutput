@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Running comparison"
+
 TESTRESULT=$(diff $1 $2 | paste -d " " - - - - | sed '/####/d')
 if [ -z "$TESTRESULT" ]
 then

@@ -18,6 +18,7 @@ endif()
 execute_process(
     COMMAND ${test_cmd} ${test_cmd_arg1} ${test_cmd_arg2}
     OUTPUT_FILE ${output_test}
+    message(STATUS "produced output" )
 )
 
 execute_process(
