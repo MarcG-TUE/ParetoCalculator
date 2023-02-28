@@ -6,7 +6,6 @@ ParetoCalculator/Interop
 inc/*
 lib/*
 CMakeFiles/
-*.cmake
 Makefile
 CMakeCache.txt
 *.a
