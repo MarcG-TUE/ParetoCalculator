@@ -5,12 +5,14 @@ ENV TZ=Europe/Amsterdam
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update
 RUN apt-get -y install default-jdk build-essential cmake libxml2-dev gradle dos2unix
+RUN apt-get -y install doxygen
 
 # Create directory
 WORKDIR /usr/paretocalculator
 
 # compile xtext stuff
-COPY ./ .
+COPY ./src/ .
+COPY ./examples/ .
 
 RUN cmake .
 RUN make
