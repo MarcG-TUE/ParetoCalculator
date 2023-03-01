@@ -1,29 +1,37 @@
-# Pareto Calculator
+# Pareto Calculator and Pareto Algebra DSL
 
-## What is the Pareto Calculator?
+## What are the Pareto Calculator and Pareto Algebra DSL?
 
-The Pareto Calculator V.1.0 is a library that implements Pareto
+The Pareto Calculator is a library that implements Pareto
 Algebra [1]. You can find more information about Pareto Algebra and
 the calculator at
 
 - <https://computationalmodeling.info/wp/models/pareto-algebra/>
 - <https://computationalmodeling.info/wp/tools/the-pareto-calculator/>
 
+In addition there is a definition of a Domain-Specific Language for Pareto Algebra models. It can convert a specification in the DSL into an xml file that can be processed by the Pareto Calculator
+
 ------------------------------------------------------------------
 
-## How do I use / install it?
+## Pareto Calculator
 
-### Dependencies
+### How do I use / install it?
+
+#### Dependencies
 
 _Which software dependencies does the Pareto Calculator have?_
 
 The ParetoCalculator needs the `libxml2` library to access XML files. This library is available in most Linux distributions and Windows and Linux versions can be downloaded from [www.libxml2.org](www.libxml2.org).
 
-### On Windows
+#### Using Docker
+
+The docker image defined by the `Dockerfile` builds the Pareto Calculator and the DSL tools.
+
+#### On Windows
 
 See [README_WIN.md](README_WIN.md)
 
-### On Linux
+#### On Linux
 
 The static library with all Pareto Algebra operations can be compiled with Linux/gcc. The `ParetoCalculatorConsole` directory contains a small example application that uses the library.
 
@@ -31,7 +39,7 @@ See [README_LINUX.md](README_LINUX.md)
 
 ------------------------------------------------------------------
 
-## Documentation
+### Documentation
 
 Is there any documentation for the Pareto Calculator?
 
@@ -40,6 +48,16 @@ There is currently no documentation for the Pareto Calculator. The Linux build g
 Documentation for the library can be found at <http://www.es.ele.tue.nl/pareto.>
 
 ------------------------------------------------------------------
+
+## Pareto Algebra DSL
+
+The Pareto Algebra DSL defines a domain-specific language for Pareto Algebra using Eclipse Xtext.
+A gradle project is defined that builds a language server infrastructure and a converter application that transforms a model in the DSL into an xml file that can be used as input for the Pareto Calculator.
+
+``` sh
+cd dsl/eclipse-workspace/org.xtext.paretoalgebra.calculator.parent
+./gradlew installDist
+```
 
 ## License
 
