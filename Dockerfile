@@ -4,8 +4,7 @@ WORKDIR /usr
 ENV TZ=Europe/Amsterdam
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update
-RUN apt-get -y install default-jdk build-essential cmake libxml2-dev gradle dos2unix
-RUN apt-get -y install doxygen
+RUN apt-get -y install default-jdk build-essential cmake libxml2-dev gradle dos2unix doxygen graphviz
 
 # Create directory
 WORKDIR /usr/paretocalculator
